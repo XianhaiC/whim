@@ -5,38 +5,39 @@ import NewImpulseForm from './NewImpulseForm';
 import MessagesArea from './MessagesArea';
 import Cable from './Cable';
 
-class ImpulseList extends React.component { 
+class ImpulseList extends React.Component { 
   
   state = { 
     impulses : [],
     activeImpulse: null
   };
 
+  /*
   componentDidMount = () => {
     fetch('${API_ROOT}/impulses')
       .then(res => res.json())
-      .then(conversations => this.setState({ impulses }));
-  };
+      .then(impulses => this.setState({ impulses }));
+  };*/
   
   handleClick = id => {
-    this.setState({ activeConversation: id });
+    this.setState({ activeImpulse: id });
   };
 
   handleReceivedImpulse = response => {
-    const { conversation } = response;
+    const { impulse } = response;
     this.setState({
-      conversations: [...this.state.conversations, conversation]
+      impulses: [...this.state.impulses, impulse]
     });
   };
 
   handleReceivedMessage = response => {
     const { message } = response;
-    const conversations = [...this.state.conversations];
-    const conversation = conversations.find(
-      conversation => conversation.id === message.conversation_id
+    const impulses = [...this.state.impulses];
+    const impulse = impulses.find(
+      impulse => impulse.id === message.impulse_id
     );
-    conversation.messages = [...conversation.messages, message];
-    this.setState({ conversations });
+    impulse.messages = [...impulse.messages, message];
+    this.setState({ impulses });
   }
 
   render = () => {
@@ -47,7 +48,7 @@ class ImpulseList extends React.component {
                      onReceived={this.handleReceivedImpulse}
         />
        
-        {this.state.conversations.lenght ? (
+        {this.state.impulses.length ? (
           <Cable impulses={impulses}
                  handleReceivedMessage={this.handleReceivedMessage}
           />

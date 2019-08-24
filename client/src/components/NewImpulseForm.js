@@ -37,4 +37,4 @@ class NewImpulseForm extends React.Component {
   };
 }
 
-export default NewConversationForm;
+export default NewImpulseForm;

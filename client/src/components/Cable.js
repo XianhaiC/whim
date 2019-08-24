@@ -9,7 +9,7 @@ const Cable =({ impulses, handleReceivedMessage }) => {
                   <ActionCable
                   key={impulse.id}
                   channel={{ channel: '', impulse: impulse.id}}
-                  onReceived={handleReceivedMEssage}
+                  onReceived={handleReceivedMessage}
                   />
               );
           })}
