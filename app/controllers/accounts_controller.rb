@@ -1,6 +1,8 @@
 class AccountsController < ApplicationController
+  before_action :authenticate_request!, except: [:create]
+
   def show
-    account = Account.find(param[:id])
+    account = Account.find(params[:id])
     render json: account
   end
 
@@ -17,13 +19,13 @@ class AccountsController < ApplicationController
   end
 
   def impulses
-    account = Account.find(param[:id])
+    account = Account.find(params[:id])
     serialized_data = account.impulses.to_json
     render json: serialized_data
   end
 
   def sparks
-    account = Account.find(param[:id])
+    account = Account.find(params[:id])
     serialized_data = account.sparks.to_json
     render json: serialized_data
   end

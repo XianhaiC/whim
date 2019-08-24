@@ -1,4 +1,5 @@
 class SparksController < ApplicationController
+  before_action :authenticate_request!, only: [:update]
   def show
     spark = Sparks.find(params[:id])
     render json: spark
@@ -24,7 +25,7 @@ class SparksController < ApplicationController
   end
 
   def messages
-    spark = Sparks.find(params[:id])
+    spark = Spark.find(params[:id])
     serialized_data = spark.messages.to_json
     render json: serialized_data
   end
