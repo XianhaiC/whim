@@ -2,6 +2,15 @@ class ApplicationController < ActionController::API
 
   # functions for login authentication
   protected
+    def attempt_login
+      unless login_authorized?
+        return
+      end
+      @current_account = Account.find(auth_token_login[:account_id])
+      rescue JWT::VerificationError, JWT::DecodeError
+        return
+    end
+
     def authenticate_login!
       unless login_authorized?
         render json: { errors: ['Login not authenticated: Token mismatch'] }, status: :unauthorized

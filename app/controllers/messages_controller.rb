@@ -1,4 +1,6 @@
 class MessagesController < ApplicationController
+  before_action :attempt_login, only: [:create]
+
   def show
   end
 
@@ -7,7 +9,7 @@ class MessagesController < ApplicationController
 
   def create
     # authenticate spark before creating message
-    authenticate_spark_session(Spark.find(params[:spark_id]))
+    authenticate_spark_session!(Spark.find(params[:spark_id]))
 
     message = Message.new(message_params)
     impulse = Impulse.find(message_params[:impulse_id])
@@ -17,7 +19,7 @@ class MessagesController < ApplicationController
         MessageSerializer.new(message)
       ).serializable_hash
 
-      MessagesChannel.broadcast_to impulse, serialized_data
+      ActiveMessagesChannel.broadcast_to impulse, serialized_data
 
       head :ok
     else
@@ -33,14 +35,14 @@ class MessagesController < ApplicationController
 
   private
     def message_params
-      params.require(:message).permit(:body, :spark_id. :impulse_id)
+      params.require(:message).permit(:body, :spark_id, :impulse_id)
     end
 
     def authenticate_spark_session!(spark)
       if spark.account.nil?
         # authenticate via token verification
         authenticate_spark!
-      elsif @current_account.nil
+      elsif @current_account.nil?
         render json: { errors: ['Spark not authenticated: Spark linked, but not logged in'] }, status: :unauthorized
       elsif !@current_account.nil? && @current_account.id.to_i != spark.account.id.to_i
         # authenticate via account link verification
