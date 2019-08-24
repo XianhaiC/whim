@@ -1,5 +1,15 @@
 class ImpulsesController < ApplicationController
   def show
+    impulse = Impulse.find(params[:id])
+
+    if !impulse.nil?
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+          ImpulseSerializer.new(impulse)
+        ).serializable_hash
+      render json: serialized_data
+    else
+      render json: { errors: ['Impulse not found'] }, status => 400
+    end
   end
 
   def create

@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ActionCableProvider } from 'react-actioncable-provider';
-import './index.css';
+
+import { API_WS_ROOT } from './constants'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { API_WS_ROOT } from './constants'
+
+import './index.css';
 
 ReactDOM.render(
   <ActionCableProvider url={API_WS_ROOT}> 
     <App />
-  </ActionCableProvider>, document.getElementById('root')
+  </ActionCableProvider>,
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import { ActionCable } from 'react-actioncable-provider';
 
-const Cable =({ impulses, handleReceivedMessage }) => {
+const ActiveMessagesChannels =({ impulses, handleReceivedMessage }) => {
     return (
         <Fragment>
           {impulses.map(impulse => {
               return (
                   <ActionCable
                   key={impulse.id}
-                  channel={{ channel: '', impulse: impulse.id}}
+                  channel={{ channel: 'ActiveMessagesChannel', impulse: impulse.id}}
                   onReceived={handleReceivedMessage}
                   />
               );
@@ -17,4 +17,4 @@ const Cable =({ impulses, handleReceivedMessage }) => {
     );
 };
 
-export default Cable; 
+export default ActiveMessagesChannels; 

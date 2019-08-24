@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
+
+import ImpulseManager from './components/ImpulseManager';
+
 import logo from './logo.svg';
-import ImpulseList from './components/ImpulseList';
 
 class App extends Component { 
+  state = {
+    'account_id': null,
+    'active_impulse': null
+  }
+
   render() {
     return ( 
       <div className="App">
-        <ImpulseList />
+        <ImpulseManager />
       </div> 
     );
   }

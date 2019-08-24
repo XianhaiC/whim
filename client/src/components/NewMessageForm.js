@@ -4,7 +4,8 @@ import { API_ROOT, HEADERS } from '../constants';
 class NewMessageForm extends React.Component {
   state = {
     text: '',
-    impulse_id: this.props.impulse_id
+    impulse_id: this.props.impulse_id,
+    spark_id: null
   };
 
   componentWillReceiveProps = nextProps => {
@@ -14,6 +15,17 @@ class NewMessageForm extends React.Component {
   handleChange = e => {
     this.setState({ text: e.target.value });
   };
+
+  liscenceSpark = () => {
+    if (spark_id == null) {
+      if (false) {
+        //user is logged in
+      }
+      else {
+        createSpark();
+      }
+    }
+  }
 
   handleSubmit = e => {
     e.preventDefault();
