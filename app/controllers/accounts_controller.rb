@@ -1,11 +1,7 @@
 class AccountsController < ApplicationController
   def show
     account = Account.find(param[:id])
-    #TODO should we send back list of impulses as well? Or should that be sent in a different request?
     render json: account
-  end
-
-  def new
   end
 
   def create
@@ -17,10 +13,19 @@ class AccountsController < ApplicationController
     end
   end
 
-  def edit
+  def update
   end
 
-  def update
+  def impulses
+    account = Account.find(param[:id])
+    serialized_data = account.impulses.to_json
+    render json: serialized_data
+  end
+
+  def sparks
+    account = Account.find(param[:id])
+    serialized_data = account.sparks.to_json
+    render json: serialized_data
   end
 
   private

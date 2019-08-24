@@ -2,9 +2,6 @@ class ImpulsesController < ApplicationController
   def show
   end
 
-  def new
-  end
-
   def create
     impulse = Impulse.new(impulse_params)
     if impulse.save
@@ -14,10 +11,19 @@ class ImpulsesController < ApplicationController
     end
   end
 
-  def edit
+  def update
   end
 
-  def update
+  def messages
+    impulse = Impulse.find(params[:id])
+    serialized_data = impulse.messages.to_json
+    render json: serialized_data
+  end
+
+  def sparks
+    impulse = Impulse.find(params[:id])
+    serialized_data = impulse.sparks.to_json
+    render json: serialized_data
   end
 
   private

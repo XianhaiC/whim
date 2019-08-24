@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190824001558) do
+ActiveRecord::Schema.define(version: 20190824024323) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "handle"
@@ -33,6 +33,8 @@ ActiveRecord::Schema.define(version: 20190824001558) do
     t.string "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "spark_id"
+    t.integer "impulse_id"
   end
 
   create_table "sparks", force: :cascade do |t|
@@ -40,6 +42,8 @@ ActiveRecord::Schema.define(version: 20190824001558) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "session_hash"
+    t.integer "account_id"
+    t.integer "impulse_id"
   end
 
 end
