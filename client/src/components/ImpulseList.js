@@ -1,11 +1,12 @@
 import React from 'react';
+import NewImpulseForm from './NewImpulseForm';
 
 class ImpulseList extends React.Component {
 
   render = () => {
     return (
       <div className="ImpulseList">
-        <ul>{mapImpulses(impulses, this.props.onClick)}</ul> 
+        <ul>{mapImpulses(this.props.impulses, this.props.onClick)}</ul> 
         <NewImpulseForm />
       </div>
     );
@@ -18,7 +19,7 @@ const mapImpulses = (impulses, handleClick) => {
   return impulses.map(impulse => {
     return (
       <li key={impulse.id} onClick={() => handleClick (impulse.id)}>
-        {impulse.title}
+        {impulse.name}
       </li>
     );
   });
