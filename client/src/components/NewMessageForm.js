@@ -2,11 +2,16 @@ import React from 'react';
 import { API_ROOT, HEADERS } from '../constants';
 
 class NewMessageForm extends React.Component {
-  state = {
-    body: '',
-    impulse_id: this.props.impulse_id,
-    spark_id: this.props.spark_id
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      body: '',
+      impulse_id: this.props.impulse_id,
+      spark_id: this.props.spark_id
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
   componentWillReceiveProps = nextProps => {
     this.setState({ impulse_id: nextProps.impulse_id, spark_id: nextProps.spark_id });

@@ -9,8 +9,6 @@ class MessageFeed extends React.Component {
       <div className="MessageFeed">
         {
           orderedMessages(this.props.impulse.messages).map(message => {
-            console.log(message)
-            console.log(this.props.impulse)
             const spark_poster = this.props.impulse.sparks.find(
               spark => spark.id == message.spark_id
             );

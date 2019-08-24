@@ -1,19 +1,24 @@
 import React from 'react';
-import { ActionCable } from 'react-actioncable-provider';
 import { API_ROOT, HEADERS } from '../constants';
-import ActiveMessagesChannels from './ActiveMessagesChannels';
+
+import MessageChannelsManager from './MessageChannelsManager';
 import ImpulseList from './ImpulseList';
 import ActiveImpulse from './ActiveImpulse';
 import NewImpulseForm from './NewImpulseForm';
 
 class ImpulseManager extends React.Component { 
 
-  state = { 
-    impulses: [],
-    sparks: [],
-    active_impulse_id: null,
-    active_spark_id: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = { 
+      impulses: [],
+      sparks: [],
+      active_impulse_id: null,
+      active_spark_id: null
+    };
+    this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
 
 
   componentDidMount = () => {
@@ -78,7 +83,7 @@ class ImpulseManager extends React.Component {
     return (
       <div className="ImpulseManager">
         {this.state.impulses.length && (
-          <ActiveMessagesChannels
+          <MessageChannelsManager 
           impulses={impulses}
           handleReceivedMessage={this.handleReceivedMessage}
           />
