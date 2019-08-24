@@ -1,5 +1,6 @@
 class SparksController < ApplicationController
-  before_action :authenticate_request!, only: [:update]
+  before_action :authenticate_login!, only: [:update]
+
   def show
     spark = Sparks.find(params[:id])
     render json: spark
@@ -9,7 +10,8 @@ class SparksController < ApplicationController
     # account_id is null upon creation, will be set with PUT request during account linking
     spark = Spark.new(spark_params)
     if spark.save
-      render json: spark
+      # create session token for spark
+      render json: auth_token_spark(spark)
     else
       render json: { errors: spark.errors }, status => 400
     end
@@ -33,4 +35,13 @@ class SparksController < ApplicationController
     def spark_params
       params.require(:spark).permit(:name, :sessions_hash, :account_id, :impulse_id)
     end
+
+    def auth_token_spark(spark)
+      return nil unless spark and spark.id
+      {
+        auth_token: JsonWebToken.encode({ spark_id: spark.id }),
+        spark: { id: spark.id }
+      }
+    end
+
 end

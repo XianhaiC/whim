@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :authenticate_request!, except: [:create]
+  before_action :authenticate_login!, except: [:create]
 
   def show
     account = Account.find(params[:id])

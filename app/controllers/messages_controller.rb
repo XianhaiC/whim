@@ -6,6 +6,9 @@ class MessagesController < ApplicationController
   end
 
   def create
+    # authenticate spark before creating message
+    authenticate_spark_session(Spark.find(params[:spark_id]))
+
     message = Message.new(message_params)
     impulse = Impulse.find(message_params[:impulse_id])
 
@@ -31,5 +34,17 @@ class MessagesController < ApplicationController
   private
     def message_params
       params.require(:message).permit(:body, :spark_id. :impulse_id)
+    end
+
+    def authenticate_spark_session!(spark)
+      if spark.account.nil?
+        # authenticate via token verification
+        authenticate_spark!
+      elsif @current_account.nil
+        render json: { errors: ['Spark not authenticated: Spark linked, but not logged in'] }, status: :unauthorized
+      elsif !@current_account.nil? && @current_account.id.to_i != spark.account.id.to_i
+        # authenticate via account link verification
+        render json: { errors: ['Spark not authenticated: Spark does not belong to account'] }, status: :unauthorized
+      end
     end
 end

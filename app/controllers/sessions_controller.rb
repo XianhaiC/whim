@@ -18,8 +18,8 @@ class SessionsController < ApplicationController
     def auth_token(account)
       return nil unless account and account.id
       {
-        auth_token: JsonWebToken.encode({account_id: account.id}),
-        account: {id: account.id, handle: account.handle, email: account.email}
+        auth_token: JsonWebToken.encode({ account_id: account.id }),
+        account: { id: account.id, handle: account.handle, email: account.email }
       }
     end
 end
