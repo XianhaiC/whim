@@ -3,50 +3,43 @@ import { API_ROOT, HEADERS } from '../constants';
 
 class NewMessageForm extends React.Component {
   state = {
-    text: '',
+    body: '',
     impulse_id: this.props.impulse_id,
-    spark_id: null
+    spark_id: this.props.spark_id
   };
 
   componentWillReceiveProps = nextProps => {
-    this.setState({ impulse_id: nextProps.impulse_id });
+    this.setState({ impulse_id: nextProps.impulse_id, spark_id: nextProps.spark_id });
   };
 
   handleChange = e => {
-    this.setState({ text: e.target.value });
+    this.setState({ body: e.target.value });
   };
-
-  liscenceSpark = () => {
-    if (spark_id == null) {
-      if (false) {
-        //user is logged in
-      }
-      else {
-        createSpark();
-      }
-    }
-  }
 
   handleSubmit = e => {
     e.preventDefault();
+    const login_session_token = localStorage.getItem('login_session_token');
 
     fetch(`${API_ROOT}/messages`, {
       method: 'POST',
-      headers: HEADERS,
+      headers: {
+        ...HEADERS,
+        AuthorizationLogin: `Bearer ${login_session_token}`
+      },
       body: JSON.stringify(this.state)
     });
-    this.setState({ text: '' });
+    this.setState({ body: '' });
   };
 
   render = () => {
     return (
-      <div className="newMessageForm">
+      <div className="NewMessageForm">
         <form onSubmit={this.handleSubmit}>
           <label>New Message:</label>
           <br />
           <input
             type="text"
-            value={this.state.text}
+            value={this.state.body}
             onChange={this.handleChange}
           />
           <input type="submit" />

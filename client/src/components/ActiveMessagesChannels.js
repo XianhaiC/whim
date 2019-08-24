@@ -4,7 +4,8 @@ import { ActionCable } from 'react-actioncable-provider';
 const ActiveMessagesChannels =({ impulses, handleReceivedMessage }) => {
     return (
         <Fragment>
-          {impulses.map(impulse => {
+          {
+            impulses.map(impulse => {
               return (
                   <ActionCable
                   key={impulse.id}
@@ -12,7 +13,8 @@ const ActiveMessagesChannels =({ impulses, handleReceivedMessage }) => {
                   onReceived={handleReceivedMessage}
                   />
               );
-          })}
+            })
+          }
         </Fragment>
     );
 };

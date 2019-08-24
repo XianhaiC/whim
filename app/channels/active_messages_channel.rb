@@ -1,5 +1,6 @@
 class ActiveMessagesChannel < ApplicationCable::Channel
   def subscribed
+    puts "ID: #{params[:impulse]}"
     impulse = Impulse.find(params[:impulse])
     stream_for impulse
   end

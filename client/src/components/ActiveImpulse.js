@@ -1,4 +1,6 @@
 import React from 'react';
+import MessageFeed from './MessageFeed';
+import NewMessageForm from './NewMessageForm';
 
 class ActiveImpulse extends React.Component {
   state = {
@@ -7,6 +9,10 @@ class ActiveImpulse extends React.Component {
 
   render = () => {
     return (
+      <div className="ActiveImpulse">
+        <MessageFeed impulse={this.props.active_impulse} />
+        <NewMessageForm impulse_id={this.props.active_impulse.id} spark_id={this.props.active_spark.id} />
+      </div>
     );
   };
 }
