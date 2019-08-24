@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190823212930) do
+ActiveRecord::Schema.define(version: 20190824001558) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "handle"
@@ -18,6 +18,8 @@ ActiveRecord::Schema.define(version: 20190823212930) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_accounts_on_email", unique: true
+    t.index ["handle"], name: "index_accounts_on_handle", unique: true
   end
 
   create_table "impulses", force: :cascade do |t|
@@ -37,6 +39,7 @@ ActiveRecord::Schema.define(version: 20190823212930) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "session_hash"
   end
 
 end
