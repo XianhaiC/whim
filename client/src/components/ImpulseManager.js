@@ -127,6 +127,12 @@ class ImpulseManager extends React.Component {
   handleSparkCreation = spark => {
     console.log("CREATING SPARL");
     this.setState({ sparks: [...this.state.sparks, spark] });
+    const impulses = [...this.state.impulses];
+    const impulse = impulses.find(
+      impulse => impulse.id === spark.impulse_id
+    );
+    impulse.sparks = [...impulse.sparks, spark];
+    this.setState({ impulses });
     this.setActiveImpulse(this.state.active_impulse_id);
   }
 
