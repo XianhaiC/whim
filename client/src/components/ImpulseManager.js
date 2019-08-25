@@ -5,7 +5,6 @@ import MessageChannelsManager from './MessageChannelsManager';
 import ImpulseList from './ImpulseList';
 import ActiveImpulse from './ActiveImpulse';
 import NewImpulseForm from './NewImpulseForm';
-<<<<<<< HEAD
 import NewSparkForm from './NewSparkForm';
 import EmptyImpulse from './EmptyImpulse';
 import ImpulseOptionsList from './ImpulseOptionsList';
@@ -19,7 +18,7 @@ class ImpulseManager extends React.Component {
       sparks: [],
       active_impulse_id: null,
       active_spark_id: null,
-      account_id: null
+      account_id: null,
       option_links: [
       {
 		index: 0, 
