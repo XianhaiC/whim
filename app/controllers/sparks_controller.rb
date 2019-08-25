@@ -11,7 +11,7 @@ class SparksController < ApplicationController
     spark = Spark.new(spark_params)
     if spark.save
       # create session token for spark
-      render json: { auth_payload: auth_token_spark(spark), spark: spark.to_json }
+      render json: { auth_payload: auth_token_spark(spark), spark: spark.as_json }
     else
       render json: { errors: spark.errors }, status => 400
     end
@@ -33,7 +33,7 @@ class SparksController < ApplicationController
   end
   private
     def spark_params
-      params.require(:spark).permit(:name, :sessions_hash, :account_id, :impulse_id)
+      params.require(:spark).permit(:name, :account_id, :impulse_id)
     end
 
     def auth_token_spark(spark)
