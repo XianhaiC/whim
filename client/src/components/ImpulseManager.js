@@ -5,8 +5,10 @@ import MessageChannelsManager from './MessageChannelsManager';
 import ImpulseList from './ImpulseList';
 import ActiveImpulse from './ActiveImpulse';
 import NewImpulseForm from './NewImpulseForm';
+<<<<<<< HEAD
 import NewSparkForm from './NewSparkForm';
 import EmptyImpulse from './EmptyImpulse';
+import ImpulseOptionsList from './ImpulseOptionsList';
 
 class ImpulseManager extends React.Component { 
 
@@ -18,12 +20,39 @@ class ImpulseManager extends React.Component {
       active_impulse_id: null,
       active_spark_id: null,
       account_id: null
+      option_links: [
+      {
+		index: 0, 
+        title: 'Create Invite Link', 
+  		selection: false, 
+  		key: 'option-links:'
+      },
+      {
+		index: 1, 
+  		title: 'Edit Channel Account', 
+		selection: false, 		
+		key: 'option-links'
+      },
+      {
+		index: 2, 
+		title: 'Channel Settings', 
+		selection: false, 
+		key: 'option-links'
+      },
+      {
+		index: 3, 
+		title: 'Link Account', 
+		selection: false, 
+		key: 'option-links'
+      }
+    ]
+
     };
     this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleImpulseResponse = this.handleImpulseResponse.bind(this);
   }
-
+  
   componentDidMount = () => {
     fetch(`${API_ROOT}/login`, {
       method: 'POST',
@@ -130,12 +159,14 @@ class ImpulseManager extends React.Component {
           handleReceivedMessage={this.handleReceivedMessage}
           />
         )}
-        <ImpulseList 
-          impulses={impulses} 
-          onClick={this.handleClick} 
-          onImpulseResponse={this.handleImpulseResponse}
-        />
-        {impulseComponent}
+        <div className="ViewportWrapper row">
+          <ImpulseList 
+            impulses={impulses} 
+            onClick={this.handleClick} 
+            onImpulseResponse={this.handleImpulseResponse}
+          />
+          {impulseComponent}
+        </div>
       </div>
     );
   };
