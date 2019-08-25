@@ -11,27 +11,37 @@ class NewImpulseForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = e=> {
+  handleChange = e => {
     this.setState({name: e.target.value});
   }
 
   handleSubmit = e => {
+    e.preventDefault();
+    fetch(`${API_ROOT}/impulses`, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify(this.state)
+    })
+    .then(res => res.json())
+    .then(impulse => {
+      console.log(impulse);
+    });
     this.setState({ name: ''});
   }
 
-  render = ()=> {
+  render = () => {
     return (
-      <div className="newImpulseForm">
-      <form onSubmit={this.handleSubmit}>
-      <label>New Impulse: </label>
-      <br />
-      <input 
-      type="text"
-      value={this.state.name}
-      onChange={this.handleChange}
-      />
-      <input type="submit" />
-      </form>
+      <div className="NewImpulseForm">
+        <form onSubmit={this.handleSubmit}>
+          <label>New Impulse: </label>
+          <br />
+          <input 
+            type="text"
+            value={this.state.name}
+            onChange={this.handleChange}
+          />
+          <input type="submit" />
+        </form>
       </div>
     );
   };
