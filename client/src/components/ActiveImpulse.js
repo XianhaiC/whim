@@ -11,7 +11,7 @@ class ActiveImpulse extends React.Component {
   render = () => {
     return (
       <div className="ActiveImpulse">
-        <MessageFeed impulse={this.props.active_impulse} />
+        <MessageFeed impulse={this.props.active_impulse} sparks={this.props.sparks} />
         <NewMessageForm impulse_id={this.props.active_impulse.id} spark_id={this.props.active_spark.id} />
 	  </div>
     );

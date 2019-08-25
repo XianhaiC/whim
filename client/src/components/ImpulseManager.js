@@ -100,6 +100,8 @@ class ImpulseManager extends React.Component {
 
   setActiveImpulse = id => {
     const active_spark = findActiveSpark(this.state.sparks, id);
+    console.log(`FOUND ${active_spark} id: ${id}`);
+    console.log(this.state.sparks);
     let active_spark_id = null;
     if (typeof active_spark !== "undefined") {
       active_spark_id = active_spark.id;
@@ -123,6 +125,7 @@ class ImpulseManager extends React.Component {
   }
 
   handleSparkCreation = spark => {
+    console.log("CREATING SPARL");
     this.setState({ sparks: [...this.state.sparks, spark] });
     this.setActiveImpulse(this.state.active_impulse_id);
   }
@@ -135,7 +138,7 @@ class ImpulseManager extends React.Component {
     let impulseComponent = null;
     if (active_impulse_id) {
       if (active_spark_id) {
-        impulseComponent = <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} />
+        impulseComponent = <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} sparks={sparks}/>
       }
       else {
         impulseComponent = ( <NewSparkForm 

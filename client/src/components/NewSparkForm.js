@@ -30,12 +30,12 @@ class NewSparkForm extends React.Component {
       headers: HEADERS,
       body: JSON.stringify({
         name: this.state.name,
-        account_id: account_id,
         impulse_id: this.props.impulse_id
       })
     })
       .then(res => res.json())
       .then(response => {
+        console.log(response);
         const auth_payload = response.auth_payload;
         const spark = response.spark;
         localStorage.setItem(`spark_${spark.id}_session_token`, auth_payload.auth_token);

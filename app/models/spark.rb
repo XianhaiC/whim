@@ -1,5 +1,5 @@
 class Spark < ApplicationRecord
-  belongs_to :account
+  belongs_to :account, optional: true
   belongs_to :impulse
   has_many :messages, -> { order('created_at DESC') }
 
