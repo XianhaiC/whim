@@ -13,6 +13,7 @@ class ImpulsesController < ApplicationController
   end
 
   def create
+    puts "CRETING NEW IMP"
     impulse = Impulse.new(impulse_params)
     if impulse.save
       render json: impulse

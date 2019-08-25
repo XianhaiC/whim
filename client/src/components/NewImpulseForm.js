@@ -2,38 +2,48 @@ import React from 'react';
 import { API_ROOT, HEADERS } from '../constants';
 
 class NewImpulseForm extends React.Component {
-  state = {
-      title: ''
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: ''
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
 
-  handleChange = e=> {
-      this.setState({title: e.target.value});
+  handleChange = e => {
+    this.setState({name: e.target.value});
   }
 
   handleSubmit = e => {
-      fetch( '${API_ROOT}/impulses', {
-          method: 'POST',
-          headers: HEADERS, 
-          body: JSON.stringify(this.state)
-      });
-      this.setState({ title: ''});
+    e.preventDefault();
+    fetch(`${API_ROOT}/impulses`, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify(this.state)
+    })
+    .then(res => res.json())
+    .then(impulse => {
+      console.log(impulse);
+    });
+    this.setState({ name: ''});
   }
 
-  render = ()=> {
-      return (
-          <div className="newImpulseForm">
-              <form onSubmit={this.handleSubmit}>
-                  <label>New Impulse: </label>
-                  <br />
-                  <input 
-                    type="text"
-                    value={this.state.title}
-                    onChange={this.handleChange}
-                  />
-                  <input type="submit" />
-              </form>
-          </div>
-      );
+  render = () => {
+    return (
+      <div className="NewImpulseForm">
+        <form onSubmit={this.handleSubmit}>
+          <label>New Impulse: </label>
+          <br />
+          <input 
+            type="text"
+            value={this.state.name}
+            onChange={this.handleChange}
+          />
+          <input type="submit" />
+        </form>
+      </div>
+    );
   };
 }
 
