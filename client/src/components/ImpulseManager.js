@@ -5,14 +5,40 @@ import ActiveMessagesChannels from './ActiveMessagesChannels';
 import ImpulseList from './ImpulseList';
 import ActiveImpulse from './ActiveImpulse';
 import NewImpulseForm from './NewImpulseForm';
-
+import ImpulseOptionsList from './ImpulseOptionsList';
 class ImpulseManager extends React.Component { 
 
   state = { 
     impulses: [],
     sparks: [],
     active_impulse_id: null,
-    active_spark_id: null
+    active_spark_id: null,
+    option_links: [
+      {
+		index: 0, 
+        title: 'Create Invite Link', 
+  		selection: false, 
+  		key: 'option-links:'
+      },
+      {
+		index: 1, 
+  		title: 'Edit Channel Account', 
+		selection: false, 		
+		key: 'option-links'
+      },
+      {
+		index: 2, 
+		title: 'Channel Settings', 
+		selection: false, 
+		key: 'option-links'
+      },
+      {
+		index: 3, 
+		title: 'Link Account', 
+		selection: false, 
+		key: 'option-links'
+      }
+    ]
   };
 
 
@@ -83,9 +109,11 @@ class ImpulseManager extends React.Component {
           handleReceivedMessage={this.handleReceivedMessage}
           />
         )}
-        <ImpulseList impulses={impulses} onClick={this.handleClick}/>
-        {active_impulse_id && <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} />}
-      </div>
+        <div className="ViewportWrapper row"> 
+          <ImpulseList impulses={impulses} onClick={this.handleClick}/>
+          {active_impulse_id && <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} />}
+        </div>
+	  </div>
     );
   };
 }
