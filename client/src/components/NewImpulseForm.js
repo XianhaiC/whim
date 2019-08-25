@@ -23,9 +23,7 @@ class NewImpulseForm extends React.Component {
       body: JSON.stringify(this.state)
     })
     .then(res => res.json())
-    .then(impulse => {
-      console.log(impulse);
-    });
+    .then(this.props.onImpulseResponse);
     this.setState({ name: ''});
   }
 
