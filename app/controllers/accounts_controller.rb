@@ -23,7 +23,7 @@ class AccountsController < ApplicationController
 
     serialized_data = [] 
     if !account.nil?
-      render json: account.impulses, each_serializer: ImpulseSerializer
+      render json: account.impulses
     else
       render json: { errors: ['Account not found'] }, status => 400
     end
