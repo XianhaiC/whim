@@ -5,6 +5,8 @@ import MessageChannelsManager from './MessageChannelsManager';
 import ImpulseList from './ImpulseList';
 import ActiveImpulse from './ActiveImpulse';
 import NewImpulseForm from './NewImpulseForm';
+import NewSparkForm from './NewSparkForm';
+import EmptyImpulse from './EmptyImpulse';
 
 class ImpulseManager extends React.Component { 
 
@@ -14,12 +16,13 @@ class ImpulseManager extends React.Component {
       impulses: [],
       sparks: [],
       active_impulse_id: null,
-      active_spark_id: null
+      active_spark_id: null,
+      account_id: null
     };
     this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleImpulseResponse = this.handleImpulseResponse.bind(this);
   }
-
 
   componentDidMount = () => {
     fetch(`${API_ROOT}/login`, {
@@ -32,7 +35,10 @@ class ImpulseManager extends React.Component {
     })
       .then(res => res.json())
       .then(auth_payload => {
+        // persist the login for the session
         localStorage.setItem('login_session_token', auth_payload['auth_token']);
+        this.setState({ account_id: auth_payload['account']['id'] });
+
         console.log(auth_payload);
         fetch(`${API_ROOT}/accounts/${auth_payload['account']['id']}/impulses`, {
           headers: {
@@ -61,9 +67,17 @@ class ImpulseManager extends React.Component {
   };
 
   handleClick = id => {
-    const active_spark = findActiveSpark(this.state.sparks, id);
-    this.setState({ active_impulse_id: id, active_spark_id: active_spark.id });
+    this.setActiveImpulse(id);
   };
+
+  setActiveImpulse = id => {
+    const active_spark = findActiveSpark(this.state.sparks, id);
+    let active_spark_id = null;
+    if (typeof active_spark !== "undefined") {
+      active_spark_id = active_spark.id;
+    }
+    this.setState({ active_impulse_id: id, active_spark_id: active_spark_id });
+  }
 
   handleReceivedMessage = response => {
     const { message } = response;
@@ -75,10 +89,38 @@ class ImpulseManager extends React.Component {
     this.setState({ impulses });
   };
 
+  handleImpulseResponse = impulse => {
+    this.setState({ impulses: [...this.state.impulses, impulse]});
+    this.setActiveImpulse(impulse.id);
+  }
+
+  handleSparkCreation = spark => {
+    this.setState({ sparks: [...this.state.sparks, spark] });
+    this.setActiveImpulse(this.state.active_impulse_id);
+  }
+
   render = () => {
-    const { impulses, sparks, active_impulse_id, active_sparks_id } = this.state;
+    const { impulses, sparks, active_impulse_id, active_spark_id } = this.state;
     const active_impulse = findActiveImpulse(impulses, active_impulse_id);
     const active_spark = findActiveSpark(sparks, active_impulse_id);
+
+    let impulseComponent = null;
+    if (active_impulse_id) {
+      if (active_spark_id) {
+        impulseComponent = <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} />
+      }
+      else {
+        impulseComponent = ( <NewSparkForm 
+          impulse_id={active_impulse_id} 
+          account_id={this.state.account_id} 
+          onSparkCreation={this.handleSparkCreation}
+          />
+        )
+      }
+    }
+    else {
+      impulseComponent = <EmptyImpulse />
+    }
 
     return (
       <div className="ImpulseManager">
@@ -88,8 +130,12 @@ class ImpulseManager extends React.Component {
           handleReceivedMessage={this.handleReceivedMessage}
           />
         )}
-        <ImpulseList impulses={impulses} onClick={this.handleClick}/>
-        {active_impulse_id && <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} />}
+        <ImpulseList 
+          impulses={impulses} 
+          onClick={this.handleClick} 
+          onImpulseResponse={this.handleImpulseResponse}
+        />
+        {impulseComponent}
       </div>
     );
   };

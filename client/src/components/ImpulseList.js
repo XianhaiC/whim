@@ -7,7 +7,7 @@ class ImpulseList extends React.Component {
     return (
       <div className="ImpulseList">
         <ul>{mapImpulses(this.props.impulses, this.props.onClick)}</ul> 
-        <NewImpulseForm />
+        <NewImpulseForm onImpulseResponse={this.props.onImpulseResponse} />
       </div>
     );
   }

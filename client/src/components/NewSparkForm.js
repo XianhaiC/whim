@@ -1,9 +1,10 @@
 import React from 'react';
+import { API_ROOT, HEADERS } from '../constants';
 
 class NewSparkForm extends React.Component {
   state = {
-    'name': ''
-    'link_immediately': false
+    name: '',
+    link_immediately: false
   }
 
   handleChange = e => {
@@ -28,15 +29,18 @@ class NewSparkForm extends React.Component {
       method: 'POST',
       headers: HEADERS,
       body: JSON.stringify({
-        'name': "beaver",
-        'account_id': account_id,
-        'impulse_id': this.state.impulse_id
+        name: this.state.name,
+        account_id: account_id,
+        impulse_id: this.props.impulse_id
       })
     })
-    .then(res => res.json())
-    .then(auth_payload => {
-      // store the spark session token in session cookies
-    })
+      .then(res => res.json())
+      .then(response => {
+        const auth_payload = response.auth_payload;
+        const spark = response.spark;
+        localStorage.setItem(`spark_${spark.id}_session_token`, auth_payload.auth_token);
+        this.props.onSparkCreation(spark);
+      });
   }
 
   render = () => {
@@ -45,17 +49,19 @@ class NewSparkForm extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <label>Enter a name!</label>
           <br />
-          <input className="NewSparkForm__Input"
-            type="text
+          <input
+            type="text"
             value={this.state.name}
             onChange={this.handleChange}
           />
           <input type="submit" />
         </form>
       </div>
-    )
+    );
   }
 }
+
+export default NewSparkForm;
 
 NewSparkForm.defaultProps = {
   'account_id': null,

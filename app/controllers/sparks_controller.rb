@@ -11,7 +11,7 @@ class SparksController < ApplicationController
     spark = Spark.new(spark_params)
     if spark.save
       # create session token for spark
-      render json: auth_token_spark(spark)
+      render json: { auth_payload: auth_token_spark(spark), spark: spark.to_json }
     else
       render json: { errors: spark.errors }, status => 400
     end
