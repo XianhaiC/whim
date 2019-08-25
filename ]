@@ -20,13 +20,16 @@ class AccountsController < ApplicationController
 
   def impulses
     account = Account.find(params[:id])
-
     serialized_data = [] 
     if !account.nil?
-      render json: account.impulses, each_serializer: ImpulseSerializer
-    else
-      render json: { errors: ['Account not found'] }, status => 400
-    end
+      account.impulses.each do |impulse|
+        serialized_impulse = ActiveModelSerializers::Adapter::Json.new(
+            ImpulseSerializer.new(impulse)).serializable_hash
+        serialized_data.push(serialized_impulse)
+      end
+      render json: serialized_data.to_json
+
+    render json: serialized_data
   end
 
   def sparks
