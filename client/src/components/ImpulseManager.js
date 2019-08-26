@@ -8,6 +8,7 @@ import NewImpulseForm from './NewImpulseForm';
 import NewSparkForm from './NewSparkForm';
 import EmptyImpulse from './EmptyImpulse';
 import ImpulseOptionsList from './ImpulseOptionsList';
+import LoginForm from './LoginForm';
 
 class ImpulseManager extends React.Component { 
 
@@ -50,49 +51,9 @@ class ImpulseManager extends React.Component {
     this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleImpulseResponse = this.handleImpulseResponse.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
   }
   
-  componentDidMount = () => {
-    fetch(`${API_ROOT}/login`, {
-      method: 'POST',
-      headers: HEADERS,
-      body: JSON.stringify({
-        email: 'jonny@gmail.com',
-        password: 'helloworld'
-      })
-    })
-      .then(res => res.json())
-      .then(auth_payload => {
-        // persist the login for the session
-        localStorage.setItem('login_session_token', auth_payload['auth_token']);
-        this.setState({ account_id: auth_payload['account']['id'] });
-
-        console.log(auth_payload);
-        fetch(`${API_ROOT}/accounts/${auth_payload['account']['id']}/impulses`, {
-          headers: {
-            ...HEADERS,
-            AuthorizationLogin: `Bearer ${auth_payload['auth_token']}`
-          }
-        })
-          .then(res => res.json())
-          .then(impulses => {
-            console.log(impulses);
-            this.setState({ impulses: impulses })
-          })
-
-        fetch(`${API_ROOT}/accounts/${auth_payload['account']['id']}/sparks`, {
-          headers: {
-            ...HEADERS,
-            AuthorizationLogin: `Bearer ${auth_payload['auth_token']}`
-          }
-        })
-          .then(res => res.json())
-          .then(sparks => {
-            console.log(sparks);
-            this.setState({ sparks })
-          })
-      });
-  };
 
   handleClick = id => {
     this.setActiveImpulse(id);
@@ -136,6 +97,34 @@ class ImpulseManager extends React.Component {
     this.setActiveImpulse(this.state.active_impulse_id);
   }
 
+  handleLogin = auth_payload => {
+    this.setState({ account_id: auth_payload['account']['id'] });
+
+    fetch(`${API_ROOT}/accounts/${auth_payload['account']['id']}/impulses`, {
+      headers: {
+        ...HEADERS,
+        AuthorizationLogin: `Bearer ${auth_payload['auth_token']}`
+      }
+    })
+      .then(res => res.json())
+      .then(impulses => {
+        console.log(impulses);
+        this.setState({ impulses: impulses })
+      })
+
+    fetch(`${API_ROOT}/accounts/${auth_payload['account']['id']}/sparks`, {
+      headers: {
+        ...HEADERS,
+        AuthorizationLogin: `Bearer ${auth_payload['auth_token']}`
+      }
+    })
+      .then(res => res.json())
+      .then(sparks => {
+        console.log(sparks);
+        this.setState({ sparks })
+      })
+  }
+
   render = () => {
     const { impulses, sparks, active_impulse_id, active_spark_id } = this.state;
     const active_impulse = findActiveImpulse(impulses, active_impulse_id);
@@ -161,6 +150,7 @@ class ImpulseManager extends React.Component {
 
     return (
       <div className="ImpulseManager">
+        <LoginForm onLogin={this.handleLogin} />
         {this.state.impulses.length && (
           <MessageChannelsManager 
           impulses={impulses}
