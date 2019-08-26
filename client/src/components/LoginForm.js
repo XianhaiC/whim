@@ -32,6 +32,7 @@ class LoginForm extends React.Component {
       .then(auth_payload => {
         // persist the login for the session
         localStorage.setItem('login_session_token', auth_payload['auth_token']);
+        localStorage.setItem('login_account_id', auth_payload['account']['id']);
         this.props.onLogin(auth_payload);
       })
   }

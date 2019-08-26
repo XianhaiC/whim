@@ -21,37 +21,40 @@ class ImpulseManager extends React.Component {
       active_spark_id: null,
       account_id: null,
       option_links: [
-      {
-		index: 0, 
-        title: 'Create Invite Link', 
-  		selection: false, 
-  		key: 'option-links:'
-      },
-      {
-		index: 1, 
-  		title: 'Edit Channel Account', 
-		selection: false, 		
-		key: 'option-links'
-      },
-      {
-		index: 2, 
-		title: 'Channel Settings', 
-		selection: false, 
-		key: 'option-links'
-      },
-      {
-		index: 3, 
-		title: 'Link Account', 
-		selection: false, 
-		key: 'option-links'
-      }
-    ]
-
+        {
+          index: 0, 
+          title: 'Create Invite Link', 
+          selection: false, 
+          key: 'option-links:'
+        },
+        {
+          index: 1, 
+          title: 'Edit Channel Account', 
+          selection: false, 		
+          key: 'option-links'
+        },
+        {
+          index: 2, 
+          title: 'Channel Settings', 
+          selection: false, 
+          key: 'option-links'
+        },
+        {
+          index: 3, 
+          title: 'Link Account', 
+          selection: false, 
+          key: 'option-links'
+        }
+      ]
     };
+
     this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleImpulseResponse = this.handleImpulseResponse.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+
+    // check if a login session token exists
+
   }
   
 
