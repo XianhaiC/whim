@@ -18,9 +18,9 @@ sports_impulse = Impulse.create(name: "Sports", description: "A place to discuss
 
 Spark.destroy_all
 
-cooldude123 = Spark.create(name: "cooldude123", account_id: jonathan.id, impulse_id: gaming_impulse.id, session_hash: "123")
-fooldude123 = Spark.create(name: "fooldude123", account_id: andy.id, impulse_id: gaming_impulse.id, session_hash: "123")
-tooldude123 = Spark.create(name: "tooldude123", account_id: nate.id, impulse_id: gaming_impulse.id, session_hash: "123")
+cooldude123 = Spark.create(name: "cooldude123", account_id: jonathan.id, impulse_id: gaming_impulse.id)
+fooldude123 = Spark.create(name: "fooldude123", account_id: andy.id, impulse_id: gaming_impulse.id)
+tooldude123 = Spark.create(name: "tooldude123", account_id: nate.id, impulse_id: gaming_impulse.id)
 
 mandude123 = Spark.create(name: "mandude123", impulse_id: sports_impulse.id)
 fandude123 = Spark.create(name: "fandude123", impulse_id: sports_impulse.id)
