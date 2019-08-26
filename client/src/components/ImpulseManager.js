@@ -1,6 +1,7 @@
 import React from 'react';
 import { API_ROOT, HEADERS } from '../constants';
 
+import ImpulseManagerStyle from '../styles/ImpulseManagerStyle.css';
 import MessageChannelsManager from './MessageChannelsManager';
 import ImpulseList from './ImpulseList';
 import ActiveImpulse from './ActiveImpulse';
@@ -169,12 +170,14 @@ class ImpulseManager extends React.Component {
           />
         )}
         <div className="ViewportWrapper row bg-light">
-          <div className="ImpulseList col-md-4 card bg-secondary text-white">
-            <ImpulseList 
-              impulses={impulses} 
-              onClick={this.handleClick} 
-              onImpulseResponse={this.handleImpulseResponse}
-            />
+          <div className="ImpulseListSidebar col-md-4 card bg-secondary text-white">
+            <div className="sticky-top">
+              <ImpulseList 
+                impulses={impulses} 
+                onClick={this.handleClick} 
+                onImpulseResponse={this.handleImpulseResponse}
+              />
+            </div>
 		  </div>
           <div className="ImpulseComponent col-md-5">
             {impulseComponent}
