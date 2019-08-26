@@ -168,8 +168,8 @@ class ImpulseManager extends React.Component {
           handleReceivedMessage={this.handleReceivedMessage}
           />
         )}
-        <div className="ViewportWrapper row">
-          <div className="ImpulseList col-md-4">
+        <div className="ViewportWrapper row bg-light">
+          <div className="ImpulseList col-md-4 card bg-secondary text-white">
             <ImpulseList 
               impulses={impulses} 
               onClick={this.handleClick} 
