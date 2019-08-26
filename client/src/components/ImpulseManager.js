@@ -1,6 +1,7 @@
 import React from 'react';
 import { API_ROOT, HEADERS } from '../constants';
 
+import ImpulseManagerStyle from '../styles/ImpulseManagerStyle.css';
 import MessageChannelsManager from './MessageChannelsManager';
 import ImpulseList from './ImpulseList';
 import ActiveImpulse from './ActiveImpulse';
@@ -131,6 +132,7 @@ class ImpulseManager extends React.Component {
     const active_spark = findActiveSpark(sparks, active_impulse_id);
 
     let impulseComponent = null;
+    let optionsComponent = <ImpulseOptionsList list={this.state.option_links}/>
     if (active_impulse_id) {
       if (active_spark_id) {
         impulseComponent = <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} sparks={sparks}/>
@@ -157,13 +159,22 @@ class ImpulseManager extends React.Component {
           handleReceivedMessage={this.handleReceivedMessage}
           />
         )}
-        <div className="ViewportWrapper row">
-          <ImpulseList 
-            impulses={impulses} 
-            onClick={this.handleClick} 
-            onImpulseResponse={this.handleImpulseResponse}
-          />
-          {impulseComponent}
+        <div className="ViewportWrapper row bg-light">
+          <div className="ImpulseListSidebar col-md-4 card bg-secondary text-white">
+            <div className="sticky-top">
+              <ImpulseList 
+                impulses={impulses} 
+                onClick={this.handleClick} 
+                onImpulseResponse={this.handleImpulseResponse}
+              />
+            </div>
+		  </div>
+          <div className="ImpulseComponent col-md-5">
+            {impulseComponent}
+		  </div>
+          <div className="OptionsComponent col-md-3">
+            {optionsComponent}
+          </div>
         </div>
       </div>
     );

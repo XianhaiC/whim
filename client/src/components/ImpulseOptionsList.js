@@ -29,21 +29,20 @@ class ImpulseOptionsList extends Component {
 
     return (
       <div className="OptionsListWrapper"> 
-        <div className="OptionsListHeader row " onClick={() => this.toggleList()}>
-          <div className="OptionsListHeaderTitle col-md-2">{headerTitle}</div>
-          <div className="OptionsIcon col-md-1">
-		  {listOpen
-            ? <FontAwesome name="angle-up" size="2x"/>
-            : <FontAwesome name="angle-down" size="2x"/>
-          }
+        <div className="OptionsListHeader dropdown-header row " onClick={() => this.toggleList()}>
+          <div className="OptionsListHeaderTitle col-md-2">
+            <button className="btn btn-secondary dropdown-toggle" aria-haspopup="true"
+                   aria-expanded="false" type="button">{headerTitle}
+            </button>
           </div>
         </div>
-      {listOpen && <ul className="OptionsListMenu">
+        
+        {listOpen && <ul className="OptionsListMenu ">
      
-        {list.map((item) => (
-         <a> <li className="OptionsListItem" key={item.id}> {item.title} </li></a>
-        ))}
-      </ul>}
+          {list.map((item) => (
+           <a className="dropdown-item" key={item.id}> {item.title} </a>))
+          }
+        </ul>}
       </div>
     )
   }
