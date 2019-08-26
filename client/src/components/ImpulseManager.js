@@ -8,7 +8,7 @@ import ActiveImpulse from './ActiveImpulse';
 import NewImpulseForm from './NewImpulseForm';
 import NewSparkForm from './NewSparkForm';
 import EmptyImpulse from './EmptyImpulse';
-import ImpulseOptionsList from './ImpulseOptionsList';
+import ImpulseMessageSidebar from './ImpulseMessageSidebar';
 
 class ImpulseManager extends React.Component { 
 
@@ -20,34 +20,7 @@ class ImpulseManager extends React.Component {
       active_impulse_id: null,
       active_spark_id: null,
       account_id: null,
-      option_links: [
-      {
-		index: 0, 
-        title: 'Create Invite Link', 
-  		selection: false, 
-  		key: 'option-links:'
-      },
-      {
-		index: 1, 
-  		title: 'Edit Channel Account', 
-		selection: false, 		
-		key: 'option-links'
-      },
-      {
-		index: 2, 
-		title: 'Channel Settings', 
-		selection: false, 
-		key: 'option-links'
-      },
-      {
-		index: 3, 
-		title: 'Link Account', 
-		selection: false, 
-		key: 'option-links'
-      }
-    ]
-
-    };
+      };
     this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleImpulseResponse = this.handleImpulseResponse.bind(this);
@@ -103,6 +76,7 @@ class ImpulseManager extends React.Component {
     const active_spark = findActiveSpark(this.state.sparks, id);
     console.log(`FOUND ${active_spark} id: ${id}`);
     console.log(this.state.sparks);
+    console.log(this.state.impulses);
     let active_spark_id = null;
     if (typeof active_spark !== "undefined") {
       active_spark_id = active_spark.id;
@@ -143,10 +117,11 @@ class ImpulseManager extends React.Component {
     const active_spark = findActiveSpark(sparks, active_impulse_id);
 
     let impulseComponent = null;
-    let optionsComponent = <ImpulseOptionsList list={this.state.option_links}/>
+    let messageSidebarComponent = null;
     if (active_impulse_id) {
       if (active_spark_id) {
         impulseComponent = <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} sparks={sparks}/>
+        messageSidebarComponent = <ImpulseMessageSidebar active_impulse={active_impulse} sparks={sparks} /> 
       }
       else {
         impulseComponent = ( <NewSparkForm 
@@ -172,6 +147,7 @@ class ImpulseManager extends React.Component {
         <div className="ViewportWrapper row bg-light">
           <div className="ImpulseListSidebar col-md-4 card bg-secondary text-white">
             <div className="sticky-top">
+              <div className="ILSidebarHeader card-header">Impulses</div>
               <ImpulseList 
                 impulses={impulses} 
                 onClick={this.handleClick} 
@@ -182,8 +158,8 @@ class ImpulseManager extends React.Component {
           <div className="ImpulseComponent col-md-5">
             {impulseComponent}
 		  </div>
-          <div className="OptionsComponent col-md-3">
-            {optionsComponent}
+          <div className="MessageSidebarComponent col-md-3 sticky-top">
+            {messageSidebarComponent}
           </div>
         </div>
       </div>
