@@ -8,7 +8,7 @@ import ActiveImpulse from './ActiveImpulse';
 import NewImpulseForm from './NewImpulseForm';
 import NewSparkForm from './NewSparkForm';
 import EmptyImpulse from './EmptyImpulse';
-import ImpulseOptionsList from './ImpulseOptionsList';
+import MessageSidebar from './MessageSidebar';
 import LoginForm from './LoginForm';
 
 class ImpulseManager extends React.Component { 
@@ -21,33 +21,7 @@ class ImpulseManager extends React.Component {
       active_impulse_id: null,
       active_spark_id: null,
       account_id: null,
-      option_links: [
-      {
-		index: 0, 
-        title: 'Create Invite Link', 
-  		selection: false, 
-  		key: 'option-links:'
-      },
-      {
-		index: 1, 
-  		title: 'Edit Channel Account', 
-		selection: false, 		
-		key: 'option-links'
-      },
-      {
-		index: 2, 
-		title: 'Channel Settings', 
-		selection: false, 
-		key: 'option-links'
-      },
-      {
-		index: 3, 
-		title: 'Link Account', 
-		selection: false, 
-		key: 'option-links'
-      }
-    ]
-
+      
     };
     this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -132,10 +106,11 @@ class ImpulseManager extends React.Component {
     const active_spark = findActiveSpark(sparks, active_impulse_id);
 
     let impulseComponent = null;
-    let optionsComponent = <ImpulseOptionsList list={this.state.option_links}/>
+    let rightSidebarComponent = null;
     if (active_impulse_id) {
       if (active_spark_id) {
         impulseComponent = <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} sparks={sparks}/>
+        rightSidebarComponent = <MessageSidebar active_impulse={active_impulse} sparks={sparks}/>
       }
       else {
         impulseComponent = ( <NewSparkForm 
@@ -172,8 +147,8 @@ class ImpulseManager extends React.Component {
           <div className="ImpulseComponent col-md-5">
             {impulseComponent}
 		  </div>
-          <div className="OptionsComponent col-md-3">
-            {optionsComponent}
+          <div className="rightSidebarComponent col-md-3">
+            {rightSidebarComponent}
           </div>
         </div>
       </div>
