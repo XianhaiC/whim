@@ -31,6 +31,12 @@ class SparksController < ApplicationController
     serialized_data = spark.messages.to_json
     render json: serialized_data
   end
+
+  def impulses_multiple
+    sparks = Spark.where(id: params[:ids])
+    impulses = sparks.map { |spark| spark.impulse }
+    render json: impulses
+  end
   private
     def spark_params
       params.require(:spark).permit(:name, :account_id, :impulse_id)

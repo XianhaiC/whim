@@ -17,9 +17,13 @@ class ImpulseManager extends React.Component {
     this.state = { 
       impulses: [],
       sparks: [],
+      session_impulses: [],
+      session_sparks: [],
       active_impulse_id: null,
       active_spark_id: null,
       account_id: null,
+      account_session_token: null,
+      logged_in: false,
       option_links: [
         {
           index: 0, 
@@ -54,7 +58,15 @@ class ImpulseManager extends React.Component {
     this.handleLogin = this.handleLogin.bind(this);
 
     // check if a login session token exists
+    this.state.account_session_token = sessionStorage.getItem('login_session_token') || null;
+    this.state.account_id = sessionStorage.getItem('login_account_id') || null;
+    this.state.logged_in = this.state.account_id && this.state.account_session_token;
+    console.log("TOKEN IS" + this.state.logged_in);
+  }
 
+  componentDidMount = () => {
+    if (this.state.logged_in) this.loginAccount();
+    loadSessionSparks();
   }
   
 
@@ -102,23 +114,31 @@ class ImpulseManager extends React.Component {
 
   handleLogin = auth_payload => {
     this.setState({ account_id: auth_payload['account']['id'] });
+    this.loginAccount();
+  }
 
-    fetch(`${API_ROOT}/accounts/${auth_payload['account']['id']}/impulses`, {
+  loginAccount = () => {
+    if (!this.state.account_id || !this.state.account_session_token) {
+      this.setState({ logged_in: false });
+      return false;
+    }
+
+    fetch(`${API_ROOT}/accounts/${this.state.account_id}/impulses`, {
       headers: {
         ...HEADERS,
-        AuthorizationLogin: `Bearer ${auth_payload['auth_token']}`
+        AuthorizationLogin: `Bearer ${this.state.account_session_token}`
       }
     })
       .then(res => res.json())
       .then(impulses => {
         console.log(impulses);
-        this.setState({ impulses: impulses })
+        this.setState({ impulses })
       })
 
-    fetch(`${API_ROOT}/accounts/${auth_payload['account']['id']}/sparks`, {
+    fetch(`${API_ROOT}/accounts/${this.state.account_id}/sparks`, {
       headers: {
         ...HEADERS,
-        AuthorizationLogin: `Bearer ${auth_payload['auth_token']}`
+        AuthorizationLogin: `Bearer ${this.state.account_session_token}`
       }
     })
       .then(res => res.json())
@@ -126,6 +146,23 @@ class ImpulseManager extends React.Component {
         console.log(sparks);
         this.setState({ sparks })
       })
+
+    this.setState({ logged_in: true });
+  }
+
+  //TODO figure out how to handle validation of multiple session sparks before returning data from the database
+  loadSessionSparks = () => {
+    session_sparks = getSessionSparks()
+
+    session_spark_ids = this.state.session_sparks.map((spark) => spark.id);
+    fetch(`${API_ROOT}/sparks/impulse/multiple`, {
+      headers: HEADERS,
+      body: { ids: session_spark_ids }
+    })
+    .then(res => res.json())
+    .then(session_impulses => {
+      this.setState({ session_impulses });
+    });
   }
 
   render = () => {
@@ -153,7 +190,7 @@ class ImpulseManager extends React.Component {
 
     return (
       <div className="ImpulseManager">
-        <LoginForm onLogin={this.handleLogin} />
+        {!this.state.logged_in && <LoginForm onLogin={this.handleLogin} />}
         {this.state.impulses.length && (
           <MessageChannelsManager 
           impulses={impulses}

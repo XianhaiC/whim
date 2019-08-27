@@ -1,15 +1,17 @@
 import React from 'react';
 import { API_ROOT, HEADERS } from '../constants';
 
+import { getSessionSparks, addSessionSpark } from './SessionHelper';
+
 class NewSparkForm extends React.Component {
   state = {
     name: '',
     link_immediately: false
-  }
+  };
 
   handleChange = e => {
     this.setState({ name: e.target.value });
-  }
+  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -38,10 +40,13 @@ class NewSparkForm extends React.Component {
         console.log(response);
         const auth_payload = response.auth_payload;
         const spark = response.spark;
-        localStorage.setItem(`spark_${spark.id}_session_token`, auth_payload.auth_token);
+        const cookie_spark = { id: spark.id, session_token: auth_payload.auth_token };
+        addSessionSpark(cookie_spark);
+
         this.props.onSparkCreation(spark);
       });
-  }
+  };
+
 
   render = () => {
     return (
@@ -59,7 +64,7 @@ class NewSparkForm extends React.Component {
       </div>
     );
   }
-}
+};
 
 export default NewSparkForm;
 
