@@ -10,10 +10,12 @@ class ActiveImpulse extends React.Component {
 
   render = () => {
     return (
-      <div className="ActiveImpulse">
-        <MessageFeed impulse={this.props.active_impulse} sparks={this.props.sparks} />
-        <NewMessageForm impulse_id={this.props.active_impulse.id} spark_id={this.props.active_spark.id} />
-	  </div>
+      <div className="ActiveImpulse card text-white bg-dark">
+        <div className="ActiveImpulsePadding card-body">
+          <MessageFeed impulse={this.props.active_impulse} sparks={this.props.sparks} />
+          <NewMessageForm impulse_id={this.props.active_impulse.id} spark_id={this.props.active_spark.id} />
+	    </div>
+      </div>
     );
   };
 }

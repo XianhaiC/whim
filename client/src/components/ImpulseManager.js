@@ -1,13 +1,14 @@
 import React from 'react';
 import { API_ROOT, HEADERS, UNDEFINED } from '../constants';
 
+import ImpulseManagerStyle from '../styles/ImpulseManagerStyle.css';
 import MessageChannelsManager from './MessageChannelsManager';
 import ImpulseList from './ImpulseList';
 import ActiveImpulse from './ActiveImpulse';
 import NewImpulseForm from './NewImpulseForm';
 import NewSparkForm from './NewSparkForm';
 import EmptyImpulse from './EmptyImpulse';
-import ImpulseOptionsList from './ImpulseOptionsList';
+import MessageSidebar from './MessageSidebar';
 import LoginForm from './LoginForm';
 
 class ImpulseManager extends React.Component { 
@@ -238,9 +239,11 @@ class ImpulseManager extends React.Component {
     const active_spark = findActiveSpark(sparks, active_impulse_id);
 
     let impulseComponent = null;
+    let rightSidebarComponent = null;
     if (active_impulse_id) {
       if (active_spark_id) {
         impulseComponent = <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} sparks={sparks}/>
+        rightSidebarComponent = <MessageSidebar active_impulse={active_impulse} sparks={sparks}/>
       }
       else {
         impulseComponent = ( <NewSparkForm 
@@ -264,13 +267,23 @@ class ImpulseManager extends React.Component {
           handleReceivedMessage={this.handleReceivedMessage}
           />
         )}
-        <div className="ViewportWrapper row">
-          <ImpulseList 
-            impulses={impulses} 
-            onClick={this.handleClick} 
-            onImpulseCreated={this.handleImpulseCreated}
-          />
-          {impulseComponent}
+
+        <div className="ViewportWrapper row bg-light">
+          <div className="ImpulseListSidebar col-md-4 card bg-secondary text-white">
+            <div className="sticky-top">
+              <ImpulseList 
+                impulses={impulses} 
+                onClick={this.handleClick} 
+                onImpulseCreated={this.handleImpulseCreated}
+              />
+            </div>
+	  </div>
+          <div className="ImpulseComponent col-md-5">
+            {impulseComponent}
+	  </div>
+          <div className="rightSidebarComponent col-md-3">
+            {rightSidebarComponent}
+          </div>
         </div>
       </div>
     );

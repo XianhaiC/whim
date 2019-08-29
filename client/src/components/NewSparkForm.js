@@ -54,17 +54,19 @@ class NewSparkForm extends React.Component {
 
   render = () => {
     return (
-      <div className="NewSparkForm">
+      <div className="NewSparkForm card bg-dark text-white">
+        <div className="card-body">
         <form onSubmit={this.handleSubmit}>
           <label>Enter a name!</label>
-          <br />
-          <input
-            type="text"
-            value={this.state.name}
-            onChange={this.handleChange}
-          />
-          <input type="submit" />
-        </form>
+            <br />
+            <input
+              type="text"
+              value={this.state.name}
+              onChange={this.handleChange}
+            />
+            <input type="submit" />
+          </form>
+        </div>
       </div>
     );
   }
