@@ -206,6 +206,7 @@ class ImpulseManager extends React.Component {
     })
     .then(res => res.json())
     .then(session_info => {
+      
       const session_impulses = session_info.impulses;
       const session_sparks = session_info.sparks;
 
@@ -232,6 +233,8 @@ class ImpulseManager extends React.Component {
     const active_impulse = findActiveImpulse(impulses, active_impulse_id);
     console.log("CHECK SPARK LIST:");
     console.log(sparks);
+    console.log("CHECK IMPULSES LIST:");
+    console.log(impulses);
     const active_spark = findActiveSpark(sparks, active_impulse_id);
 
     let impulseComponent = null;

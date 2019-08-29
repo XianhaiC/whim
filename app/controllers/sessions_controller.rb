@@ -27,7 +27,11 @@ class SessionsController < ApplicationController
   def session_sparks
     sparks = Spark.where(session_token: params[:session_token])
     impulses = sparks.map { |spark| spark.impulse }
-    render json: { impulses: impulses, sparks: sparks }
+    render json: { 
+      impulses: ActiveModel::Serializer::CollectionSerializer.new(impulses, each_serializer: ImpulseSerializer), 
+      sparks: ActiveModel::Serializer::CollectionSerializer.new(sparks, each_serializer: SparkSerializer)
+    }
+    #render json: { impulses: impulses.as_json, sparks: sparks.as_json }
   end
 
   private
