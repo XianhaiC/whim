@@ -11,24 +11,24 @@ class ApplicationController < ActionController::API
         return
     end
 
-    def authenticate_login!
+    def authenticate_login
       unless login_authorized?
-        render json: { errors: ['Login not authenticated: Token mismatch'] }, status: :unauthorized
+        puts "LOGIN_RET #{@auth_token_session}"
+        render json: { errors: ["Login not authenticated: Token mismatch"] }, status: :unauthorized
         return
       end
       @current_account = Account.find(auth_token_login[:account_id])
       rescue JWT::VerificationError, JWT::DecodeError
-        render json: { errors: ['Login not authenticated: Account not found'] }, status: :unauthorized
+        render json: { errors: ["Login not authenticated: Account not found"] }, status: :unauthorized
     end
 
-    def authenticate_spark!
-      unless spark_authorized?
-        render json: { errors: ['Spark not authenticated: Token mismatch'] }, status: :unauthorized
+    def authenticate_session
+      unless session_authorized?
+        puts "OUT #{@auth_token_session}"
+        render json: { errors: ["Session not authenticated: Token mismatch"] }, status: :unauthorized
         return
       end
-      @current_spark = Spark.find(auth_token_spark[:spark_id])
-      rescue JWT::VerificationError, JWT::DecodeError
-        render json: { errors: ['Spark not authenticated: Spark not found'] }, status: :unauthorized
+      @current_session_token = auth_token_session[:auth_token]
     end
 
   private
@@ -46,17 +46,21 @@ class ApplicationController < ActionController::API
       http_token_login && auth_token_login && auth_token_login[:account_id].to_i
     end
 
-    def http_token_spark
-      @http_token_spark ||= if request.headers['AuthorizationSpark'].present?
-        request.headers['AuthorizationSpark'].split(' ').last
+    def http_token_session
+      puts "PROBELM HTTP"
+      @http_token_session ||= if request.headers['AuthorizationSession'].present?
+        request.headers['AuthorizationSession'].split(' ').last
       end
     end
 
-    def auth_token_spark
-      @auth_token_spark ||= JsonWebToken.decode(http_token_spark)
+    def auth_token_session
+      puts "TOKM #{http_token_session}"
+      @auth_token_session ||= JsonWebToken.decode(http_token_session)
+      puts "PROBELM #{@auth_token_session}"
+      return @auth_token_session
     end
 
-    def spark_authorized?
-      http_token_spark && auth_token_spark && auth_token_spark[:spark_id].to_i
+    def session_authorized?
+      http_token_session && auth_token_session
     end
 end

@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :authenticate_login!, except: [:create]
+  before_action :authenticate_login, except: [:create]
 
   def show
     account = Account.find(params[:id])
@@ -19,13 +19,17 @@ class AccountsController < ApplicationController
   end
 
   def impulses
+    if params[:id].to_i != @current_account.id
+      puts "CURRENT ID: #{@current_account.id}, REQ ID: #{params[:id]}"
+      return render json: { errors: ["Unauthorized for action: logged in account doesn't match requested account"] }, status: :unauthorized
+    end
     account = Account.find(params[:id])
 
     serialized_data = [] 
     if !account.nil?
       render json: account.impulses
     else
-      render json: { errors: ['Account not found'] }, status => 400
+      render json: { errors: ["Account not found"] }, status => 400
     end
   end
 

@@ -1,5 +1,6 @@
 class SparksController < ApplicationController
-  before_action :authenticate_login!, only: [:update]
+  before_action :authenticate_login, only: [:update]
+  before_action :authenticate_session, only: [:create]
 
   def show
     spark = Sparks.find(params[:id])
@@ -10,8 +11,7 @@ class SparksController < ApplicationController
     # account_id is null upon creation, will be set with PUT request during account linking
     spark = Spark.new(spark_params)
     if spark.save
-      # create session token for spark
-      render json: { auth_payload: auth_token_spark(spark), spark: spark.as_json }
+      render json: spark
     else
       render json: { errors: spark.errors }, status => 400
     end
@@ -32,14 +32,9 @@ class SparksController < ApplicationController
     render json: serialized_data
   end
 
-  def impulses_multiple
-    sparks = Spark.where(id: params[:ids])
-    impulses = sparks.map { |spark| spark.impulse }
-    render json: impulses
-  end
   private
     def spark_params
-      params.require(:spark).permit(:name, :account_id, :impulse_id)
+      params.require(:spark).permit(:name, :account_id, :impulse_id, :session_token)
     end
 
     def auth_token_spark(spark)

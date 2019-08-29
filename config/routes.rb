@@ -14,12 +14,13 @@ Rails.application.routes.draw do
     get '/sparks/:id/messages', to: 'sparks#messages'
     get '/impulses/:id/messages', to: 'impulses#messages'
     get '/impulses/:id/sparks', to: 'impulses#sparks'
-    post '/sparks/impulse/multiple', to: 'sparks#impulse_multiple'
+    post '/session-sparks', to: 'sessions#session_sparks'
 
     # session routes
     get    '/login',   to: 'sessions#new'
     post   '/login',   to: 'sessions#create'
     delete '/logout',  to: 'sessions#destroy'
+    get    '/register', to: 'sessions#register'
 
     mount ActionCable.server => '/cable'
   end

@@ -17,8 +17,8 @@ class ImpulseManager extends React.Component {
     this.state = { 
       impulses: [],
       sparks: [],
-      session_impulse_ids: [],
-      session_spark_ids: [],
+      session_impulses: [],
+      session_sparks: [],
       active_impulse_id: null,
       active_spark_id: null,
       account_id: null,
@@ -56,7 +56,7 @@ class ImpulseManager extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.handleImpulseCreated = this.handleImpulseCreated.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
-    this.handleSparkCreated = this.handleSparkCreated.bind(this);
+    this.handleSparkCreation = this.handleSparkCreation.bind(this);
 
     // check if an account session token exists
     this.state.account_session_token = sessionStorage.getItem('account_session_token');
@@ -66,13 +66,13 @@ class ImpulseManager extends React.Component {
 
     // check if a session token for sparks exists
     this.state.spark_session_token = sessionStorage.getItem('spark_session_token');
-    console.log("Session exists ? " + exists(this.state.spark_session_token));
   }
 
   componentDidMount = () => {
     if (this.state.logged_in) this.loginAccount();
-    if (!exists(this.state.spark_session_token)) this.registerSession();
-    else this.loadSessionImpulses();
+    //if (this.state.spark_session_token == null) this.registerSession();
+    //else this.loadSessionSparks();
+    this.registerSession();
   }
   
 
@@ -90,14 +90,6 @@ class ImpulseManager extends React.Component {
     this.setState({ active_impulse_id: id, active_spark_id: active_spark_id });
   }
 
-  addImpulse = impulse => {
-
-  }
-
-  addSpark = spark => {
-
-  }
-
   handleReceivedMessage = response => {
     const { message } = response;
     const impulses = [...this.state.impulses];
@@ -109,17 +101,12 @@ class ImpulseManager extends React.Component {
   };
 
   handleImpulseCreated = impulse => {
-    this.setState({ 
-      impulses: [...this.state.impulses, impulse], 
-      session_impulse_ids: [...this.state.session_impulse_ids, impulse.id]
-    });
+    this.setState({ impulses: [...this.state.impulses, impulse]});
     this.setActiveImpulse(impulse.id);
   }
 
-  handleSparkCreated = spark => {
+  handleSparkCreation = spark => {
     this.setState({ sparks: [...this.state.sparks, spark] });
-    console.log("NEW SPARK LIST:");
-    console.log(this.state.sparks);
     const impulses = [...this.state.impulses];
     const active_impulse = impulses.find(
       impulse => impulse.id === this.state.active_impulse_id
@@ -127,11 +114,7 @@ class ImpulseManager extends React.Component {
     active_impulse.sparks = [...active_impulse.sparks, spark];
 
     // set the created spark to be the active one
-    this.setState({ 
-      impulses: impulses,
-      active_spark_id: spark.id,
-      session_spark_ids: [...this.state.session_spark_ids, spark.id]
-    });
+    this.setState({ impulses: impulses, active_spark_id: spark.id });
   }
 
   handleLogin = auth_payload => {
@@ -156,10 +139,8 @@ class ImpulseManager extends React.Component {
       .then(impulses => {
         console.log("FETCHED IMPULSES:");
         console.log(impulses);
-        this.setState({ 
-          impulses: [...this.state.impulses, ...impulses],
-        });
-      });
+        this.setState({ impulses })
+      })
 
     fetch(`${API_ROOT}/accounts/${this.state.account_id}/sparks`, {
       headers: {
@@ -171,10 +152,8 @@ class ImpulseManager extends React.Component {
       .then(sparks => {
         console.log("FETCHED SPARKS:");
         console.log(sparks);
-        this.setState({ 
-          sparks: [...this.state.sparks, ...sparks],
-        });
-      });
+        this.setState({ sparks })
+      })
 
     this.setState({ logged_in: true });
   }
@@ -188,13 +167,13 @@ class ImpulseManager extends React.Component {
     .then(auth_payload => {
       this.setState({ spark_session_token: auth_payload.auth_token });
       sessionStorage.setItem('spark_session_token', auth_payload.auth_token);
-      this.loadSessionImpulses();
+      this.loadSessionSparks();
     });
   }
 
-  loadSessionImpulses = () => {
+  //TODO figure out how to handle validation of multiple session sparks before returning data from the database
+  loadSessionSparks = () => {
     const spark_session_token = sessionStorage.getItem('spark_session_token');
-    console.log("LOADING SESSION");
 
     fetch(`${API_ROOT}/session-sparks`, {
       method: 'POST',
@@ -205,33 +184,16 @@ class ImpulseManager extends React.Component {
       body: JSON.stringify({ session_token: spark_session_token })
     })
     .then(res => res.json())
-    .then(session_info => {
-      const session_impulses = session_info.impulses;
-      const session_sparks = session_info.sparks;
-
+    .then(session_sparks => {
+      this.setState({ session_sparks });
       console.log("SESSION SPARKS:");
-      console.log(session_sparks);
-      const session_impulse_ids = session_impulses.map(impulse => impulse.id);
-      const session_spark_ids = session_sparks.map(spark => spark.id);
-
-      this.setState({
-        impulses: [...this.state.impulses, ...session_impulses],
-        sparks: [...this.state.sparks, ...session_sparks],
-        session_impulse_ids: [...this.state.session_impulse_ids, ...session_impulse_ids],
-        session_spark_ids: [...this.state.session_spark_ids, ...session_spark_ids]
-      });
-
-      console.log("SPARKS UPDATED:");
-      console.log(this.state.sparks);
-
+      console.log(this.state.session_sparks);
     });
   }
 
   render = () => {
     const { impulses, sparks, active_impulse_id, active_spark_id } = this.state;
     const active_impulse = findActiveImpulse(impulses, active_impulse_id);
-    console.log("CHECK SPARK LIST:");
-    console.log(sparks);
     const active_spark = findActiveSpark(sparks, active_impulse_id);
 
     let impulseComponent = null;
@@ -243,7 +205,7 @@ class ImpulseManager extends React.Component {
         impulseComponent = ( <NewSparkForm 
           impulse_id={active_impulse_id} 
           account_id={this.state.account_id} 
-          onSparkCreated={this.handleSparkCreated}
+          onSparkCreation={this.handleSparkCreation}
           />
         )
       }
@@ -291,5 +253,5 @@ const findActiveSpark = (sparks, active_impulse_id) => {
 };
 
 const exists = (obj) => {
-  return typeof obj !== 'undefined' && obj !== null;
+  return obj !== 'undefined' && obj !== null;
 }

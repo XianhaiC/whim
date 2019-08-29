@@ -1,8 +1,6 @@
 import React from 'react';
 import { API_ROOT, HEADERS } from '../constants';
 
-import { getSessionSparks, addSessionSpark } from './SessionHelper';
-
 class NewSparkForm extends React.Component {
   state = {
     name: '',
@@ -15,6 +13,12 @@ class NewSparkForm extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    const spark_session_token = sessionStorage.getItem('spark_session_token');
+
+    if (!spark_session_token) {
+      console.log("[ERROR] NewSparkForm: No spark session registered");
+      return;
+    }
 
     if (this.props.impulse_id == null) {
       console.log("[ERROR] NewSparkForm: Cannot create spark with no impulse");
@@ -29,21 +33,21 @@ class NewSparkForm extends React.Component {
 
     fetch(`${API_ROOT}/sparks`, {
       method: 'POST',
-      headers: HEADERS,
+      headers: {
+        ...HEADERS,
+        AuthorizationSession: `Bearer ${spark_session_token}`
+      },
       body: JSON.stringify({
         name: this.state.name,
-        impulse_id: this.props.impulse_id
+        impulse_id: this.props.impulse_id,
+        session_token: spark_session_token
       })
     })
       .then(res => res.json())
-      .then(response => {
-        console.log(response);
-        const auth_payload = response.auth_payload;
-        const spark = response.spark;
-        const cookie_spark = { id: spark.id, session_token: auth_payload.auth_token };
-        addSessionSpark(cookie_spark);
+      .then(spark => {
+        console.log(spark);
 
-        this.props.onSparkCreation(spark);
+        this.props.onSparkCreated(spark);
       });
   };
 

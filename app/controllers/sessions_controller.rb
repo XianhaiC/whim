@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  before_action :authenticate_session, only: [:session_sparks]
   def new
   end
 
@@ -12,6 +13,21 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+  end
+
+  #TODO Fix authentication issue. It seems that the session token isn't being accepted for some reason. figure out what the decryption depends on
+  def register
+    time = Time.now.to_i
+    tok = JsonWebToken.encode({ timestamp: time })
+    puts "TIME #{time}"
+    puts "GEN #{tok}"
+    render json: { auth_token: tok }
+  end
+
+  def session_sparks
+    sparks = Spark.where(session_token: params[:session_token])
+    impulses = sparks.map { |spark| spark.impulse }
+    render json: { impulses: impulses, sparks: sparks }
   end
 
   private

@@ -21,15 +21,18 @@ class NewMessageForm extends React.Component {
     this.setState({ body: e.target.value });
   };
 
+  //TODO handle case where not logged in
   handleSubmit = e => {
     e.preventDefault();
-    const login_session_token = localStorage.getItem('login_session_token');
+    const account_session_token = sessionStorage.getItem('account_session_token');
+    const spark_session_token = sessionStorage.getItem('spark_session_token');
 
     fetch(`${API_ROOT}/messages`, {
       method: 'POST',
       headers: {
         ...HEADERS,
-        AuthorizationLogin: `Bearer ${login_session_token}`
+        AuthorizationLogin: `Bearer ${account_session_token}`,
+        AuthorizationSession: `Bearer ${spark_session_token}`
       },
       body: JSON.stringify(this.state)
     });
