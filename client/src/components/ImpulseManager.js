@@ -281,6 +281,7 @@ class ImpulseManager extends React.Component {
 
     return (
       <div className="ImpulseManager">
+        {this.props.invite_hash != null && <p>{this.props.invite_hash}</p>}
         {!this.state.logged_in && <LoginForm onLogin={this.handleLogin} />}
           <MessageChannelsManager 
           impulses={impulses}

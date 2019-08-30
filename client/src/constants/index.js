@@ -5,3 +5,7 @@ export const HEADERS = {
   'Content-Type': 'application/json',
   Accept: 'application/json', 
 };
+
+// routes
+export const PATH_ROOT = "/";
+export const PATH_INVITE = "/invite/:hash";

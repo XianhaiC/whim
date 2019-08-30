@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ActionCableProvider } from 'react-actioncable-provider';
+import { BrowserRouter } from 'react-router-dom';
 
 import { API_WS_ROOT } from './constants'
 import App from './App';
@@ -10,7 +11,9 @@ import './index.css';
 
 ReactDOM.render(
   <ActionCableProvider url={API_WS_ROOT}> 
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </ActionCableProvider>,
   document.getElementById('root')
 );
