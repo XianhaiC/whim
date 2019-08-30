@@ -1,7 +1,6 @@
 import React from 'react';
 import MessageFeed from './MessageFeed';
 import NewMessageForm from './NewMessageForm';
-import ImpulseOptionsList from './ImpulseOptionsList';
 
 class ActiveImpulse extends React.Component {
   state = {

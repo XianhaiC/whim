@@ -1,3 +1,6 @@
+//TODO: impulses show up twice sometimes when reloading after linking a new account.
+// this could be a problem with session sparks/impulses not being deleted, thus adding in a
+// duplicate object when retreiving session and login info
 import React from 'react';
 import { API_ROOT, HEADERS, UNDEFINED } from '../constants';
 
@@ -58,6 +61,7 @@ class ImpulseManager extends React.Component {
     this.handleImpulseCreated = this.handleImpulseCreated.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleSparkCreated = this.handleSparkCreated.bind(this);
+    this.handleAccountLinked = this.handleAccountLinked.bind(this);
 
     // check if an account session token exists
     this.state.account_session_token = sessionStorage.getItem('account_session_token');
@@ -81,23 +85,6 @@ class ImpulseManager extends React.Component {
     this.setActiveImpulse(id);
   };
 
-  setActiveImpulse = id => {
-    // grab the spark associated with the impulse
-    const active_spark = findActiveSpark(this.state.sparks, id);
-    let active_spark_id = null;
-    if (exists(active_spark)) {
-      active_spark_id = active_spark.id;
-    }
-    this.setState({ active_impulse_id: id, active_spark_id: active_spark_id });
-  }
-
-  addImpulse = impulse => {
-
-  }
-
-  addSpark = spark => {
-
-  }
 
   handleReceivedMessage = response => {
     const { message } = response;
@@ -138,6 +125,22 @@ class ImpulseManager extends React.Component {
   handleLogin = auth_payload => {
     this.setState({ account_id: auth_payload['account']['id'] });
     this.loginAccount();
+  }
+
+  handleAccountLinked(spark_id) {
+    // assume the user is logged in, since they'd long ago be redirected otherwise
+    console.log("LINKED SPARK " + spark_id);
+    console.log(this.state.sparks);
+    
+    // remove the linked spark and its impulse from the session lists
+    let sparks = [...this.state.sparks]
+    let linked_spark = sparks.find(spark => spark.id === spark_id);
+    linked_spark.account_id = this.state.account_id;
+    const linked_impulse = this.state.impulses.find(impulse => impulse.id == linked_spark.impulse_id);
+    const session_spark_ids_new = this.state.session_spark_ids.filter(id => id !== spark_id);
+    const session_impulse_ids_new = this.state.session_impulse_ids.filter(id => id !== linked_impulse.id);
+
+    this.setState({ sparks: sparks, session_spark_ids: session_spark_ids_new, session_impulse_ids: session_impulse_ids_new });
   }
 
   loginAccount = () => {
@@ -229,28 +232,46 @@ class ImpulseManager extends React.Component {
     });
   }
 
+  setActiveImpulse = id => {
+    // grab the spark associated with the impulse
+    const active_spark = findActiveSpark(this.state.sparks, id);
+    let active_spark_id = null;
+    if (exists(active_spark)) {
+      active_spark_id = active_spark.id;
+    }
+    this.setState({ active_impulse_id: id, active_spark_id: active_spark_id });
+  }
+
   render = () => {
     const { impulses, sparks, active_impulse_id, active_spark_id } = this.state;
     const active_impulse = findActiveImpulse(impulses, active_impulse_id);
-    console.log("CHECK SPARK LIST:");
-    console.log(sparks);
-    console.log("CHECK IMPULSES LIST:");
-    console.log(impulses);
     const active_spark = findActiveSpark(sparks, active_impulse_id);
+    console.log("LOGGED INNN?? " + this.state.logged_in);
 
     let impulseComponent = null;
     let rightSidebarComponent = null;
     if (active_impulse_id) {
       if (active_spark_id) {
-        impulseComponent = <ActiveImpulse active_impulse={active_impulse} active_spark={active_spark} sparks={sparks}/>
-        rightSidebarComponent = <MessageSidebar active_impulse={active_impulse} sparks={sparks}/>
+        impulseComponent = (<ActiveImpulse 
+          active_impulse={active_impulse} 
+          active_spark={active_spark} 
+          sparks={sparks}/>
+        )
+
+        rightSidebarComponent = (<MessageSidebar 
+          onAccountLinked={this.handleAccountLinked} 
+          account_id={this.state.account_id}
+          logged_in={this.state.logged_in}
+          active_impulse={active_impulse} 
+          active_spark={active_spark} 
+          sparks={sparks} />
+        )
       }
       else {
-        impulseComponent = ( <NewSparkForm 
+        impulseComponent = (<NewSparkForm 
           impulse_id={active_impulse_id} 
           account_id={this.state.account_id} 
-          onSparkCreated={this.handleSparkCreated}
-          />
+          onSparkCreated={this.handleSparkCreated} />
         )
       }
     }
@@ -261,12 +282,10 @@ class ImpulseManager extends React.Component {
     return (
       <div className="ImpulseManager">
         {!this.state.logged_in && <LoginForm onLogin={this.handleLogin} />}
-        {this.state.impulses.length && (
           <MessageChannelsManager 
           impulses={impulses}
           handleReceivedMessage={this.handleReceivedMessage}
           />
-        )}
 
         <div className="ViewportWrapper row bg-light">
           <div className="ImpulseListSidebar col-md-4 card bg-secondary text-white">
@@ -307,5 +326,5 @@ const findActiveSpark = (sparks, active_impulse_id) => {
 };
 
 const exists = (obj) => {
-  return typeof obj !== 'undefined' && obj !== null;
+  return typeof obj !== UNDEFINED && obj !== null;
 }

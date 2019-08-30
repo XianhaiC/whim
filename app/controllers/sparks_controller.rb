@@ -20,7 +20,7 @@ class SparksController < ApplicationController
   def update
     spark = Spark.find(params[:id])
     if spark.update(spark_params)
-      head :ok
+      render json: spark
     else
       render json: { errors: spark.errors }, status => 400
     end
