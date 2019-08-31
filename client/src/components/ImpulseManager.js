@@ -3,6 +3,7 @@
 // duplicate object when retreiving session and login info
 import React from 'react';
 import { API_ROOT, HEADERS, UNDEFINED } from '../constants';
+import { exists } from './helpers';
 
 import ImpulseManagerStyle from '../styles/ImpulseManagerStyle.css';
 import MessageChannelsManager from './MessageChannelsManager';
@@ -266,7 +267,6 @@ class ImpulseManager extends React.Component {
       console.log(impulse);
       this.handleImpulseCreated(impulse);
     });
-
   }
 
   setActiveImpulse = id => {
@@ -319,7 +319,7 @@ class ImpulseManager extends React.Component {
 
     return (
       <div className="ImpulseManager">
-        {this.props.invite_hash != null && <p>{this.props.invite_hash}</p>}
+        {this.props.invited_impulse != null && <p>{this.props.invited_impulse.invite_hash}</p>}
         {!this.state.logged_in && <LoginForm onLogin={this.handleLogin} />}
           <MessageChannelsManager 
           impulses={impulses}
@@ -350,7 +350,7 @@ class ImpulseManager extends React.Component {
 
 export default ImpulseManager;
 
-// Helper Functions
+// helper functions
 
 const findActiveImpulse = (impulses, active_impulse_id) => {
   return impulses.find(
@@ -364,6 +364,3 @@ const findActiveSpark = (sparks, active_impulse_id) => {
   );
 };
 
-const exists = (obj) => {
-  return typeof obj !== UNDEFINED && obj !== null;
-}

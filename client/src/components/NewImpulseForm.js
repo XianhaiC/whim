@@ -12,7 +12,7 @@ class NewImpulseForm extends React.Component {
   }
 
   handleChange = e => {
-    this.setState({name: e.target.value});
+    this.setState({ name: e.target.value });
   }
 
   handleSubmit = e => {
