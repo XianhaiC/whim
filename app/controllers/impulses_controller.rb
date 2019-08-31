@@ -37,6 +37,26 @@ class ImpulsesController < ApplicationController
     render json: serialized_data
   end
 
+  def invite
+    impulse = Impulse.find_by(invite_hash: params[:invite_hash])
+    if !impulse.nil?
+      render json: impulse
+    else
+      render json: { errors: ['Impulse not found'] }, status => 400
+    end
+  end
+
+  def invite_new
+    impulse = Impulse.find(params[:id])
+    if !impulse.nil?
+      invite_hash = gen_hash(INVITE_HASH_LENGTH)
+      impulse.update(invite_hash: invite_hash)
+      render json: impulse
+    else
+      render json: { errors: ['Impulse not found'] }, status => 400
+    end
+  end
+
   private
     def impulse_params
       params.require(:impulse).permit(:name, :description)

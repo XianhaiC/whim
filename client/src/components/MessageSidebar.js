@@ -46,9 +46,11 @@ class MessageSidebar extends React.Component {
         <div className="MessageSidebarDesc card-body">This is where description will go TODO</div>
         <ImpulseOptionsList 
           onAccountLinked={this.props.onAccountLinked}
+          onInviteCreated={this.props.onInviteCreated}
           account_id={this.props.account_id} 
           logged_in={this.props.logged_in}
           list={this.state.option_links}
+          active_impulse_id={this.props.active_impulse.id}
           active_spark_id={this.props.active_spark.id} />
       </div>
     );

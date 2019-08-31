@@ -15,6 +15,7 @@ class ImpulseOptionsList extends Component {
 
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.handleAccountLink = this.handleAccountLink.bind(this);
+    this.handleInviteCreate = this.handleInviteCreate.bind(this);
   }
 
   handleClickOutside() {
@@ -41,6 +42,17 @@ class ImpulseOptionsList extends Component {
     });
   }
 
+  handleInviteCreate() {
+    fetch(`${API_ROOT}/impulses/${this.props.active_impulse_id}/invite/new`, {
+      method: 'GET',
+      headers: HEADERS
+    })
+    .then(res => res.json())
+    .then(impulse => {
+      this.props.onInviteCreated(impulse);
+    });
+  }
+
   toggleList() {
     this.setState( prevState => ({listOpen: !prevState.listOpen})) 
   }
@@ -60,10 +72,10 @@ class ImpulseOptionsList extends Component {
         </div>
         
         {listOpen && <ul className="OptionsListMenu ">
-     
-          {list.map((item) => (
-           <button className="dropdown-item" key={item.id} onClick={this.handleAccountLink}> {item.title} </button>))
-          }
+          <button className="dropdown-item" key="0" onClick={this.handleInviteCreate}> {list[0].title} </button>
+          <button className="dropdown-item" key="1"> {list[1].title} </button>
+          <button className="dropdown-item" key="2"> {list[2].title} </button>
+          <button className="dropdown-item" key="3" onClick={this.handleAccountLink}> {list[3].title} </button>
         </ul>}
       </div>
     )

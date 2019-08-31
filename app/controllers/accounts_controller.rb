@@ -23,9 +23,8 @@ class AccountsController < ApplicationController
       puts "CURRENT ID: #{@current_account.id}, REQ ID: #{params[:id]}"
       return render json: { errors: ["Unauthorized for action: logged in account doesn't match requested account"] }, status: :unauthorized
     end
-    account = Account.find(params[:id])
 
-    serialized_data = [] 
+    account = Account.find(params[:id])
     if !account.nil?
       render json: account.impulses
     else
@@ -35,8 +34,11 @@ class AccountsController < ApplicationController
 
   def sparks
     account = Account.find(params[:id])
-    serialized_data = account.sparks.to_json
-    render json: serialized_data
+    if !account.nil?
+      render json: account.sparks
+    else
+      render json: { errors: ["Account not found"] }, status => 400
+    end
   end
 
   private

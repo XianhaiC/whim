@@ -14,11 +14,13 @@ class MessagesController < ApplicationController
 
     message = Message.new(message_params)
     impulse = Impulse.find(message_params[:impulse_id])
+    spark = message.spark
 
     if message.save
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
-        MessageSerializer.new(message)
-      ).serializable_hash
+        MessageSerializer.new(message)).serializable_hash.merge(
+          ActiveModelSerializers::Adapter::Json.new(
+          SparkSerializer.new(spark)).serializable_hash)
 
       ActiveMessagesChannel.broadcast_to impulse, serialized_data
 

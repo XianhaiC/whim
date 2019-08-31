@@ -62,6 +62,7 @@ class ImpulseManager extends React.Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleSparkCreated = this.handleSparkCreated.bind(this);
     this.handleAccountLinked = this.handleAccountLinked.bind(this);
+    this.handleInviteCreated = this.handleInviteCreated.bind(this);
 
     // check if an account session token exists
     this.state.account_session_token = sessionStorage.getItem('account_session_token');
@@ -75,9 +76,15 @@ class ImpulseManager extends React.Component {
   }
 
   componentDidMount = () => {
+    // if logged in for the session, load the account's impulses
     if (this.state.logged_in) this.loginAccount();
+
+    // register for a new session if we haven't already
     if (!exists(this.state.spark_session_token)) this.registerSession();
     else this.loadSessionImpulses();
+
+    // add the impulse we are invited to if an invite link is used to access the app
+    if (this.props.invite_hash != null) this.fetchInvitedImpulse();
   }
   
 
@@ -87,12 +94,20 @@ class ImpulseManager extends React.Component {
 
 
   handleReceivedMessage = response => {
-    const { message } = response;
+    const { message, spark } = response;
     const impulses = [...this.state.impulses];
     const impulse = impulses.find(
       impulse => impulse.id === message.impulse_id
     );
+
+    // add the message to the impulse
     impulse.messages = [...impulse.messages, message];
+
+    // add the spark poster if they're new
+    if (impulse.sparks.find(spark_poster => spark_poster.id === spark.id) !== UNDEFINED) {
+      impulse.sparks = [...impulse.sparks, spark];
+    }
+
     this.setState({ impulses });
   };
 
@@ -141,6 +156,13 @@ class ImpulseManager extends React.Component {
     const session_impulse_ids_new = this.state.session_impulse_ids.filter(id => id !== linked_impulse.id);
 
     this.setState({ sparks: sparks, session_spark_ids: session_spark_ids_new, session_impulse_ids: session_impulse_ids_new });
+  }
+
+  handleInviteCreated(invited_impulse) {
+    let impulses  = [...this.state.impulses.filter(impulse => impulse.id !== invited_impulse.id), invited_impulse];
+    this.setState({ impulses });
+    console.log("INVITE CREATED: " + invited_impulse.invite_hash);
+    
   }
 
   loginAccount = () => {
@@ -232,6 +254,21 @@ class ImpulseManager extends React.Component {
     });
   }
 
+  fetchInvitedImpulse() {
+    fetch(`${API_ROOT}/impulses/invite/${this.props.invite_hash}`, {
+      method: 'GET',
+      headers: HEADERS
+    })
+    .then(res => res.json())
+    .then(impulse => {
+      //TODO: redirect to error page if link is expired/non-existent
+      console.log("FETCHED INVITE");
+      console.log(impulse);
+      this.handleImpulseCreated(impulse);
+    });
+
+  }
+
   setActiveImpulse = id => {
     // grab the spark associated with the impulse
     const active_spark = findActiveSpark(this.state.sparks, id);
@@ -260,6 +297,7 @@ class ImpulseManager extends React.Component {
 
         rightSidebarComponent = (<MessageSidebar 
           onAccountLinked={this.handleAccountLinked} 
+          onInviteCreated={this.handleInviteCreated}
           account_id={this.state.account_id}
           logged_in={this.state.logged_in}
           active_impulse={active_impulse} 

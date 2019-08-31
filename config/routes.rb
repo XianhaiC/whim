@@ -22,6 +22,10 @@ Rails.application.routes.draw do
     delete '/logout',  to: 'sessions#destroy'
     get    '/register', to: 'sessions#register'
 
+    # invites
+    get '/impulses/:id/invite/new', to: 'impulses#invite_new'
+    get '/impulses/invite/:invite_hash', to: 'impulses#invite'
+
     mount ActionCable.server => '/cable'
   end
 end

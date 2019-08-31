@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::API
+  INVITE_HASH_LENGTH = 8
 
   # functions for login authentication
   protected
@@ -29,6 +30,12 @@ class ApplicationController < ActionController::API
         return
       end
       @current_session_token = auth_token_session[:auth_token]
+    end
+
+  # utility
+    def gen_hash(length) 
+      o = [('a'..'z')].map(&:to_a).flatten
+      string = (0...length).map { o[rand(o.length)] }.join
     end
 
   private
