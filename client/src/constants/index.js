@@ -8,4 +8,6 @@ export const HEADERS = {
 
 // routes
 export const PATH_ROOT = "/";
+export const PATH_BOARD = "/board";
 export const PATH_INVITE = "/invite/:hash";
+export const PATH_INVALID_INVITE = "/invalid";

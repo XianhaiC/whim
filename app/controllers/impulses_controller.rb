@@ -42,6 +42,8 @@ class ImpulsesController < ApplicationController
     if !impulse.nil?
       render json: impulse
     else
+      puts "FOUND IMPUSEL"
+      puts !impulse.nil?
       render json: { errors: ['Impulse not found'] }, status => 400
     end
   end
