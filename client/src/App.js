@@ -26,7 +26,7 @@ class App extends Component {
   }
 
   parseInvite(props) {
-    fetch(`${API_ROOT}/impulses/invite/${this.state.invite_hash}`, {
+    fetch(`${API_ROOT}/impulses/invite/${props.match.params.hash}`, {
       method: 'GET',
       headers: HEADERS
     })
