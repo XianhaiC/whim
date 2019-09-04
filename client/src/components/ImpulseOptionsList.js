@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { API_ROOT, HEADERS } from '../constants';
-import FontAwesome from 'react-fontawesome'
 
 class ImpulseOptionsList extends Component {
 
@@ -10,7 +9,6 @@ class ImpulseOptionsList extends Component {
     this.state = {
       listOpen: false, 
       headerTitle: 'Options',
-       
     }
 
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -71,11 +69,13 @@ class ImpulseOptionsList extends Component {
           </div>
         </div>
         
-        {listOpen && <ul className="OptionsListMenu ">
-          <button className="dropdown-item" key="0" onClick={this.handleInviteCreate}> {list[0].title} </button>
+        {listOpen && <ul className="OptionsListMenu">
+          <button className="dropdown-item" type="button" key="0" 
+                  onClick={this.handleInviteCreate}> {list[0].title} </button>
           <button className="dropdown-item" key="1"> {list[1].title} </button>
           <button className="dropdown-item" key="2"> {list[2].title} </button>
-          <button className="dropdown-item" key="3" onClick={this.handleAccountLink}> {list[3].title} </button>
+          <button className="dropdown-item" key="3" 
+                  onClick={this.handleAccountLink}> {list[3].title} </button>
         </ul>}
       </div>
     )
