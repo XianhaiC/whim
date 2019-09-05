@@ -9,6 +9,7 @@ import ImpulseManagerStyle from '../styles/ImpulseManagerStyle.css';
 import MessageChannelsManager from './MessageChannelsManager';
 import LeftSidebar from './LeftSidebar';
 import CenterCreateImpulse from './CenterCreateImpulse';
+import CenterJoinImpulse from './CenterJoinImpulse';
 import ActiveImpulse from './ActiveImpulse';
 import NewSparkForm from './NewSparkForm';
 import EmptyImpulse from './EmptyImpulse';
@@ -61,7 +62,8 @@ class ImpulseManager extends React.Component {
     this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
     this.handle_select_active_impulse = this.handle_select_active_impulse.bind(this);
     this.handle_select_create_impulse = this.handle_select_create_impulse.bind(this);
-    this.handleImpulseCreated = this.handleImpulseCreated.bind(this);
+    this.handle_select_join_impulse = this.handle_select_join_impulse.bind(this);
+    this.handle_impulse_joined = this.handle_impulse_joined.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleSparkCreated = this.handleSparkCreated.bind(this);
     this.handleAccountLinked = this.handleAccountLinked.bind(this);
@@ -99,6 +101,10 @@ class ImpulseManager extends React.Component {
     this.setState({ render_center: CenterState.CREATE });
   }
 
+  handle_select_join_impulse() {
+    this.setState({ render_center: CenterState.JOIN });
+  }
+
   handleReceivedMessage = response => {
     const { message, spark } = response;
     const impulses = [...this.state.impulses];
@@ -117,11 +123,14 @@ class ImpulseManager extends React.Component {
     this.setState({ impulses });
   };
 
-  handleImpulseCreated = impulse => {
-    this.setState({ 
-      impulses: [...this.state.impulses, impulse], 
-      session_impulse_ids: [...this.state.session_impulse_ids, impulse.id]
-    });
+  handle_impulse_joined = impulse => {
+    let linked_impulse = findImpulse(this.state.impulses, impulse.id);
+    if (!exists(linked_impulse)) {
+      this.setState({ 
+        impulses: [...this.state.impulses, impulse], 
+        session_impulse_ids: [...this.state.session_impulse_ids, impulse.id]
+      });
+    }
     this.setActiveImpulse(impulse.id);
   }
 
@@ -259,6 +268,7 @@ class ImpulseManager extends React.Component {
       });
   }
 
+  // TODO: is this still relevant
   fetchInvitedImpulse() {
     fetch(`${API_ROOT}/impulses/invite/${this.props.invite_hash}`, {
       method: 'GET',
@@ -269,7 +279,7 @@ class ImpulseManager extends React.Component {
         //TODO: redirect to error page if link is expired/non-existent
         console.log("FETCHED INVITE");
         console.log(impulse);
-        this.handleImpulseCreated(impulse);
+        this.handle_impulse_joined(impulse);
       });
   }
 
@@ -289,7 +299,7 @@ class ImpulseManager extends React.Component {
 
   render = () => {
     const { impulses, sparks, active_impulse_id, active_spark_id } = this.state;
-    const active_impulse = findActiveImpulse(impulses, active_impulse_id);
+    const active_impulse = findImpulse(impulses, active_impulse_id);
     const active_spark = findActiveSpark(sparks, active_impulse_id);
     console.log("LOGGED INNN?? " + this.state.logged_in);
 
@@ -314,10 +324,11 @@ class ImpulseManager extends React.Component {
         break;
       case CenterState.CREATE:
         center_component = (<CenterCreateImpulse
-          on_impulse_created={this.handleImpulseCreated} 
-          on_click={this.handle_select_create_impulse}/>)
+          on_impulse_created={this.handle_impulse_joined}/>)
         break;
       case CenterState.JOIN:
+        center_component = (<CenterJoinImpulse
+          on_impulse_joined={this.handle_impulse_joined}/>)
         break;
       case CenterState.SPARK:
         center_component = (<NewSparkForm 
@@ -344,10 +355,12 @@ class ImpulseManager extends React.Component {
             impulses={impulses} 
             session_impulse_ids={this.state.session_impulse_ids}
             on_click_active_impulse={this.handle_select_active_impulse}
-            on_click_create_impulse={this.handle_select_create_impulse}/>
+            on_click_create_impulse={this.handle_select_create_impulse}
+            on_click_join_impulse={this.handle_select_join_impulse}/>
 
-            {center_component}
-            {right_sidebar}
+          {center_component}
+
+          {right_sidebar}
         </div>
       </div>
     );
@@ -359,7 +372,7 @@ export default ImpulseManager;
 
 // helper functions
 
-const findActiveImpulse = (impulses, active_impulse_id) => {
+const findImpulse = (impulses, active_impulse_id) => {
   return impulses.find(
     impulse => impulse.id === active_impulse_id
   );
