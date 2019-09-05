@@ -3,13 +3,13 @@
 // duplicate object when retreiving session and login info
 import React from 'react';
 import { API_ROOT, HEADERS, UNDEFINED } from '../constants';
-import { exists } from './helpers';
+import { exists, CenterState } from './helpers';
 
 import ImpulseManagerStyle from '../styles/ImpulseManagerStyle.css';
 import MessageChannelsManager from './MessageChannelsManager';
-import ImpulseList from './ImpulseList';
+import LeftSidebar from './LeftSidebar';
+import CenterCreateImpulse from './CenterCreateImpulse';
 import ActiveImpulse from './ActiveImpulse';
-import NewImpulseForm from './NewImpulseForm';
 import NewSparkForm from './NewSparkForm';
 import EmptyImpulse from './EmptyImpulse';
 import MessageSidebar from './MessageSidebar';
@@ -20,6 +20,7 @@ class ImpulseManager extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
+      render_center: CenterState.BLANK,
       impulses: [],
       sparks: [],
       session_impulse_ids: [],
@@ -58,7 +59,8 @@ class ImpulseManager extends React.Component {
     };
 
     this.handleReceivedMessage = this.handleReceivedMessage.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.handle_select_active_impulse = this.handle_select_active_impulse.bind(this);
+    this.handle_select_create_impulse = this.handle_select_create_impulse.bind(this);
     this.handleImpulseCreated = this.handleImpulseCreated.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleSparkCreated = this.handleSparkCreated.bind(this);
@@ -87,12 +89,15 @@ class ImpulseManager extends React.Component {
     // add the impulse we are invited to if an invite link is used to access the app
     if (this.props.invite_hash != null) this.fetchInvitedImpulse();
   }
-  
 
-  handleClick = id => {
-    this.setActiveImpulse(id);
+
+  handle_select_active_impulse(impulse_id) {
+    this.setActiveImpulse(impulse_id);
   };
 
+  handle_select_create_impulse() {
+    this.setState({ render_center: CenterState.CREATE });
+  }
 
   handleReceivedMessage = response => {
     const { message, spark } = response;
@@ -121,9 +126,6 @@ class ImpulseManager extends React.Component {
   }
 
   handleSparkCreated = spark => {
-    this.setState({ sparks: [...this.state.sparks, spark] });
-    console.log("NEW SPARK LIST:");
-    console.log(this.state.sparks);
     const impulses = [...this.state.impulses];
     const active_impulse = impulses.find(
       impulse => impulse.id === this.state.active_impulse_id
@@ -132,6 +134,8 @@ class ImpulseManager extends React.Component {
 
     // set the created spark to be the active one
     this.setState({ 
+      render_center: CenterState.ACTIVE,
+      sparks: [...this.state.sparks, spark],
       impulses: impulses,
       active_spark_id: spark.id,
       session_spark_ids: [...this.state.session_spark_ids, spark.id]
@@ -147,7 +151,7 @@ class ImpulseManager extends React.Component {
     // assume the user is logged in, since they'd long ago be redirected otherwise
     console.log("LINKED SPARK " + spark_id);
     console.log(this.state.sparks);
-    
+
     // remove the linked spark and its impulse from the session lists
     let sparks = [...this.state.sparks]
     let linked_spark = sparks.find(spark => spark.id === spark_id);
@@ -163,7 +167,7 @@ class ImpulseManager extends React.Component {
     let impulses  = [...this.state.impulses.filter(impulse => impulse.id !== invited_impulse.id), invited_impulse];
     this.setState({ impulses });
     console.log("INVITE CREATED: " + invited_impulse.invite_hash);
-    
+
   }
 
   loginAccount = () => {
@@ -178,30 +182,30 @@ class ImpulseManager extends React.Component {
         ...HEADERS,
         AuthorizationLogin: `Bearer ${account_session_token}`
       }
-    })
-      .then(res => res.json())
-      .then(impulses => {
-        console.log("FETCHED IMPULSES:");
-        console.log(impulses);
-        this.setState({ 
-          impulses: [...this.state.impulses, ...impulses],
-        });
+    }
+    ).then(res => res.json()
+    ).then(impulses => {
+      console.log("FETCHED IMPULSES:");
+      console.log(impulses);
+      this.setState({ 
+        impulses: [...this.state.impulses, ...impulses],
       });
+    });
 
     fetch(`${API_ROOT}/accounts/${this.state.account_id}/sparks`, {
       headers: {
         ...HEADERS,
         AuthorizationLogin: `Bearer ${account_session_token}`
       }
-    })
-      .then(res => res.json())
-      .then(sparks => {
-        console.log("FETCHED SPARKS:");
-        console.log(sparks);
-        this.setState({ 
-          sparks: [...this.state.sparks, ...sparks],
-        });
+    }
+    ).then(res => res.json()
+    ).then(sparks => {
+      console.log("FETCHED SPARKS:");
+      console.log(sparks);
+      this.setState({ 
+        sparks: [...this.state.sparks, ...sparks],
       });
+    });
 
     this.setState({ logged_in: true });
   }
@@ -211,12 +215,12 @@ class ImpulseManager extends React.Component {
       method: 'GET',
       headers: HEADERS
     })
-    .then(res => res.json())
-    .then(auth_payload => {
-      this.setState({ spark_session_token: auth_payload.auth_token });
-      sessionStorage.setItem('spark_session_token', auth_payload.auth_token);
-      this.loadSessionImpulses();
-    });
+      .then(res => res.json())
+      .then(auth_payload => {
+        this.setState({ spark_session_token: auth_payload.auth_token });
+        sessionStorage.setItem('spark_session_token', auth_payload.auth_token);
+        this.loadSessionImpulses();
+      });
   }
 
   loadSessionImpulses = () => {
@@ -231,28 +235,28 @@ class ImpulseManager extends React.Component {
       },
       body: JSON.stringify({ session_token: spark_session_token })
     })
-    .then(res => res.json())
-    .then(session_info => {
-      
-      const session_impulses = session_info.impulses;
-      const session_sparks = session_info.sparks;
+      .then(res => res.json())
+      .then(session_info => {
 
-      console.log("SESSION SPARKS:");
-      console.log(session_sparks);
-      const session_impulse_ids = session_impulses.map(impulse => impulse.id);
-      const session_spark_ids = session_sparks.map(spark => spark.id);
+        const session_impulses = session_info.impulses;
+        const session_sparks = session_info.sparks;
 
-      this.setState({
-        impulses: [...this.state.impulses, ...session_impulses],
-        sparks: [...this.state.sparks, ...session_sparks],
-        session_impulse_ids: [...this.state.session_impulse_ids, ...session_impulse_ids],
-        session_spark_ids: [...this.state.session_spark_ids, ...session_spark_ids]
+        console.log("SESSION SPARKS:");
+        console.log(session_sparks);
+        const session_impulse_ids = session_impulses.map(impulse => impulse.id);
+        const session_spark_ids = session_sparks.map(spark => spark.id);
+
+        this.setState({
+          impulses: [...this.state.impulses, ...session_impulses],
+          sparks: [...this.state.sparks, ...session_sparks],
+          session_impulse_ids: [...this.state.session_impulse_ids, ...session_impulse_ids],
+          session_spark_ids: [...this.state.session_spark_ids, ...session_spark_ids]
+        });
+
+        console.log("SPARKS UPDATED:");
+        console.log(this.state.sparks);
+
       });
-
-      console.log("SPARKS UPDATED:");
-      console.log(this.state.sparks);
-
-    });
   }
 
   fetchInvitedImpulse() {
@@ -260,13 +264,13 @@ class ImpulseManager extends React.Component {
       method: 'GET',
       headers: HEADERS
     })
-    .then(res => res.json())
-    .then(impulse => {
-      //TODO: redirect to error page if link is expired/non-existent
-      console.log("FETCHED INVITE");
-      console.log(impulse);
-      this.handleImpulseCreated(impulse);
-    });
+      .then(res => res.json())
+      .then(impulse => {
+        //TODO: redirect to error page if link is expired/non-existent
+        console.log("FETCHED INVITE");
+        console.log(impulse);
+        this.handleImpulseCreated(impulse);
+      });
   }
 
   setActiveImpulse = id => {
@@ -276,7 +280,11 @@ class ImpulseManager extends React.Component {
     if (exists(active_spark)) {
       active_spark_id = active_spark.id;
     }
-    this.setState({ active_impulse_id: id, active_spark_id: active_spark_id });
+
+    let new_center_state = active_spark_id == null ? 
+      CenterState.SPARK : CenterState.ACTIVE;
+    this.setState({ render_center: new_center_state, 
+      active_impulse_id: id, active_spark_id: active_spark_id });
   }
 
   render = () => {
@@ -285,63 +293,61 @@ class ImpulseManager extends React.Component {
     const active_spark = findActiveSpark(sparks, active_impulse_id);
     console.log("LOGGED INNN?? " + this.state.logged_in);
 
-    let impulseComponent = null;
-    let rightSidebarComponent = null;
-    if (active_impulse_id) {
-      if (active_spark_id) {
-        impulseComponent = (<ActiveImpulse 
+    let center_component = null;
+    let right_sidebar = null;
+
+    switch (this.state.render_center) {
+      case CenterState.ACTIVE:
+        center_component = (<ActiveImpulse 
           active_impulse={active_impulse} 
           active_spark={active_spark} 
-          sparks={sparks}/>
-        )
+          sparks={sparks}/>)
 
-        rightSidebarComponent = (<MessageSidebar 
+        right_sidebar = (<MessageSidebar 
           onAccountLinked={this.handleAccountLinked} 
           onInviteCreated={this.handleInviteCreated}
           account_id={this.state.account_id}
           logged_in={this.state.logged_in}
           active_impulse={active_impulse} 
           active_spark={active_spark} 
-          sparks={sparks} />
-        )
-      }
-      else {
-        impulseComponent = (<NewSparkForm 
+          sparks={sparks}/>)
+        break;
+      case CenterState.CREATE:
+        center_component = (<CenterCreateImpulse
+          on_impulse_created={this.handleImpulseCreated} 
+          on_click={this.handle_select_create_impulse}/>)
+        break;
+      case CenterState.JOIN:
+        break;
+      case CenterState.SPARK:
+        center_component = (<NewSparkForm 
           impulse_id={active_impulse_id} 
           account_id={this.state.account_id} 
-          onSparkCreated={this.handleSparkCreated} />
-        )
-      }
-    }
-    else {
-      impulseComponent = <EmptyImpulse />
+          onSparkCreated={this.handleSparkCreated}/>)
+        break;
+      case CenterState.BLANK:
+      default:
+        center_component = <EmptyImpulse />
+          break;
     }
 
     return (
-      <div className="ImpulseManager">
-        {this.props.invited_impulse != null && <p>{this.props.invited_impulse.invite_hash}</p>}
-        {!this.state.logged_in && <LoginForm onLogin={this.handleLogin} />}
-          <MessageChannelsManager 
+      <div className="impulse_manager">
+          {this.props.invited_impulse != null && <p>{this.props.invited_impulse.invite_hash}</p>}
+          {!this.state.logged_in && <LoginForm onLogin={this.handleLogin}/>}
+        <MessageChannelsManager 
           impulses={impulses}
-          handleReceivedMessage={this.handleReceivedMessage}
-          />
+          handleReceivedMessage={this.handleReceivedMessage}/>
 
-        <div className="ViewportWrapper row bg-light">
-          <div className="ImpulseListSidebar col-md-4 card bg-secondary text-white">
-            <div className="sticky-top">
-              <ImpulseList 
-                impulses={impulses} 
-                onClick={this.handleClick} 
-                onImpulseCreated={this.handleImpulseCreated}
-              />
-            </div>
-	  </div>
-          <div className="ImpulseComponent col-md-5">
-            {impulseComponent}
-	  </div>
-          <div className="rightSidebarComponent col-md-3">
-            {rightSidebarComponent}
-          </div>
+        <div className="impulse_manager_flex">
+          <LeftSidebar 
+            impulses={impulses} 
+            session_impulse_ids={this.state.session_impulse_ids}
+            on_click_active_impulse={this.handle_select_active_impulse}
+            on_click_create_impulse={this.handle_select_create_impulse}/>
+
+            {center_component}
+            {right_sidebar}
         </div>
       </div>
     );
@@ -349,6 +355,7 @@ class ImpulseManager extends React.Component {
 }
 
 export default ImpulseManager;
+
 
 // helper functions
 
