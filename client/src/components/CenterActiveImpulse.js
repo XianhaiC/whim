@@ -4,11 +4,7 @@ import CreateMessage from './CreateMessage';
 import ImpulseHeader from './ImpulseHeader';
 
 class CenterActiveImpulse extends React.Component {
-  state = {
-
-  };
-
-  render = () => {
+  render() {
     return (
       <div className="CenterActiveImpulse">
         <p>Invite hash: {this.props.active_impulse.invite_hash}</p>
@@ -20,4 +16,4 @@ class CenterActiveImpulse extends React.Component {
   };
 }
 
-export default CreateMessage;
+export default CenterActiveImpulse;

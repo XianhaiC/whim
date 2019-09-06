@@ -13,8 +13,7 @@ class MessageFeed extends React.Component {
     }
 
     let date = new Date();
-    this.state.offset = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} 
-    ${date.getHours}:${date.getMinutes()}:${date.getSeconds()}`
+    this.state.offset = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}T${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
 
   }
 
