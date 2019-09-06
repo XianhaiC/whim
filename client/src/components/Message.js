@@ -4,8 +4,11 @@ class Message extends React.Component {
   render = () => {
     return (
       <div className="Message">
-        <h3>{this.props.spark_name}</h3>
-        <p>{this.props.body}</p>
+        <hr/>
+        <div className="message-spark-pic">Profile Pic</div>
+        <h3 className="message-spark-name">{this.props.message.spark.name}</h3>
+        <p className="message-created-at">{this.props.message.created_at}</p>
+        <p className="message-body">{this.props.message.body}</p>
       </div>
     );
   };

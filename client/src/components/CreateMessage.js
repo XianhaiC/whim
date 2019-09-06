@@ -1,7 +1,7 @@
 import React from 'react';
 import { API_ROOT, HEADERS } from '../constants';
 
-class NewMessageForm extends React.Component {
+class CreateMessage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,12 +21,13 @@ class NewMessageForm extends React.Component {
     this.setState({ body: e.target.value });
   };
 
-  //TODO handle case where not logged in
   handleSubmit = e => {
     e.preventDefault();
     const account_session_token = sessionStorage.getItem('account_session_token');
     const spark_session_token = sessionStorage.getItem('spark_session_token');
 
+    // note that login authentication may fail but session authentication can succeed
+    // so long as one succeeds the message will be successfully sent
     fetch(`${API_ROOT}/messages`, {
       method: 'POST',
       headers: {
@@ -41,20 +42,17 @@ class NewMessageForm extends React.Component {
 
   render = () => {
     return (
-      <div className="NewMessageForm">
+      <div className="CreateMessage">
         <form onSubmit={this.handleSubmit}>
-          <label>New Message:</label>
-          <br />
-          <input
+          <input className="message-text"
             type="text"
             value={this.state.body}
-            onChange={this.handleChange}
-          />
-          <input type="submit" />
+            onChange={this.handleChange}/>
+          <input className="message-submit" type="submit"/>
         </form>
       </div>
     );
   };
 }
 
-export default NewMessageForm;
+export default CreateMessage;

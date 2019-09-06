@@ -8,12 +8,12 @@ import { exists, CenterState } from './helpers';
 import ImpulseManagerStyle from '../styles/ImpulseManagerStyle.css';
 import MessageChannelsManager from './MessageChannelsManager';
 import LeftSidebar from './LeftSidebar';
+import RightSidebar from './RightSidebar';
+import CenterActiveImpulse from './CenterActiveImpulse';
 import CenterCreateImpulse from './CenterCreateImpulse';
 import CenterJoinImpulse from './CenterJoinImpulse';
-import ActiveImpulse from './ActiveImpulse';
 import NewSparkForm from './NewSparkForm';
 import EmptyImpulse from './EmptyImpulse';
-import MessageSidebar from './MessageSidebar';
 import LoginForm from './LoginForm';
 
 class ImpulseManager extends React.Component { 
@@ -308,12 +308,12 @@ class ImpulseManager extends React.Component {
 
     switch (this.state.render_center) {
       case CenterState.ACTIVE:
-        center_component = (<ActiveImpulse 
+        center_component = (<CenterActiveImpulse 
           active_impulse={active_impulse} 
           active_spark={active_spark} 
           sparks={sparks}/>)
 
-        right_sidebar = (<MessageSidebar 
+        right_sidebar = (<RightSidebar 
           onAccountLinked={this.handleAccountLinked} 
           onInviteCreated={this.handleInviteCreated}
           account_id={this.state.account_id}

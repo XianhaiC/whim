@@ -6,11 +6,36 @@ class ImpulseOptionsList extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
-      listOpen: false, 
+      listOpen: false,
       headerTitle: 'Options',
-       
+      optionItems: [
+        {
+          index: 0,
+          title: 'Create Invite Link',
+          selection: false,
+          key: 'option-links:'
+        },
+        {
+          index: 1,
+          title: 'Edit Channel Account',
+          selection: false,
+          key: 'option-links'
+        },
+        {
+          index: 2,
+          title: 'Channel Settings',
+          selection: false,
+          key: 'option-links'
+        },
+        {
+          index: 3,
+          title: 'Link Account',
+          selection: false,
+          key: 'option-links'
+        }
+      ]
     }
 
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -54,15 +79,32 @@ class ImpulseOptionsList extends Component {
   }
 
   toggleList() {
-    this.setState( prevState => ({listOpen: !prevState.listOpen})) 
+    this.setState( prevState => ({listOpen: !prevState.listOpen}));
   }
 
   render() {
-    const {list} = this.props;
-    const {listOpen, headerTitle} = this.state
+    const {listOpen, headerTitle, optionItems} = this.state
 
     return (
-      <div className="OptionsListWrapper"> 
+      <div className="right-impulse-options">
+        <ul className="options-list">
+          <button className="option-item" key="0" onClick={this.handleInviteCreate}> {optionItems[0].title} </button>
+          <button className="option-item" key="1"> {optionItems[1].title} </button>
+          <button className="option-item" key="2"> {optionItems[2].title} </button>
+          <button className="option-item" key="3" onClick={this.handleAccountLink}> {optionItems[3].title} </button>
+        </ul>
+      </div>
+    )
+      /*
+    return (
+      <div className="right-impulse-options">
+        <ul className="options-list">
+          <button className="option-item" key="0" onClick={this.handleInviteCreate}> {optionItems[0].title} </button>
+          <button className="option-item" key="1"> {optionItems[1].title} </button>
+          <button className="option-item" key="2"> {option[2].title} </button>
+          <button className="option-item" key="3" onClick={this.handleAccountLink}> {optionItem[3].title} </button>
+        </ul>
+
         <div className="OptionsListHeader dropdown-header row " onClick={() => this.toggleList()}>
           <div className="OptionsListHeaderTitle col-md-2">
             <button className="btn btn-secondary dropdown-toggle" aria-haspopup="true"
@@ -70,15 +112,10 @@ class ImpulseOptionsList extends Component {
             </button>
           </div>
         </div>
-        
-        {listOpen && <ul className="OptionsListMenu ">
-          <button className="dropdown-item" key="0" onClick={this.handleInviteCreate}> {list[0].title} </button>
-          <button className="dropdown-item" key="1"> {list[1].title} </button>
-          <button className="dropdown-item" key="2"> {list[2].title} </button>
-          <button className="dropdown-item" key="3" onClick={this.handleAccountLink}> {list[3].title} </button>
-        </ul>}
+
       </div>
     )
+    */
   }
 }
 

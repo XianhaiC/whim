@@ -1,22 +1,39 @@
 import React from 'react';
-import NewMessageForm from './NewMessageForm';
+import { API_ROOT, HEADERS, PATH_QUERY_MESSAGES } from '../constants';
+
 import Message from './Message';
 
+// is in charge of loading messages given an impulse id
 class MessageFeed extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      offset: null,
+      messages: []
+    }
 
-  render = () => {
+    let date = new Date();
+    this.state.offset = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} 
+    ${date.getHours}:${date.getMinutes()}:${date.getSeconds()}`
+
+  }
+
+  componentDidMount() {
+    this.fetchMessages();
+  }
+
+  fetchMessages() {
+    fetch(`${API_ROOT}${PATH_QUERY_MESSAGES}offset=${this.state.offset}`, {
+      method: 'GET'
+    }
+    ).then(res => res.json()
+    ).then(messagesNew => this.setState({ messages: [...this.state.messages, ...messagesNew] }));
+  }
+
+  render() {
     return (
       <div className="MessageFeed">
-        {
-          orderedMessages(this.props.impulse.messages).map(message => {
-            const spark_poster = this.props.impulse.sparks.find(
-              spark => spark.id == message.spark_id
-            );
-            return (
-              <Message spark_name={spark_poster.name} body={message.body} />
-            );
-          })
-        }
+        {this.state.messages.reverse().map(message => <Message message={message}/>)}
       </div>
     );
   };
