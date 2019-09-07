@@ -5,5 +5,4 @@ class Spark < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 50 }
   validates :impulse_id, presence: true
-  validates :session_token, presence: true
 end

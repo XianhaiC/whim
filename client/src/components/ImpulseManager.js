@@ -232,7 +232,7 @@ class ImpulseManager extends React.Component {
       });
   }
 
-  loadSessionImpulses = () => {
+  loadSessionImpulses() {
     const spark_session_token = sessionStorage.getItem('spark_session_token');
     console.log("LOADING SESSION");
 
@@ -253,6 +253,7 @@ class ImpulseManager extends React.Component {
         console.log("SESSION SPARKS:");
         console.log(session_sparks);
         const session_impulse_ids = session_impulses.map(impulse => impulse.id);
+
         const session_spark_ids = session_sparks.map(spark => spark.id);
 
         this.setState({
@@ -348,8 +349,8 @@ class ImpulseManager extends React.Component {
           {this.props.invited_impulse != null && <p>{this.props.invited_impulse.invite_hash}</p>}
           {!this.state.logged_in && <LoginForm onLogin={this.handleLogin}/>}
         <div className="impulse_manager_flex">
-          <LeftSidebar 
-            impulses={impulses} 
+          <LeftSidebar
+            impulses={impulses}
             session_impulse_ids={this.state.session_impulse_ids}
             on_click_active_impulse={this.handle_select_active_impulse}
             on_click_create_impulse={this.handle_select_create_impulse}
