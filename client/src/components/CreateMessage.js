@@ -37,6 +37,7 @@ class CreateMessage extends React.Component {
       },
       body: JSON.stringify(this.state)
     });
+
     this.setState({ body: '' });
   };
 

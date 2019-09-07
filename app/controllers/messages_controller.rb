@@ -20,12 +20,17 @@ class MessagesController < ApplicationController
 
     if message.save
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
-        MessageSerializer.new(message)).serializable_hash.merge(
-          ActiveModelSerializers::Adapter::Json.new(
-          SparkSerializer.new(spark)).serializable_hash)
+        MessageSerializer.new(message)).serializable_hash
+
+      #TODO use as reference
+      #serialized_data = ActiveModelSerializers::Adapter::Json.new(
+      #  MessageSerializer.new(message)).serializable_hash.merge(
+      #    ActiveModelSerializers::Adapter::Json.new(
+      #    SparkSerializer.new(spark)).serializable_hash)
 
       ActiveMessagesChannel.broadcast_to impulse, serialized_data
 
+      #render json: message
       head :ok
     else
       render json: { errors: message.errors }, status => 400

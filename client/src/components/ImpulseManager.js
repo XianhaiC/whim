@@ -347,10 +347,6 @@ class ImpulseManager extends React.Component {
       <div className="impulse_manager">
           {this.props.invited_impulse != null && <p>{this.props.invited_impulse.invite_hash}</p>}
           {!this.state.logged_in && <LoginForm onLogin={this.handleLogin}/>}
-        <MessageChannelsManager 
-          impulses={impulses}
-          handleReceivedMessage={this.handleReceivedMessage}/>
-
         <div className="impulse_manager_flex">
           <LeftSidebar 
             impulses={impulses} 
