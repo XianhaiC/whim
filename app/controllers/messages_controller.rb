@@ -39,8 +39,11 @@ class MessagesController < ApplicationController
   end
 
   def query_paginate
-    messages = Message.where("created_at < :date", date: params[:offset]).order("created_at DESC").limit(MESSAGES_PER_PAGE)
-
+    # query the impulse with the associated id for a set of messages created
+    # after the given date
+    messages = Message.where("created_at < (?) AND impulse_id = (?)",
+                             params[:offset], params[:id])
+      .order("created_at DESC").limit(MESSAGES_PER_PAGE)
     render json: messages
   end
 

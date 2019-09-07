@@ -312,6 +312,7 @@ class ImpulseManager extends React.Component {
           active_impulse={active_impulse} 
           active_spark={active_spark} 
           sparks={sparks}/>)
+        console.log("SET");
 
         right_sidebar = (<RightSidebar 
           onAccountLinked={this.handleAccountLinked} 

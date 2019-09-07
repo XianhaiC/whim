@@ -14,8 +14,7 @@ class MessageFeed extends React.Component {
     }
 
     let date = new Date();
-    this.state.offset = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} 
-    ${date.getHours}:${date.getMinutes()}:${date.getSeconds()}`
+    this.state.offset = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
 
   }
 
@@ -24,15 +23,15 @@ class MessageFeed extends React.Component {
   }
 
   fetchMessages() {
-    fetch(`${API_ROOT}${PATH_QUERY_MESSAGES}offset=${this.state.offset}`, {
-      method: 'GET'
+    fetch(`${API_ROOT}${PATH_QUERY_MESSAGES}/${this.props.impulse.id}?offset=${this.state.offset}`, {
+      method: 'GET',
+      headers: HEADERS
     }
     ).then(res => res.json()
     ).then(messagesNew => {
-    	console.log(this.state.messages);
-	  	this.setState({ messages: [...this.state.messages, ...messagesNew] });
-		});
-	}
+      this.setState({ messages: [...this.state.messages, ...messagesNew] });
+    });
+  }
 
   render() {
     return (
