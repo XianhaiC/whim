@@ -27,14 +27,12 @@ class ImpulsesController < ApplicationController
 
   def messages
     impulse = Impulse.find(params[:id])
-    serialized_data = impulse.messages.to_json
-    render json: serialized_data
+    render json: impulse.messages
   end
 
   def sparks
     impulse = Impulse.find(params[:id])
-    serialized_data = impulse.sparks.to_json
-    render json: serialized_data
+    render json: impulse.sparks
   end
 
   def invite

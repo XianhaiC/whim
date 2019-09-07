@@ -5,9 +5,9 @@ class ImpulseOptionsList extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
-      listOpen: false, 
+      listOpen: false,
       headerTitle: 'Options',
     }
 
@@ -52,15 +52,21 @@ class ImpulseOptionsList extends Component {
   }
 
   toggleList() {
-    this.setState( prevState => ({listOpen: !prevState.listOpen})) 
+    this.setState( prevState => ({listOpen: !prevState.listOpen}));
   }
 
   render() {
-    const {list} = this.props;
-    const {listOpen, headerTitle} = this.state
+    const {listOpen, headerTitle, optionItems} = this.state
 
     return (
-      <div className="OptionsListWrapper"> 
+      <div className="right-impulse-options">
+        <ul className="options-list">
+          <button className="option-item" onClick={this.handleInviteCreate}>Create Invite Link </button>
+          <button className="option-item" key="1">Impulse Settings</button>
+          <button className="option-item" key="2">Account Settings</button>
+          <button className="option-item" key="3" onClick={this.handleAccountLink}>Link Account</button>
+        </ul>
+
         <div className="OptionsListHeader dropdown-header row " onClick={() => this.toggleList()}>
           <div className="OptionsListHeaderTitle col-md-2">
             <button className="btn btn-secondary dropdown-toggle" aria-haspopup="true"
@@ -68,17 +74,9 @@ class ImpulseOptionsList extends Component {
             </button>
           </div>
         </div>
-        
-        {listOpen && <ul className="OptionsListMenu">
-          <button className="dropdown-item" type="button" key="0" 
-                  onClick={this.handleInviteCreate}> {list[0].title} </button>
-          <button className="dropdown-item" key="1"> {list[1].title} </button>
-          <button className="dropdown-item" key="2"> {list[2].title} </button>
-          <button className="dropdown-item" key="3" 
-                  onClick={this.handleAccountLink}> {list[3].title} </button>
-        </ul>}
       </div>
     )
+    
   }
 }
 

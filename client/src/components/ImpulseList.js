@@ -1,13 +1,12 @@
 import React from 'react';
-import NewImpulseForm from './NewImpulseForm';
 
 class ImpulseList extends React.Component {
-
-  render = () => {
+  render() {
     return (
-      <div className="ImpulseList col-md-4">
-        <ul className="ActiveImpulsesList col">{mapImpulses(this.props.impulses, this.props.onClick)}</ul> 
-        <NewImpulseForm onImpulseCreated={this.props.onImpulseCreated} />
+      <div className="impulse_list">
+        <p>{this.props.list_name}</p>
+        <hr />
+        <ul className="impulse_list_flex">{createImpulseCards(this.props.impulses, this.props.on_click)}</ul> 
       </div>
     );
   }
@@ -15,11 +14,15 @@ class ImpulseList extends React.Component {
 
 export default ImpulseList;
 
-const mapImpulses = (impulses, handleClick) => {
+// helpers
+
+const createImpulseCards = (impulses, handle_click) => {
   return impulses.map(impulse => {
     return (
-      <li key={impulse.id} onClick={() => handleClick (impulse.id)}>
-        {impulse.name}
+      <li className="impulse_card" key={impulse.id} onClick={() => handle_click (impulse.id)}>
+        <img src={"../images/flame.jpg"} alt="Impulse pic" />
+        <p>{impulse.name}</p>
+        <hr />
       </li>
     );
   });

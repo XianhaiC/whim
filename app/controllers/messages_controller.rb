@@ -2,6 +2,8 @@ class MessagesController < ApplicationController
   before_action :attempt_login, only: [:create]
   before_action :authenticate_session, only: [:create]
 
+  MESSAGES_PER_PAGE = 30
+
   def show
   end
 
@@ -34,6 +36,12 @@ class MessagesController < ApplicationController
   end
 
   def update
+  end
+
+  def query_paginate
+    messages = Message.where("created_at < :date", date: params[:offset]).order("created_at DESC").limit(MESSAGES_PER_PAGE)
+
+    render json: messages
   end
 
   private

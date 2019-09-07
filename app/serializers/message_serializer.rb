@@ -1,3 +1,5 @@
 class MessageSerializer < ActiveModel::Serializer
-  attributes :id, :body, :created_at, :impulse_id, :spark_id
+  has_one :spark
+
+  attributes :id, :body, :created_at, :impulse_id
 end
