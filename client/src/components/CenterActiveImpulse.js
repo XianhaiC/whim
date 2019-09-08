@@ -11,7 +11,7 @@ class CenterActiveImpulse extends React.Component {
     super(props);
     this.state = {
       offset: null,
-      messages: []
+      messages: [],
     }
 
     this.handleMessageReceived = this.handleMessageReceived.bind(this);
@@ -19,9 +19,17 @@ class CenterActiveImpulse extends React.Component {
     let date = new Date();
     this.state.offset = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
   }
-
+  
   componentDidMount() {
     this.fetchMessages();
+    /*this.refs.myScroll.addEventListener("scroll", () => {
+      if ( 
+        this.refs.myScroll.scrollTop + this.refs.myScroll.clientHeight < 
+        this.refs.myScroll.scrollHeight
+      ) {
+        this.loadMore(); 
+      }
+    }*/
   }
 
   fetchMessages() {
@@ -39,8 +47,9 @@ class CenterActiveImpulse extends React.Component {
     const { message } = response;
     this.setState({ messages: [...this.state.messages, message] });
   }
-
+    
   render() {
+    
     return (
       <div className="CenterActiveImpulse">
         <MessageChannel impulse_id={this.props.active_impulse.id} onResponse={this.handleMessageReceived} />
