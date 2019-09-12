@@ -15,7 +15,6 @@ class SessionsController < ApplicationController
   def destroy
   end
 
-  #TODO Fix authentication issue. It seems that the session token isn't being accepted for some reason. figure out what the decryption depends on
   def register
     time = Time.now.to_i
     tok = JsonWebToken.encode({ timestamp: time })

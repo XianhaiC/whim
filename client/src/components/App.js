@@ -75,7 +75,7 @@ class App extends Component {
         {this.renderRedirect()}
         <Switch>
           <Route exact path={PATH_ROOT} render={this.renderLanding} />
-          //<Route exact path={PATH_BOARD} render={this.renderImpulseManager} />
+          <Route exact path={PATH_BOARD} render={this.renderImpulseManager} />
           <Route path={PATH_INVITE} render={this.parseInvite} />
           <Route exact path={PATH_INVALID_INVITE} component={InvalidInvite} />
         </Switch>
