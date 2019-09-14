@@ -16,6 +16,15 @@ class CenterActiveImpulse extends React.Component {
 
     this.handleMessageReceived = this.handleMessageReceived.bind(this);
 
+    //TODO: create cachedThreadOffsets that store the load offset for each thread (keyed by thread id)
+    let cachedThreadId = this.props.cachedThreadIds[this.props.activeImpulseId];
+    if (exists(cachedThreadId)) this.props.setActiveThreadId(cachedThreadIds);
+    else {
+      let activeImpulse = this.props.impulses.find(
+        impulse => impulse.id == this.props.activeImpulseId);
+      this.props.setActiveThreadId(activeImpulse.thread_id);
+    }
+
     let date = new Date();
     this.state.offset = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
   }
@@ -46,7 +55,7 @@ class CenterActiveImpulse extends React.Component {
         <MessageChannel impulse_id={this.props.active_impulse.id} onResponse={this.handleMessageReceived} />
         <p>Invite hash: {this.props.active_impulse.invite_hash}</p>
         <ImpulseHeader impulse={this.props.active_impulse}/>
-        <MessageFeed messages={this.state.messages}/>
+        <MessageFeed />
         <CreateMessage impulse_id={this.props.active_impulse.id} spark_id={this.props.active_spark.id}/>
       </div>
     );

@@ -1,5 +1,19 @@
 const INITIAL_STATE = {
-
+  linkedImpulses: {},
+  sessionImpulses: {},
+  linkedSparks: {},
+  sessionSparks: {},
+  threads: {},
+  //TODO create case for updating this
+  cachedThreadIds = {},
+  cachedThreadOffsets = {},
+  activeImpulse: null,
+  activeSpark: null,
+  activeThread: null
+  loggedIn: false,
+  accountId: null,
+  accountSessionToken: null,
+  sparkSessionToken: null
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -13,6 +27,10 @@ export default (state = INITIAL_STATE, action) => {
       let newState = {...state};
       let thread = newState.threads[action.payload.threadId];
       thread.messages = [...action.payload.messages.reverse(), ...thread.messages];
+      return newState;
+    case UPDATE_THREAD_OFFSET:
+      let newState = {...state};
+      newState.cachedThreadOffsets[action.payload.threadId] = action.payload.offset;
       return newState;
     case UPDATE_LINKED_IMPULSES:
       let newState = {...state, linkedImpulses: {...state.linkedImpulses}};
@@ -32,8 +50,9 @@ export default (state = INITIAL_STATE, action) => {
       return newState;
     case SET_ACTIVE_IMPULSE:
       return {...state,
-        activeImpulseId: action.payload.impulseId,
-        activeSparkId: action.payload.sparkId
+        activeImpulse: action.payload.impulse,
+        activeSpark: action.payload.spark,
+        centerComponent: action.payload.centerComponent
       };
     case SET_CENTER_COMPONENT:
       return {...state, centerComponent: action.payload.centerComponent};

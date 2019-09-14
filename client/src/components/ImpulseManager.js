@@ -302,7 +302,7 @@ class ImpulseManager extends React.Component {
     const { impulses, sparks, active_impulse_id, active_spark_id } = this.state;
     const active_impulse = findImpulse(impulses, active_impulse_id);
     const active_spark = findActiveSpark(sparks, active_impulse_id);
-    console.log("LOGGED INNN?? " + this.state.logged_in);
+    console.log("LOGGED IN? " + this.state.logged_in);
 
     let center_component = null;
     let right_sidebar = null;

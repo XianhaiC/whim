@@ -1,44 +1,56 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import ImpulseList from './ImpulseList';
-import CreateImpulse from './CreateImpulse';
-import JoinImpulse from './JoinImpulse';
+import { setCenterComponent } from '../actions/index';
 
-class LeftSidebar extends React.Component {
+class Sidebar extends React.Component {
 
-  render = () => {
-    let linked_impulses = []
-    let session_impulses = [];
-    
-    sorted_impulses(this.props.impulses).forEach(impulse => {
-      if (this.props.session_impulse_ids.includes(impulse.id))
-        session_impulses.push(impulse);
-      else
-        linked_impulses.push(impulse);
-    });
+  handleCreateImpulse() {
+    this.props.setCenterComponent(CenterComponent.CREATE);
+  }
+
+  handleJoinImpulse() {
+    this.props.setCenterComponent(CenterComponent.JOIN);
+  }
+
+  render() {
+    const {
+      linkedImpulses, sessionImpulses,
+      linkedSparks, sessionSparks
+    } = this.props;
 
     return (
-      <div className="left_sidebar">
-        <ImpulseList list_name="Linked Impulses" impulses={linked_impulses} on_click={this.props.on_click_active_impulse} />
-        <ImpulseList list_name="Session Impulses" impulses={session_impulses} on_click={this.props.on_click_active_impulse} />
-        <div className="left_sidebar_buttons">
-          <CreateImpulse on_click={this.props.on_click_create_impulse} />
-          <JoinImpulse on_click={this.props.on_click_join_impulse} />
+      <div className="sidebar">
+        <ImpulseList listName="Linked Impulses"
+          impulses={linkedImpulses} sparks={linkedSparks} />
+        <ImpulseList listName="Session Impulses"
+          impulses={sessionImpulses} sparks={sessionSparks} />
+        <div className="sidebar-buttons">
+          <div className="create-impulse">
+            <button onClick={this.handleCreateImpulse}>Create Impulse</button>
+          </div>
+          <div className="join-impulse">
+            <button onClick={this.handleJoinImpulse}>Join Impulse</button>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-export default LeftSidebar;
+export mapStateToProps = state => {
+  return {
+    linkedImpulses: state.linkedImpulses,
+    sessionImpulses: state.sessionImpulses,
+    linkedSparks: state.linkedSparks,
+    sessionSparks: state.sessionSparks
+  }
+}
+
+export default connect(mapStateToProps, {
+  setCenterComponent
+})(Sidebar);
 
 // helpers
 
-const sorted_impulses = impulses => {
-  const sorted = impulses.sort((a, b) => {
-    if (a.title < b.title) return -1;
-    if (a.title > b.title) return 1;
-    return 0;
-  });
-  return sorted;
-}
