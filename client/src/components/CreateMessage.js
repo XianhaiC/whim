@@ -1,43 +1,29 @@
 import React from 'react';
-import { API_ROOT, HEADERS } from '../constants';
+import { connect } from 'react-redux';
 
 class CreateMessage extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+
     this.state = {
-      body: '',
-      impulse_id: this.props.impulse_id,
-      spark_id: this.props.spark_id
+      body: ''
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
-  componentWillReceiveProps = nextProps => {
-    this.setState({ impulse_id: nextProps.impulse_id, spark_id: nextProps.spark_id });
-  };
 
   handleChange = e => {
     this.setState({ body: e.target.value });
   };
 
   handleSubmit = e => {
+    const { activeImpulse, activeSpark, activeThread } = this.props;
+    const { createMessage } = this.props;
+
     e.preventDefault();
-    const account_session_token = sessionStorage.getItem('account_session_token');
-    const spark_session_token = sessionStorage.getItem('spark_session_token');
 
-    // note that login authentication may fail but session authentication can succeed
-    // so long as one succeeds the message will be successfully sent
-    fetch(`${API_ROOT}/messages`, {
-      method: 'POST',
-      headers: {
-        ...HEADERS,
-        AuthorizationLogin: `Bearer ${account_session_token}`,
-        AuthorizationSession: `Bearer ${spark_session_token}`
-      },
-      body: JSON.stringify(this.state)
-    });
-
+    createMessage(activeImpulse, activeSpark, activeThread, this.state.body);
     this.setState({ body: '' });
   };
 
@@ -56,4 +42,14 @@ class CreateMessage extends React.Component {
   };
 }
 
-export default CreateMessage;
+export mapStateToProps = state => {
+  return {
+    activeImpulse: state.activeImpulse,
+    activeSpark: state.activeSpark,
+    activeThread: state.activeThread
+  }
+};
+
+export default connect(mapStateToProps, {
+  createMessage
+})(CreateMessage);

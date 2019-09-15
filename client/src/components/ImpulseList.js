@@ -28,7 +28,6 @@ class ImpulseList extends React.Component {
 }
 
 export default connect(null, { setActiveImpulse })(ImpulseList);
-export default ImpulseList;
 
 // helpers
 

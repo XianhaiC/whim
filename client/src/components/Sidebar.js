@@ -46,7 +46,7 @@ export mapStateToProps = state => {
     linkedSparks: state.linkedSparks,
     sessionSparks: state.sessionSparks
   }
-}
+};
 
 export default connect(mapStateToProps, {
   setCenterComponent

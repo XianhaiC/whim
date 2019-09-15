@@ -2,25 +2,28 @@ import React from 'react';
 import { API_WS_ROOT } from '../constants';
 import ActionCable from 'actioncable';
 
-class MessageChannel extends React.Component {
+class ThreadMessagesChannel extends React.Component {
   constructor(props) {
     super(props);
     this.cable = ActionCable.createConsumer(`${API_WS_ROOT}`);
   }
 
-  createSubscription(impulse_id) {
+  createSubscription(threadId) {
     this.subscription = this.cable.subscriptions.create(
-      { channel: 'ActiveMessagesChannel', impulse: impulse_id },
-      { received: (response) => { this.props.onResponse(response) }}
+      {channel: 'ThreadMessagesChannel', thread: threadId},
+      {received: (response) => {this.props.receiveMessage(response.message)}}
     )
   }
 
   componentDidMount(){
-    this.createSubscription(this.props.impulse_id);
+    this.createSubscription(this.props.threadId);
   }
 
   render = () => {
     return null;
   }
 }
-export default MessageChannel;
+
+export default connect(null, {
+  receiveMessage
+})(ThreadMessagesChannel);

@@ -10,6 +10,7 @@ class MessagesController < ApplicationController
   def new
   end
 
+  #TODO push to channel id'd by thread instead of impulse
   def create
     # authenticate spark before creating message
     authenticate_spark_session(Spark.find(params[:spark_id]))

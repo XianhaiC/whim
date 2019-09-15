@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 
 class ImpulseHeader extends React.Component {
   render() {
-    let activeImpulse = this.props.impulses.find(
-      impulse => impulse.id == this.props.activeImpulseId);
+    const { activeImpulse } = this.props
 
     return (
       <div className="impulse-header">
@@ -20,9 +19,8 @@ class ImpulseHeader extends React.Component {
 
 export mapStateToProps = state => {
   return {
-    impulses: state.impulses,
-    activeImpulseId: state.activeImpulseId,
+    activeImpulse: state.activeImpulse,
   }
-}
+};
 
 export default connect(mapStateToProps)(ImpulseHeader);
