@@ -3,13 +3,13 @@ class SessionsController < ApplicationController
   def new
   end
 
+  #TODO change to better function names
   def create
     account = Account.find_by(email: params[:email].downcase)
     if !account.nil? && account.authenticate(params[:password])
       render json: auth_token(account)
     else
     end
-
   end
 
   def destroy

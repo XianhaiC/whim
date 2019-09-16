@@ -20,22 +20,7 @@ class Login extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    fetch(`${API_ROOT}/login`, {
-      method: 'POST',
-      headers: HEADERS,
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password
-      })
-    })
-      .then(res => res.json())
-      .then(auth_payload => {
-
-        // persist the login for the session
-        sessionStorage.setItem('account_session_token', auth_payload['auth_token']);
-        sessionStorage.setItem('login_account_id', auth_payload['account']['id']);
-        this.props.onLogin(auth_payload);
-      })
+    this.props.getLoginSession(this.state.email, this.state.password);
   }
 
   render = () => {

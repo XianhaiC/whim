@@ -316,3 +316,36 @@ export const joinImpulse = (impulseHash) => {
     });
   }
 }
+
+export const getLoginSession = (email, password) => {
+  return (dispatch, getState) => {
+
+    fetch(`${API_ROOT}/login`, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({
+        email,
+        password
+      })
+    })
+    .then(res => {
+      if (!res.ok) throw Error(response.statusText);
+      return res.json();
+    })
+    .then(authPayload => {
+      // persist the login for the session
+      const token = authPayload['auth_token'];
+      const accountId = authPayload['account']['id'];
+
+      sessionStorage.setItem('loginAccountId', accountId);
+      sessionStorage.setItem('accountSessionToken', token);
+
+      this.props.logIn(accountId, token);
+    })
+    .catch((e) => {
+      // set invalid hash error flag
+      console.log(e);
+      dispatch(setInvalidHashError(true));
+    });
+  }
+}
