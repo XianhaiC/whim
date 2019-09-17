@@ -1,12 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { API_ROOT, HEADERS, PATH_QUERY_MESSAGES } from '../constants';
+import { exists } from './helpers';
 
 class LoadAccount extends React.Component {
+  componentDidMount() {
+    const accountToken = sessionStorage.getItem('accountToken');
+    const accountId = sessionStorage.getItem('accountId');
+
+    if (exsists(accountId) && exists(accountToken))
+      this.props.login(accountId, accountToken);
+  }
+
   componentDidUpdate() {
     if (this.props.loggedIn && exists(this.props.accountId))
-    this.loadAccount();
+      this.loadAccount();
   }
 
   loadAccount() {
@@ -26,4 +34,6 @@ export mapStateToProps = state => {
   }
 };
 
-export default connect(mapStateToProps)(ActiveImpulse);
+export default connect(mapStateToProps, {
+  login
+})(LoadAccount);

@@ -5,6 +5,12 @@ import ImpulseList from './ImpulseList';
 import { setCenterComponent } from '../actions/index';
 
 class Sidebar extends React.Component {
+  constructor() {
+    super();
+
+    this.handleCreateImpulse = this.handleCreateImpulse.bind(this);
+    this.handleJoinImpulse = this.handleJoinImpulse.bind(this);
+  }
 
   handleCreateImpulse() {
     this.props.setCenterComponent(CenterComponent.CREATE);
@@ -45,12 +51,9 @@ export mapStateToProps = state => {
     sessionImpulses: state.sessionImpulses,
     linkedSparks: state.linkedSparks,
     sessionSparks: state.sessionSparks
-  }
+  };
 };
 
 export default connect(mapStateToProps, {
   setCenterComponent
 })(Sidebar);
-
-// helpers
-

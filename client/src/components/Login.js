@@ -20,7 +20,7 @@ class Login extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.getLoginSession(this.state.email, this.state.password);
+    this.props.loginAccount(this.state.email, this.state.password);
   }
 
   render = () => {
@@ -47,4 +47,4 @@ class Login extends React.Component {
     );
   }
 }
-export default LoginForm;
+export default Login;

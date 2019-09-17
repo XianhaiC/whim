@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { createImpulse } from '../actions/index';
+
 class CreateImpusle extends React.Component {
   constructor() {
     super();
+
     this.state = {
       name: '',
       description: ''
@@ -46,7 +49,7 @@ class CreateImpusle extends React.Component {
         </form>
       </div>
     );
-  };
+  }
 }
 
 export default connect(null, {

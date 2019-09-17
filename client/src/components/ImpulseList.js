@@ -1,13 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { setActiveImpulse } from '../actions/index';
+
 class ImpulseList extends React.Component {
+  constructor() {
+    super();
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
   handleClick(impulse) {
     // find the impulses' corresponding spark
     const spark = this.props.sparks.find(spark => spark.impulse_id === impulse.id);
     
-    // update the state with the new impulse its corresponding spark
-    this.props.setActiveImpulse(impulse, spark);
+    // update the state with the new impulse
+    // this sets the active spark and thread as well
+    this.props.switchImpulse(impulse, spark);
   }
 
   render() {
@@ -30,7 +39,6 @@ class ImpulseList extends React.Component {
 export default connect(null, { setActiveImpulse })(ImpulseList);
 
 // helpers
-
 const createImpulseCards = (impulses, handleClick) => {
   return impulses.map(impulse => {
     return (

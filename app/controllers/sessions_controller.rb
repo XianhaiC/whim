@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
     render json: { auth_token: tok }
   end
 
-  def session_sparks
+  def session
     sparks = Spark.where(session_token: params[:session_token])
     impulses = sparks.map { |spark| spark.impulse }
     render json: { 

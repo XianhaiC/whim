@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-class CenterJoinImpulse extends React.Component {
+import { joinImpulse } form '../actions/index';
+
+class JoinImpulse extends React.Component {
   constructor() {
     super();
+
     this.state = {
       impulseHash: ''
     };
@@ -38,12 +41,13 @@ class CenterJoinImpulse extends React.Component {
         </form>
       </div>
     );
-  };
+  }
 }
 
 export mapStateToProps = state => {
   return {
     invalidHashError: state.invalidHashError
+  };
 };
 
 export default connect(mapStateToProps, {

@@ -308,39 +308,39 @@ class ImpulseManager extends React.Component {
     let right_sidebar = null;
 
     switch (this.state.render_center) {
-      case CenterState.ACTIVE:
-        center_component = (<CenterActiveImpulse 
+      case centerstate.active:
+        center_component = (<centeractiveimpulse 
           active_impulse={active_impulse} 
           active_spark={active_spark} 
           sparks={sparks}/>)
-        console.log("SET");
+        console.log("set");
 
-        right_sidebar = (<RightSidebar 
-          onAccountLinked={this.handleAccountLinked} 
-          onInviteCreated={this.handleInviteCreated}
+        right_sidebar = (<rightsidebar 
+          onaccountlinked={this.handleaccountlinked} 
+          oninvitecreated={this.handleinvitecreated}
           account_id={this.state.account_id}
           logged_in={this.state.logged_in}
           active_impulse={active_impulse} 
           active_spark={active_spark} 
           sparks={sparks}/>)
         break;
-      case CenterState.CREATE:
-        center_component = (<CenterCreateImpulse
+      case centerstate.create:
+        center_component = (<centercreateimpulse
           on_impulse_created={this.handle_impulse_joined}/>)
         break;
-      case CenterState.JOIN:
-        center_component = (<CenterJoinImpulse
+      case centerstate.join:
+        center_component = (<centerjoinimpulse
           on_impulse_joined={this.handle_impulse_joined}/>)
         break;
-      case CenterState.SPARK:
-        center_component = (<NewSparkForm 
+      case centerstate.spark:
+        center_component = (<newsparkform 
           impulse_id={active_impulse_id} 
           account_id={this.state.account_id} 
-          onSparkCreated={this.handleSparkCreated}/>)
+          onsparkcreated={this.handlesparkcreated}/>)
         break;
-      case CenterState.BLANK:
+      case centerstate.blank:
       default:
-        center_component = <EmptyImpulse />
+        center_component = <emptyimpulse />
           break;
     }
 

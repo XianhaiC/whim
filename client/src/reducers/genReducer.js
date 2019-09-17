@@ -4,7 +4,6 @@ const INITIAL_STATE = {
   linkedSparks: {},
   sessionSparks: {},
   threads: {},
-  //TODO create case for updating this
   cachedThreads: {},
   threadOffsets: {},
   activeImpulse: null,
@@ -12,8 +11,8 @@ const INITIAL_STATE = {
   activeThread: null
   loggedIn: false,
   accountId: null,
-  accountSessionToken: null,
-  sparkSessionToken: null
+  accountToken: null,
+  sessionToken: null
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -68,13 +67,6 @@ export default (state = INITIAL_STATE, action) => {
       payload.sparks.forEach(spark => newState.sessionSparks[spark.id] = spark);
       return newState;
 
-    case SET_ACTIVE_IMPULSE:
-      return {...state,
-        activeImpulse: action.payload.impulse,
-        activeSpark: action.payload.spark,
-        centerComponent: action.payload.centerComponent
-      };
-
     case SET_ACTIVE_THREAD:
       return {...state, activeThread: action.payload.thread}
 
@@ -85,7 +77,17 @@ export default (state = INITIAL_STATE, action) => {
       return {...state,
         loggedIn: true,
         accountId: action.payload.accountId,
-        accountSessionToken: action.payload.accountSessionToken
+        accountToken: action.payload.accountToken
+      };
+    
+    case SET_SESSION:
+      return {...state, sessionToken: action.payload.sessionToken};
+
+    case SET_ACTIVE_ITEMS:
+      return {...state,
+        activeImpulse: action.payload.impulse,
+        activeSpark: action.payload.spark,
+        activeThread: action.payload.thread
       };
 
     default:

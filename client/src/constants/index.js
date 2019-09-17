@@ -12,3 +12,4 @@ export const PATH_BOARD = "/board";
 export const PATH_INVITE = "/invite/:hash";
 export const PATH_INVALID_INVITE = "/invalid";
 export const PATH_THREADS = "/threads";
+export const PATH_SESSION = "/session";

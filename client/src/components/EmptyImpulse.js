@@ -1,8 +1,5 @@
-import React from 'react';
-
-class EmptyImpulse extends React.Component {
-  render = () => {
-    return null;
-  }
+const Empty () => {
+  return null;
 }
-export default EmptyImpulse;
+
+export default Empty;

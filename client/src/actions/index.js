@@ -64,16 +64,6 @@ export const updateSessionSparks = (sparks) => {
   };
 }
 
-export const setActiveImpulse = (impulse, spark) => {
-  let centerComponent = !exists(spark) ? 
-    CenterComponent.SPARK : CenterComponent.ACTIVE;
-
-  return {
-    type: SET_ACTIVE_IMPULSE,
-    payload: { impulse, spark, centerComponent }
-  };
-}
-
 export const setActiveThread = (thread) => {
   return {
     type: SET_ACTIVE_THREAD,
@@ -88,18 +78,32 @@ export const setCenterComponent = (centerComponent) => {
   }
 }
 
-export const logIn = (accountId, accountSessionToken) => {
+export const login = (accountId, accountToken) => {
   return {
     type: LOGIN,
-    payload: { accountId, accountSessionToken }
+    payload: { accountId, accountToken }
+  };
+}
+
+export const setSession = (sessionToken) => {
+  return {
+    type: SET_SESSION,
+    payload: { sessionToken }
+  };
+}
+
+export const setActiveItems = (impulse, spark, thread) {
+  return {
+    type: SET_ACTIVE_ITEMS,
+    payload: { impulse, spark, thread }
   };
 }
 
 // update to allow spark session validation
 export const getThread = threadId => {
   return (dispatch, getState) => {
-    const accountSessionToken = getState().accountSessionToken;
-    if (!exists(accountSessionToken)) {
+    const accountToken = getState().accountToken;
+    if (!exists(accountToken)) {
       console.log("getThread(): Not logged in!");
       dispatch(errorOccured(true));
     }
@@ -108,7 +112,7 @@ export const getThread = threadId => {
       method: 'GET',
       headers: {
         ...HEADERS,
-        AuthorizationLogin: `Bearer ${accountSessionToken}`
+        AuthorizationLogin: `Bearer ${accountToken}`
       }
     })
     .then(res => {
@@ -127,8 +131,8 @@ export const getThread = threadId => {
 
 export const getLinkedImpulses = accountId => {
   return (dispatch, getState) => {
-    const accountSessionToken = getState().accountSessionToken;
-    if (!exists(accountSessionToken)) {
+    const accountToken = getState().accountToken;
+    if (!exists(accountToken)) {
       console.log("getThread(): Not logged in!");
       dispatch(errorOccured(true));
       return;
@@ -138,7 +142,7 @@ export const getLinkedImpulses = accountId => {
       method: 'GET',
       headers: {
         ...HEADERS,
-        AuthorizationLogin: `Bearer ${accountSessionToken}`
+        AuthorizationLogin: `Bearer ${accountToken}`
       }
     })
     .then(res => {
@@ -155,11 +159,45 @@ export const getLinkedImpulses = accountId => {
   }
 }
 
+export const getSession = () => {
+  return (dispatch, getState) => {
+    const sessionToken = getState().sessionToken;
+    if (!exists(sessionToken)) {
+      console.log("getSession(): Not logged in!");
+      dispatch(errorOccured(true));
+      return;
+    }
+
+    // token is not sent as a parameter in the url because it won't be 
+    // encrypted
+    fetch(`${API_ROOT}/session`, {
+      method: 'POST',
+      headers: {
+        ...HEADERS,
+        AuthorizationSession: `Bearer ${sessionToken}`
+      },
+      body: JSON.stringify({ session_token: sessionToken })
+    })
+    .then(res => {
+      if (!res.ok) throw Error(response.statusText);
+      return res.json();
+    })
+    .then(session => {
+      dispatch(updateSessionImpulses(session.impulses));
+      dispatch(updateSessionSparks(session.sparks));
+    })
+    .catch((e) => {
+      console.log(e);
+      dispatch(errorOccured(true));
+    });
+  }
+}
+
 export const getLinkedSparks = accountId => {
   return (dispatch, getState) => {
-    const accountSessionToken = getState().accountSessionToken;
+    const accountToken = getState().accountToken;
 
-    if (!exists(accountSessionToken)) {
+    if (!exists(accountToken)) {
       console.log("getThread(): Not logged in!");
       dispatch(errorOccured(true));
       return;
@@ -169,7 +207,7 @@ export const getLinkedSparks = accountId => {
       method: 'GET',
       headers: {
         ...HEADERS,
-        AuthorizationLogin: `Bearer ${accountSessionToken}`
+        AuthorizationLogin: `Bearer ${accountToken}`
       }
     })
     .then(res => {
@@ -189,8 +227,8 @@ export const getLinkedSparks = accountId => {
 // update to allow spark session validation
 export const getThreadMessages = threadId => {
   return (dispatch, getState) => {
-    const accountSessionToken = getState().accountSessionToken;
-    const sparkSessionToken = getState().sparkSessionToken;
+    const accountToken = getState().accountToken;
+    const sessionToken = getState().sessionToken;
     const offset = getState.cachedThreadOffsets[threadId];
 
     // use current date to grab the most recent messages for the thread
@@ -203,8 +241,8 @@ export const getThreadMessages = threadId => {
       method: 'GET',
       headers: {
         ...HEADERS,
-        AuthorizationLogin: `Bearer ${accountSessionToken}`,
-        AuthorizationSession: `Bearer ${sparkSessionToken}`
+        AuthorizationLogin: `Bearer ${accountToken}`,
+        AuthorizationSession: `Bearer ${sessionToken}`
       },
     })
     .then(res => {
@@ -224,15 +262,15 @@ export const getThreadMessages = threadId => {
 
 export const createMessage = (impulseId, sparkId, threadId, body) => {
   return (dispatch, getState) => {
-    const accountSessionToken = getState().accountSessionToken;
-    const sparkSessionToken = getState().sparkSessionToken;
+    const accountToken = getState().accountToken;
+    const sessionToken = getState().sessionToken;
 
     fetch(`${API_ROOT}/messages`, {
       method: 'POST',
       headers: {
         ...HEADERS,
-        AuthorizationLogin: `Bearer ${accountSessionToken}`,
-        AuthorizationSession: `Bearer ${sparkSessionToken}`
+        AuthorizationLogin: `Bearer ${accountToken}`,
+        AuthorizationSession: `Bearer ${sessionToken}`
       },
       body: JSON.stringify({
         impulse_id: impulseId,
@@ -267,6 +305,51 @@ export const createImpulse = (name, description) => {
       // to create a new spark
       dispatch(updateSessionImpulses([newImpulse]));
       dispatch(setActiveImpulse(newImpulse, null));
+    })
+    .catch((e) => {
+      console.log(e);
+      dispatch(errorOccured(true));
+    });
+  }
+}
+
+export const createSpark = (name, impulseId, accountId) => {
+  return (dispatch, getState) => {
+    const sessionToken = getState().sessionToken;
+
+    if (!exists(sessionToken)) {
+      console.log("createSpark(): No session registered");
+      dispatch(errorOccured(true));
+      return;
+    }
+
+    if (!exists(impulseId)) {
+      console.log("createSpark(): Cannot create spark without parent impulse");
+      dispatch(errorOccured(true));
+      return;
+    }
+
+    fetch(`${API_ROOT}/sparks`, {
+      method: 'POST',
+      headers: {
+        ...HEADERS,
+        AuthorizationSession: `Bearer ${sessionToken}`
+      },
+      body: JSON.stringify({
+        name: name,
+        impulse_id: impulseId,
+        session_token: sessionToken
+      })
+    })
+    .then(res => {
+      if (!res.ok) throw Error(response.statusText);
+      return res.json();
+    })
+    .then(newSpark => {
+      // add the new spark to the list of session sparks
+      // update the active impulse information to include this new spark
+      dispatch(updateSessionSparks([newSpark]));
+      dispatch(setActiveImpulse(getState().activeImpulse, newSpark));
     })
     .catch((e) => {
       console.log(e);
@@ -317,7 +400,7 @@ export const joinImpulse = (impulseHash) => {
   }
 }
 
-export const getLoginSession = (email, password) => {
+export const loginAccount = (email, password) => {
   return (dispatch, getState) => {
 
     fetch(`${API_ROOT}/login`, {
@@ -334,18 +417,62 @@ export const getLoginSession = (email, password) => {
     })
     .then(authPayload => {
       // persist the login for the session
-      const token = authPayload['auth_token'];
-      const accountId = authPayload['account']['id'];
+      const token = authPayload.auth_token;
+      const accountId = authPayload.account.id;
 
       sessionStorage.setItem('loginAccountId', accountId);
-      sessionStorage.setItem('accountSessionToken', token);
+      sessionStorage.setItem('accountToken', token);
 
-      this.props.logIn(accountId, token);
+      dispatch(login(accountId, token));
     })
     .catch((e) => {
       // set invalid hash error flag
       console.log(e);
       dispatch(setInvalidHashError(true));
     });
+  }
+}
+
+export const registerSession = () => {
+  return (dispatch, getState) => {
+
+    fetch(`${API_ROOT}/register`, {
+      method: 'GET',
+      headers: HEADERS
+    })
+    .then(res => {
+      if (!res.ok) throw Error(response.statusText);
+      return res.json();
+    })
+    .then(authPayload => {
+      const token = authPayload.auth_token;
+
+      sessionStorage.setItem('sessionToken', token);
+
+      dispatch(setSession(token));
+
+      this.loadSessionImpulses();
+    })
+    .catch((e) => {
+      // set invalid hash error flag
+      console.log(e);
+      dispatch(setInvalidHashError(true));
+    });
+  }
+}
+
+export const switchImpulse = (activeImpulse, activeSpark) => {
+  return (dispatch, getState) => {
+    let centerComponent = !exists(activeSpark) ?
+      CenterComponent.SPARK : CenterComponent.ACTIVE;
+
+    let activeThread = getState().cachedThreads[activeImpulse.id];
+    if (!exists(activeThread)) {
+      activeThread = getState().threads[activeImpulse.thread_id];
+      dispatch(updateCachedThread(activeImpulse.id, activeThread));
+    }
+
+    dispatch(setActiveItems(activeImpulse, activeSpark, activeThread));
+    dispatch(setCenterComponent(centerComponent));
   }
 }

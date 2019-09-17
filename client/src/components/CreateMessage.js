@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { createMessage } from '../actions/index';
+
 class CreateMessage extends React.Component {
   constructor() {
     super();
@@ -13,23 +15,27 @@ class CreateMessage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = e => {
+  handleChange(e) {
     this.setState({ body: e.target.value });
-  };
+  }
 
-  handleSubmit = e => {
+  handleSubmit(e) {
     const { activeImpulse, activeSpark, activeThread } = this.props;
     const { createMessage } = this.props;
 
     e.preventDefault();
 
-    createMessage(activeImpulse, activeSpark, activeThread, this.state.body);
-    this.setState({ body: '' });
-  };
+    createMessage(activeImpulse,
+      activeSpark,
+      activeThread,
+      this.state.body);
 
-  render = () => {
+    this.setState({ body: '' });
+  }
+
+  render() {
     return (
-      <div className="CreateMessage">
+      <div className="create-message">
         <form onSubmit={this.handleSubmit}>
           <input className="message-text"
             type="text"
@@ -39,7 +45,7 @@ class CreateMessage extends React.Component {
         </form>
       </div>
     );
-  };
+  }
 }
 
 export mapStateToProps = state => {
@@ -47,7 +53,7 @@ export mapStateToProps = state => {
     activeImpulse: state.activeImpulse,
     activeSpark: state.activeSpark,
     activeThread: state.activeThread
-  }
+  };
 };
 
 export default connect(mapStateToProps, {
