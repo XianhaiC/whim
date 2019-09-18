@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import ImpulseList from './ImpulseList';
+import { CenterComponent } from '../helpers';
 import { setCenterComponent } from '../actions/index';
+
+import ImpulseList from './ImpulseList';
 
 class Sidebar extends React.Component {
   constructor() {
@@ -26,12 +28,16 @@ class Sidebar extends React.Component {
       linkedSparks, sessionSparks
     } = this.props;
 
+    // call .values() on each dict so we retrieve a list of their values
+    // that can be used by ImpulseList
     return (
       <div className="sidebar">
         <ImpulseList listName="Linked Impulses"
-          impulses={linkedImpulses} sparks={linkedSparks} />
+          impulses={Object.values(linkedImpulses)}
+          sparks={Object.values(linkedSparks)} />
         <ImpulseList listName="Session Impulses"
-          impulses={sessionImpulses} sparks={sessionSparks} />
+          impulses={Object.values(sessionImpulses)}
+          sparks={Object.values(sessionSparks)} />
         <div className="sidebar-buttons">
           <div className="create-impulse">
             <button onClick={this.handleCreateImpulse}>Create Impulse</button>
@@ -45,12 +51,12 @@ class Sidebar extends React.Component {
   }
 }
 
-export mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
-    linkedImpulses: state.linkedImpulses,
-    sessionImpulses: state.sessionImpulses,
-    linkedSparks: state.linkedSparks,
-    sessionSparks: state.sessionSparks
+    linkedImpulses: state.data.linkedImpulses,
+    sessionImpulses: state.data.sessionImpulses,
+    linkedSparks: state.data.linkedSparks,
+    sessionSparks: state.data.sessionSparks
   };
 };
 

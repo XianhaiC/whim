@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { createImpulse } from '../actions/index';
 
-class CreateImpusle extends React.Component {
+class CreateImpulse extends React.Component {
   constructor() {
     super();
 

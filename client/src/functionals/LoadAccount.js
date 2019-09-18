@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { exists } from './helpers';
+import { exists } from '../helpers';
+import { login } from '../actions/index';
 
 class LoadAccount extends React.Component {
   componentDidMount() {
     const accountToken = sessionStorage.getItem('accountToken');
     const accountId = sessionStorage.getItem('accountId');
 
-    if (exsists(accountId) && exists(accountToken))
+    if (exists(accountId) && exists(accountToken))
       this.props.login(accountId, accountToken);
   }
 
@@ -18,8 +19,8 @@ class LoadAccount extends React.Component {
   }
 
   loadAccount() {
-    getLinkedImpulses(this.props.accountId);
-    getLinkedSparks(this.props.accountId);
+    this.props.getLinkedImpulses(this.props.accountId);
+    this.props.getLinkedSparks(this.props.accountId);
   }
 
   render() {
@@ -27,10 +28,10 @@ class LoadAccount extends React.Component {
   }
 }
 
-export mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
-    loggedIn: state.loggedIn,
-    accountId: state.accountId
+    loggedIn: state.session.loggedIn,
+    accountId: state.session.accountId
   }
 };
 

@@ -15,9 +15,9 @@ class ActiveThread extends React.Component {
   }
 }
 
-export matStateToProps = state => {
+const mapStateToProps = state => {
   return {
-    activeThread: state.activeThread
+    activeThread: state.threads.activeThread
   };
 };
 

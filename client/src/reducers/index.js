@@ -1,7 +1,12 @@
-//TODO: divide genReducer into multiple smaller reducers later
 import { combineReducers } from 'redux';
-import genReducer from './genReducer';
+import dataReducer from './dataReducer';
+import threadsReducer from './threadsReducer';
+import controlReducer from './controlReducer';
+import sessionReducer from './sessionReducer';
 
 export default combineReducers({
-  gen: genReducer
+  data: dataReducer,
+  threads: threadsReducer,
+  control: controlReducer,
+  session: sessionReducer
 });

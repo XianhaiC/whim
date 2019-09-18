@@ -1,5 +1,5 @@
 import React from 'react';
-import { API_ROOT, HEADERS } from '../constants';
+import { connect } from 'react-redux';
 
 import { createSpark } from '../actions/index';
 
@@ -7,7 +7,7 @@ class CreateSpark extends React.Component {
   constructor() {
     super();
 
-    state = {
+    this.state = {
       name: '',
       linkImmediately: false
     };
@@ -45,10 +45,10 @@ class CreateSpark extends React.Component {
   }
 };
 
-export mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
-    accountId: state.accountId,
-    activeImpulse: state.activeImpulse
+    accountId: state.session.accountId,
+    activeImpulse: state.control.activeImpulse
   };
 };
 

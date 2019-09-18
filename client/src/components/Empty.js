@@ -1,4 +1,4 @@
-const Empty () => {
+const Empty = () => {
   return null;
 }
 

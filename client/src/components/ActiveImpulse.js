@@ -8,7 +8,6 @@ class ActiveImpulse extends React.Component {
   render() {
     return (
       <div className="active-impulse">
-        <p>Invite hash: {this.props.active_impulse.invite_hash}</p>
         <ImpulseHeader />
         <ActiveThread />
         <CreateMessage />

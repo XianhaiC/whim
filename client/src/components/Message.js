@@ -20,6 +20,6 @@ export default Message;
 // helpers
 
 function getTimeAMPM(time) {
-  let isPM = time.getHours() / 12 == 1;
+  let isPM = time.getHours() / 12 === 1;
   return `${time.getHours() % 12}:${time.getMinutes()} ${isPM ? "PM" : "AM"}`;
 }

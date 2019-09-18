@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { setActiveImpulse } from '../actions/index';
+import { switchImpulse } from '../actions/index';
 
 class ImpulseList extends React.Component {
   constructor() {
@@ -12,8 +12,9 @@ class ImpulseList extends React.Component {
 
   handleClick(impulse) {
     // find the impulses' corresponding spark
-    const spark = this.props.sparks.find(spark => spark.impulse_id === impulse.id);
-    
+    const spark = this.props.sparks.find(
+      spark => spark.impulse_id === impulse.id);
+
     // update the state with the new impulse
     // this sets the active spark and thread as well
     this.props.switchImpulse(impulse, spark);
@@ -30,19 +31,20 @@ class ImpulseList extends React.Component {
             sortImpulses(this.props.impulses),
             this.handleClick)
           }
-        </ul> 
+        </ul>
       </div>
     );
   }
 }
 
-export default connect(null, { setActiveImpulse })(ImpulseList);
+export default connect(null, { switchImpulse })(ImpulseList);
 
 // helpers
 const createImpulseCards = (impulses, handleClick) => {
   return impulses.map(impulse => {
     return (
-      <li className="impulse_card" key={impulse.id} onClick={() => handleClick (impulse)}>
+      <li className="impulse_card" key={impulse.id}
+        onClick={() => handleClick (impulse)}>
         <img src={"../images/flame.jpg"} alt="Impulse pic" />
         <p>{impulse.name}</p>
         <hr />

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190831085637) do
+ActiveRecord::Schema.define(version: 20190918215408) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "handle"
@@ -30,12 +30,21 @@ ActiveRecord::Schema.define(version: 20190831085637) do
     t.string "invite_hash"
   end
 
+  create_table "message_threads", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "impulse_id"
+    t.integer "inspiration_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.string "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "spark_id"
     t.integer "impulse_id"
+    t.boolean "is_inspiration"
+    t.integer "message_thread_id"
   end
 
   create_table "sparks", force: :cascade do |t|

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { joinImpulse } form '../actions/index';
+import { joinImpulse } from '../actions/index';
 
 class JoinImpulse extends React.Component {
   constructor() {
@@ -44,9 +44,9 @@ class JoinImpulse extends React.Component {
   }
 }
 
-export mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
-    invalidHashError: state.invalidHashError
+    invalidHashError: state.control.invalidHashError
   };
 };
 

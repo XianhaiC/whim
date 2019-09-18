@@ -1,7 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { exists } from './helpers';
+import { exists } from '../helpers';
+import {
+  setSession,
+  getSession,
+  registerSession
+} from '../actions/index';
 
 class LoadSession extends React.Component {
   componentDidMount() {
@@ -24,12 +29,14 @@ class LoadSession extends React.Component {
   }
 }
 
-export mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
-    sessionToken: state.sessionToken
+    sessionToken: state.session.sessionToken
   }
 };
 
 export default connect(mapStateToProps, {
-  setSession
+  setSession,
+  getSession,
+  registerSession
 })(LoadSession);

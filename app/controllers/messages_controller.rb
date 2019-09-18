@@ -2,14 +2,6 @@ class MessagesController < ApplicationController
   before_action :attempt_login, only: [:create]
   before_action :authenticate_session, only: [:create]
 
-  MESSAGES_PER_PAGE = 30
-
-  def show
-  end
-
-  def new
-  end
-
   #TODO push to channel id'd by thread instead of impulse
   def create
     # authenticate spark before creating message
@@ -36,21 +28,6 @@ class MessagesController < ApplicationController
     else
       render json: { errors: message.errors }, status => 400
     end
-  end
-
-  def edit
-  end
-
-  def update
-  end
-
-  def query_paginate
-    # query the impulse with the associated id for a set of messages created
-    # after the given date
-    messages = Message.where("created_at < (?) AND impulse_id = (?)",
-                             params[:offset], params[:id])
-      .order("created_at DESC").limit(MESSAGES_PER_PAGE)
-    render json: messages
   end
 
   private

@@ -48,11 +48,11 @@ class CreateMessage extends React.Component {
   }
 }
 
-export mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
-    activeImpulse: state.activeImpulse,
-    activeSpark: state.activeSpark,
-    activeThread: state.activeThread
+    activeImpulse: state.control.activeImpulse,
+    activeSpark: state.control.activeSpark,
+    activeThread: state.control.activeThread
   };
 };
 

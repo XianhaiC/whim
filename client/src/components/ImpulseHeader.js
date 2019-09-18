@@ -15,9 +15,9 @@ class ImpulseHeader extends React.Component {
   }
 }
 
-export mapStateToProps = state => {
+const mapStateToProps = state => {
   return {
-    activeImpulse: state.activeImpulse,
+    activeImpulse: state.control.activeImpulse,
   };
 };
 

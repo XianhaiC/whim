@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { CenterComponent } from '../helpers';
+
 import ActiveImpulse from './ActiveImpulse';
 import CreateImpulse from './CreateImpulse';
 import JoinImpulse from './JoinImpulse';
@@ -23,19 +25,25 @@ class Center extends React.Component {
         break;
       case CenterComponent.SPARK:
         centerComponent = <CreateSpark />
+        break;
       case CenterComponent.BLANK:
       default:
         centerComponent = <Empty />
         break;
     }
+    console.log("CENTER");
+    console.log(centerComponent);
+    console.log(this.props);
 
-    return { centerComponent };
+    return centerComponent;
   }
 }
 
-export mapStateToProps = state => {
+const mapStateToProps = state => {
+  console.log("CENT");
+  console.log(state.control.centerComponent);
   return {
-    centerComponent: state.centerComponent
+    centerComponent: state.control.centerComponent
   };
 };
 

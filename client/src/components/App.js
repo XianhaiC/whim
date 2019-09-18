@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { API_ROOT, HEADERS, PATH_ROOT, PATH_INVITE,
-  PATH_INVALID_INVITE, PATH_BOARD } from './constants';
-import { exists } from './helpers';
+  PATH_INVALID_INVITE, PATH_BOARD } from '../constants';
+import { exists } from '../helpers';
 import Board from './Board';
-import Landing from './Landing'
+//import Landing from './Landing'
 import InvalidInvite from './InvalidInvite';
 
 class App extends Component {
@@ -67,7 +67,8 @@ class App extends Component {
   }
 
   renderLanding(props) {
-    return <Landing onImpulseJoined={this.handleImpulseJoined} />
+    //return <Landing onImpulseJoined={this.handleImpulseJoined} />
+    return null;
   }
 
   renderRedirect() {
