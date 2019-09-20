@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190918215408) do
+ActiveRecord::Schema.define(version: 20190920130558) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "handle"
@@ -34,7 +34,9 @@ ActiveRecord::Schema.define(version: 20190918215408) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "impulse_id"
-    t.integer "inspiration_id"
+    t.string "parent_type"
+    t.integer "parent_id"
+    t.index ["parent_type", "parent_id"], name: "index_message_threads_on_parent_type_and_parent_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -44,7 +46,7 @@ ActiveRecord::Schema.define(version: 20190918215408) do
     t.integer "spark_id"
     t.integer "impulse_id"
     t.boolean "is_inspiration"
-    t.integer "message_thread_id"
+    t.integer "parent_thread_id"
   end
 
   create_table "sparks", force: :cascade do |t|

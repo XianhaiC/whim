@@ -30,7 +30,6 @@ class SessionsController < ApplicationController
       impulses: ActiveModel::Serializer::CollectionSerializer.new(impulses, each_serializer: ImpulseSerializer), 
       sparks: ActiveModel::Serializer::CollectionSerializer.new(sparks, each_serializer: SparkSerializer)
     }
-    #render json: { impulses: impulses.as_json, sparks: sparks.as_json }
   end
 
   private

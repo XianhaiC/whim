@@ -47,6 +47,7 @@ export const updateThreadOffset = (threadId, offset) => {
   };
 }
 
+// TODO the recieved response has two keys, message and thread if messages is an inspo
 export const receiveMessage = (threadId, message) => {
   return {
     type: PREPEND_THREAD_MESSAGES,
@@ -293,7 +294,7 @@ export const getThreadMessages = threadId => {
   }
 }
 
-export const createMessage = (impulseId, sparkId, threadId, body) => {
+export const createMessage = (impulseId, sparkId, threadId, body, isInspiration) => {
   return (dispatch, getState) => {
     const accountToken = getState().session.accountToken;
     const sessionToken = getState().session.sessionToken;
@@ -309,7 +310,8 @@ export const createMessage = (impulseId, sparkId, threadId, body) => {
         impulse_id: impulseId,
         spark_id: sparkId,
         thread_id: threadId,
-        body: body })
+        body: body,
+        is_inspiration: isInspiration })
     })
     .then(res => {
       if (!res.ok) throw Error(res.statusText);
@@ -337,6 +339,7 @@ export const createImpulse = (name, description) => {
       // add the new impulse and set the active impulse to allow the user
       // to create a new spark
       dispatch(updateSessionImpulses([newImpulse]));
+      dispatch(updateThreads([newImpulse.thread]));
       dispatch(switchImpulse(newImpulse, null));
     })
     .catch((e) => {
@@ -510,5 +513,16 @@ export const switchImpulse = (activeImpulse, activeSpark) => {
 
     dispatch(setActiveItems(activeImpulse, activeSpark, activeThread));
     dispatch(setCenterComponent(centerComponent));
+  }
+}
+
+export const receiveUpdate = (update) => {
+  return (dispatch, getState) => {
+    const message = update.message;
+    const thread = update.message_thread;
+
+    dispatch(receiveMessage(message.thread_id, message));
+    // thread exists if the message is an inspiration
+    if (exists(thread)) dispatch(updateThreads([thread]));
   }
 }

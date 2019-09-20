@@ -1,11 +1,12 @@
+#TODO change all render to return render
 class ImpulsesController < ApplicationController
   def show
     impulse = Impulse.find(params[:id])
 
     if !impulse.nil?
       serialized_data = ActiveModelSerializers::Adapter::Json.new(
-          ImpulseSerializer.new(impulse)
-        ).serializable_hash
+        ImpulseSerializer.new(impulse)
+      ).serializable_hash
       render json: serialized_data
     else
       render json: { errors: ['Impulse not found'] }, status => 400
@@ -14,11 +15,20 @@ class ImpulsesController < ApplicationController
 
   def create
     impulse = Impulse.new(impulse_params)
-    if impulse.save
-      render json: impulse
-    else
-      render json: { errors: impulse.errors }, status => 400
+    if !impulse.valid?
+      return render json: { errors: impulse.errors }, status => 400
     end
+
+    thread = MessageThread.new(impulse_id: params[:impulse_id],
+                               parent: impulse)
+    if !thread.save
+      return render json: { errors: thread.errors }, status => 400
+    end
+
+    impulse.save
+
+    # note that the impulses' thread is embeded into the JSON by the serializer
+    return render json: impulse
   end
 
   def update
@@ -55,7 +65,7 @@ class ImpulsesController < ApplicationController
   end
 
   private
-    def impulse_params
-      params.require(:impulse).permit(:name, :description)
-    end
+  def impulse_params
+    params.require(:impulse).permit(:name, :description)
+  end
 end

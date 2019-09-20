@@ -25,10 +25,13 @@ class CreateMessage extends React.Component {
 
     e.preventDefault();
 
-    createMessage(activeImpulse,
+    createMessage(
+      activeImpulse,
       activeSpark,
       activeThread,
-      this.state.body);
+      this.state.body,
+      false
+    );
 
     this.setState({ body: '' });
   }

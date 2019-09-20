@@ -1,8 +1,7 @@
-class ActiveMessagesChannel < ApplicationCable::Channel
+class ThreadMessagesChannel < ApplicationCable::Channel
   def subscribed
-    puts "ID: #{params[:impulse]}"
-    impulse = Impulse.find(params[:impulse])
-    stream_for impulse
+    thread = MessageThread.find(params[:thread])
+    stream_for thread
   end
 
   def unsubscribed

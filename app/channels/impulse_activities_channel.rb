@@ -1,7 +1,6 @@
-class ImpulseActivitiesChannel < ApplicationCable::Channel
+class ThreadsChannel < ApplicationCable::Channel
   def subscribed
-    impulse = Impulse.find(params[:impulse])
-    stream_for impulse
+    stream_from "threads_channel"
   end
 
   def unsubscribed
