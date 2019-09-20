@@ -1,3 +1,5 @@
 class MessageThreadSerializer < ActiveModel::Serializer
-  attributes :id
+  belongs_to :parent
+
+  attributes :id, :parent_type
 end

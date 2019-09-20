@@ -1,4 +1,4 @@
-class ThreadMessagesChannel < ApplicationCable::Channel
+class MessageThreadsChannel < ApplicationCable::Channel
   def subscribed
     thread = MessageThread.find(params[:thread])
     stream_for thread

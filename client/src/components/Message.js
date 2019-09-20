@@ -1,7 +1,8 @@
 import React from 'react';
 
 class Message extends React.Component {
-  render = () => {
+  render() {
+    console.log("MESGF");
     let createDate = new Date(this.props.message.created_at);
     return (
       <div className="Message">

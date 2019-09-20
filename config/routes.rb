@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     get '/impulses/:id/messages', to: 'impulses#messages'
     get '/impulses/:id/sparks', to: 'impulses#sparks'
     post '/session', to: 'sessions#session'
-    get '/query_messages/:id', to: 'messages#query_paginate'
+    get '/threads/:id/messages', to: 'message_threads#load'
 
     # session routes
     get    '/login',   to: 'sessions#new'

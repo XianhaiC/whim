@@ -15,17 +15,14 @@ class ImpulsesController < ApplicationController
 
   def create
     impulse = Impulse.new(impulse_params)
-    if !impulse.valid?
+    if !impulse.save
       return render json: { errors: impulse.errors }, status => 400
     end
 
-    thread = MessageThread.new(impulse_id: params[:impulse_id],
-                               parent: impulse)
+    thread = MessageThread.new(impulse: impulse, parent: impulse)
     if !thread.save
       return render json: { errors: thread.errors }, status => 400
     end
-
-    impulse.save
 
     # note that the impulses' thread is embeded into the JSON by the serializer
     return render json: impulse

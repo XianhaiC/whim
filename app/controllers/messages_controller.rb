@@ -7,9 +7,9 @@ class MessagesController < ApplicationController
     authenticate_spark_session(Spark.find(params[:spark_id]))
 
     message = Message.new(message_params)
-    thread = MessageThreads.find(message_params[:thread_id])
+    thread = MessageThread.find(params[:parent_thread_id])
 
-    if !message.valid?
+    if !message.save
       return render json: { errors: message.errors }, status => 400
     end
 
@@ -29,18 +29,17 @@ class MessagesController < ApplicationController
         MessageThreadSerializer.new(thread)).serializable_hash
     end
 
-    message.save
     serialized_data = ActiveModelSerializers::Adapter::Json.new(
       MessageSerializer.new(message)).serializable_hash.merge(thread_data)
 
-    ThreadMessagesChannel.broadcast_to thread, serialized_data
+    MessageThreadsChannel.broadcast_to thread, serialized_data
     head :ok
   end
 
   private
     def message_params
       params.require(:message).permit(:body, :spark_id,
-                                      :impulse_id, :thread_id, :is_inspiration)
+                                      :impulse_id, :parent_thread_id, :is_inspiration)
     end
 
     def authenticate_spark_session(spark)
@@ -53,8 +52,8 @@ class MessagesController < ApplicationController
       elsif @current_account.nil?
         render json: { errors: ['Spark not authenticated: Spark linked, but not logged in'] },
           status: :unauthorized
-      elsif !@current_account.nil?
-        && @current_account.id.to_i != spark.account.id.to_i
+      elsif !@current_account.nil? &&
+        @current_account.id.to_i != spark.account.id.to_i
         # authenticate via account link verification
         render json: { errors: ['Spark not authenticated: Spark does not belong to account'] },
           status: :unauthorized

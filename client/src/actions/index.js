@@ -132,7 +132,7 @@ export const setInvalidHashError = (occured) => {
   };
 }
 
-// update to allow spark session validation
+// TODO: update to allow spark session validation
 export const getThread = threadId => {
   return (dispatch, getState) => {
     const accountToken = getState().session.accountToken;
@@ -162,7 +162,7 @@ export const getThread = threadId => {
   }
 }
 
-export const getLinkedImpulses = accountId => {
+export const getImpulses = accountId => {
   return (dispatch, getState) => {
     const accountToken = getState().session.accountToken;
     if (!exists(accountToken)) {
@@ -184,6 +184,15 @@ export const getLinkedImpulses = accountId => {
     })
     .then(impulses => {
       dispatch(updateLinkedImpulses(impulses));
+
+      let inspirationThreads = [];
+      // note that threads will contain information about their parents
+      // this allows us to distinguish between impulse threads and 
+      // inspiration threads later on
+      impulses.forEach(impulse => {
+        inspirationThreads.push(...impulse.message_threads);
+      });
+      dispatch(updateThreads(inspirationThreads));
     })
     .catch((e) => {
       console.log(e);
@@ -218,6 +227,13 @@ export const getSession = () => {
     .then(session => {
       dispatch(updateSessionImpulses(session.impulses));
       dispatch(updateSessionSparks(session.sparks));
+
+      // update with session threads as well
+      let inspirationThreads = [];
+      session.impulses.forEach(impulse => {
+        inspirationThreads.push(...impulse.message_threads);
+      });
+      dispatch(updateThreads(inspirationThreads));
     })
     .catch((e) => {
       console.log(e);
@@ -299,6 +315,8 @@ export const createMessage = (impulseId, sparkId, threadId, body, isInspiration)
     const accountToken = getState().session.accountToken;
     const sessionToken = getState().session.sessionToken;
 
+    // no need for handling promise
+    // message is received via action cable channels
     fetch(`${API_ROOT}/messages`, {
       method: 'POST',
       headers: {
@@ -309,16 +327,11 @@ export const createMessage = (impulseId, sparkId, threadId, body, isInspiration)
       body: JSON.stringify({
         impulse_id: impulseId,
         spark_id: sparkId,
-        thread_id: threadId,
+        parent_thread_id: threadId,
         body: body,
         is_inspiration: isInspiration })
     })
-    .then(res => {
-      if (!res.ok) throw Error(res.statusText);
-      return res.json();
-    })
     .catch((e) => {
-      console.log(e);
       dispatch(errorOccured(true));
     });
   }
@@ -339,7 +352,7 @@ export const createImpulse = (name, description) => {
       // add the new impulse and set the active impulse to allow the user
       // to create a new spark
       dispatch(updateSessionImpulses([newImpulse]));
-      dispatch(updateThreads([newImpulse.thread]));
+      dispatch(updateThreads([newImpulse.message_thread]));
       dispatch(switchImpulse(newImpulse, null));
     })
     .catch((e) => {
@@ -479,7 +492,7 @@ export const registerSession = () => {
     .then(res => {
       console.log("REG");
       console.log(res);
-      
+
       if (!res.ok) throw Error(res.statusText);
       return res.json();
     })
@@ -507,10 +520,15 @@ export const switchImpulse = (activeImpulse, activeSpark) => {
 
     let activeThread = getState().threads.cachedThreads[activeImpulse.id];
     if (!exists(activeThread)) {
-      activeThread = getState().threads.threads[activeImpulse.thread_id];
+      activeThread = getState().threads.threads[activeImpulse.message_thread.id];
       dispatch(updateCachedThread(activeImpulse.id, activeThread));
     }
 
+    console.log("ACTIVE");
+    console.log(activeThread);
+    console.log(activeSpark);
+    console.log(activeImpulse);
+    //console.log(getState().threads);
     dispatch(setActiveItems(activeImpulse, activeSpark, activeThread));
     dispatch(setCenterComponent(centerComponent));
   }
@@ -521,7 +539,9 @@ export const receiveUpdate = (update) => {
     const message = update.message;
     const thread = update.message_thread;
 
-    dispatch(receiveMessage(message.thread_id, message));
+    console.log("REC");
+    console.log(message);
+    dispatch(receiveMessage(message.parent_thread_id, message));
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));
   }

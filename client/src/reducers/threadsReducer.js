@@ -1,3 +1,4 @@
+import { exists } from '../helpers';
 import {
   UPDATE_THREADS,
   APPEND_THREAD_MESSAGES,
@@ -33,8 +34,14 @@ export default (state = INITIAL_STATE, action) => {
     case PREPEND_THREAD_MESSAGES:
       // used for prepending new messages received via sockets
       newState = {...state};
+      console.log("IN");
+      console.log(newState.threads);
+      console.log(action.payload.threadId);
       thread = newState.threads[action.payload.threadId];
-      thread.messages = [...thread.messages, ...action.payload.messages];
+      if (!exists(thread.messages))
+        thread.messages = action.payload.messages;
+      else
+        thread.messages = [...thread.messages, ...action.payload.messages];
       return newState;
 
     case UPDATE_CACHED_THREAD:

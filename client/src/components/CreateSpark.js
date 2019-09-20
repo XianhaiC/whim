@@ -24,7 +24,7 @@ class CreateSpark extends React.Component {
     e.preventDefault();
     const linkAccountId = this.state.linkImmediately ? this.props.accountId : null;
 
-    this.props.createSpark(this.state.name, this.props.activeImpulse, linkAccountId);
+    this.props.createSpark(this.state.name, this.props.activeImpulse.id, linkAccountId);
   }
 
   render() {

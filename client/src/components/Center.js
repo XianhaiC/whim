@@ -40,8 +40,6 @@ class Center extends React.Component {
 }
 
 const mapStateToProps = state => {
-  console.log("CENT");
-  console.log(state.control.centerComponent);
   return {
     centerComponent: state.control.centerComponent
   };
