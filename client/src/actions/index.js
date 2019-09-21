@@ -428,7 +428,7 @@ export const createSpark = (name, impulseId, accountId) => {
 export const joinImpulse = (impulseHash) => {
   return (dispatch, getState) => {
 
-    fetch(`${API_ROOT}/impulses/invite/${this.state.impulse_hash}`, {
+    fetch(`${API_ROOT}/impulses/invite/${impulseHash}`, {
       method: 'GET',
       headers: HEADERS
     })
@@ -444,6 +444,7 @@ export const joinImpulse = (impulseHash) => {
       // add the new impulse to the list of session impulses
       if (!exists(existingImpulse)) {
         dispatch(updateSessionImpulses([newImpulse]));
+        dispatch(updateThreads([newImpulse.message_thread]));
         existingImpulse = newImpulse;
       }
       else {
