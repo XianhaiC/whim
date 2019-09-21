@@ -24,7 +24,7 @@ class CreateSpark extends React.Component {
     e.preventDefault();
     const linkAccountId = this.state.linkImmediately ? this.props.accountId : null;
 
-    this.props.createSpark(this.state.name, this.props.activeImpulse.id, linkAccountId);
+    this.props.createSpark(this.state.name, this.props.activeImpulseId, linkAccountId);
   }
 
   render() {
@@ -48,7 +48,7 @@ class CreateSpark extends React.Component {
 const mapStateToProps = state => {
   return {
     accountId: state.session.accountId,
-    activeImpulse: state.control.activeImpulse
+    activeImpulseId: state.control.activeImpulseId,
   };
 };
 

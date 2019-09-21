@@ -7,9 +7,9 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  activeImpulse: null,
-  activeSpark: null,
-  activeThread: null,
+  activeImpulseId: null,
+  activeSparkId: null,
+  activeThreadId: null,
   errorOccured: false,
   invalidHashError: false
 }
@@ -18,13 +18,13 @@ export default (state = INITIAL_STATE, action) => {
   switch(action.type) {
     case SET_ACTIVE_ITEMS:
       return {...state,
-        activeImpulse: action.payload.impulse,
-        activeSpark: action.payload.spark,
-        activeThread: action.payload.thread
+        activeImpulseId: action.payload.impulseId,
+        activeSparkId: action.payload.sparkId,
+        activeThreadId: action.payload.threadId
       };
 
     case SET_ACTIVE_THREAD:
-      return {...state, activeThread: action.payload.thread}
+      return {...state, activeThreadId: action.payload.threadId}
 
     case SET_CENTER_COMPONENT:
       return {...state, centerComponent: action.payload.centerComponent};

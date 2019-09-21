@@ -3,10 +3,14 @@ import { connect } from 'react-redux';
 
 class ImpulseHeader extends React.Component {
   render() {
+    const { activeImpulseId, linkedImpulses, sessionImpulses } = this.props;
+    const activeImpulse =
+      {...linkedImpulses, ...sessionImpulses}[activeImpulseId];
+
     return (
       <div className="impulse-header">
         <div className="impulse-info-flex">
-          <h3>{this.props.activeImpulse.name}</h3>
+          <h3>{activeImpulse.name}</h3>
           <p>xxx Sparks</p>
         </div>
         <button className="right-sidebar-toggle">Right Sidebar</button>
@@ -17,7 +21,9 @@ class ImpulseHeader extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    activeImpulse: state.control.activeImpulse,
+    activeImpulseId: state.control.activeImpulseId,
+    linkedImpulses: state.data.linkedImpulses,
+    sessionImpulses: state.data.sessionImpulses
   };
 };
 

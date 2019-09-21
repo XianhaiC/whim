@@ -4,7 +4,7 @@ import {
   UPDATE_THREADS,
   APPEND_THREAD_MESSAGES,
   PREPEND_THREAD_MESSAGES,
-  UPDATE_CACHED_THREAD,
+  UPDATE_CACHED_THREAD_ID,
   UPDATE_THREAD_OFFSET,
   UPDATE_LINKED_IMPULSES,
   UPDATE_SESSION_IMPULSES,
@@ -33,10 +33,10 @@ export const appendThreadMessages = (threadId, messages) => {
   };
 }
 
-export const updateCachedThread = (impulseId, thread) => {
+export const updateCachedThreadId = (impulseId, threadId) => {
   return {
-    type: UPDATE_CACHED_THREAD,
-    payload: { impulseId, thread }
+    type: UPDATE_CACHED_THREAD_ID,
+    payload: { impulseId, threadId }
   };
 }
 
@@ -111,10 +111,10 @@ export const setSession = (sessionToken) => {
   };
 }
 
-export const setActiveItems = (impulse, spark, thread) => {
+export const setActiveItems = (impulseId, sparkId, threadId) => {
   return {
     type: SET_ACTIVE_ITEMS,
-    payload: { impulse, spark, thread }
+    payload: { impulseId, sparkId, threadId }
   };
 }
 
@@ -310,7 +310,8 @@ export const getThreadMessages = threadId => {
   }
 }
 
-export const createMessage = (impulseId, sparkId, threadId, body, isInspiration) => {
+export const createMessage = (impulseId, sparkId, threadId,
+  body, isInspiration) => {
   return (dispatch, getState) => {
     const accountToken = getState().session.accountToken;
     const sessionToken = getState().session.sessionToken;
@@ -395,10 +396,15 @@ export const createSpark = (name, impulseId, accountId) => {
       return res.json();
     })
     .then(newSpark => {
+      // get the set the active impulse to be the impulse the spark was
+      // made for
+      const activeImpulse = {...getState().data.linkedImpulses,
+        ...getState().data.sessionImpulses}[impulseId];
+
       // add the new spark to the list of session sparks
       // update the active impulse information to include this new spark
       dispatch(updateSessionSparks([newSpark]));
-      dispatch(switchImpulse(getState().control.activeImpulse, newSpark));
+      dispatch(switchImpulse(activeImpulse, newSpark));
     })
     .catch((e) => {
       console.log(e);
@@ -419,8 +425,8 @@ export const joinImpulse = (impulseHash) => {
       return res.json();
     })
     .then(newImpulse => {
-      let existingImpulse = 
-        {...getState().data.linkedImpulses, ...getState().data.sessionImpulses}[newImpulse.id];
+      let existingImpulse = {...getState().data.linkedImpulses,
+        ...getState().data.sessionImpulses}[newImpulse.id];
       let existingSpark = null;
 
       // add the new impulse to the list of session impulses
@@ -431,7 +437,8 @@ export const joinImpulse = (impulseHash) => {
       else {
         // iterate through the values in the spark dicts and find the
         // impulses' corresponding spark
-        const sparks = {...getState().data.linkedSparks, ...getState().data.sessionSparks};
+        const sparks =
+          {...getState().data.linkedSparks, ...getState().data.sessionSparks};
         for (const [sparkId, spark] of Object.entries(sparks)) {
           if (spark.impulse_id === existingImpulse.id) existingSpark = spark;
         }
@@ -515,21 +522,17 @@ export const registerSession = () => {
 
 export const switchImpulse = (activeImpulse, activeSpark) => {
   return (dispatch, getState) => {
-    let centerComponent = !exists(activeSpark) ?
+    const centerComponent = !exists(activeSpark) ?
       CenterComponent.SPARK : CenterComponent.ACTIVE;
+    const activeSparkId = exists(activeSpark) ? activeSpark.id : null;
 
-    let activeThread = getState().threads.cachedThreads[activeImpulse.id];
-    if (!exists(activeThread)) {
-      activeThread = getState().threads.threads[activeImpulse.message_thread.id];
-      dispatch(updateCachedThread(activeImpulse.id, activeThread));
+    let activeThreadId = getState().threads.cachedThreadIds[activeImpulse.id];
+    if (!exists(activeThreadId)) {
+      activeThreadId = getState().threads.threads[activeImpulse.message_thread.id].id;
+      dispatch(updateCachedThreadId(activeImpulse.id, activeThreadId));
     }
 
-    console.log("ACTIVE");
-    console.log(activeThread);
-    console.log(activeSpark);
-    console.log(activeImpulse);
-    //console.log(getState().threads);
-    dispatch(setActiveItems(activeImpulse, activeSpark, activeThread));
+    dispatch(setActiveItems(activeImpulse.id, activeSparkId, activeThreadId));
     dispatch(setCenterComponent(centerComponent));
   }
 }

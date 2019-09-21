@@ -7,10 +7,8 @@ import Message from './Message';
 // is in charge of loading messages given an impulse id
 class ActiveThread extends React.Component {
   render() {
-    const { activeThread } = this.props;
+    const activeThread = this.props.threads[this.props.activeThreadId];
 
-    console.log("RENDER ACR");
-    console.log(activeThread);
     return (
       <div className="active-thread">
           {exists(activeThread.messages) && activeThread.messages.map(message => {
@@ -21,10 +19,9 @@ class ActiveThread extends React.Component {
 }
 
 const mapStateToProps = state => {
-  console.log("map ACR");
-  console.log(state.control.activeThread);
   return {
-    activeThread: state.control.activeThread
+    activeThreadId: state.control.activeThreadId,
+    threads: state.threads.threads
   };
 };
 
