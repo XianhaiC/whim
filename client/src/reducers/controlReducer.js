@@ -3,7 +3,8 @@ import {
   SET_ACTIVE_THREAD,
   SET_CENTER_COMPONENT,
   ERROR_OCCURED,
-  SET_INVALID_HASH_ERROR
+  SET_INVALID_HASH_ERROR,
+  SET_FETCH_MESSAGES
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -11,7 +12,8 @@ const INITIAL_STATE = {
   activeSparkId: null,
   activeThreadId: null,
   errorOccured: false,
-  invalidHashError: false
+  invalidHashError: false,
+  fetchMessages: false
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -36,6 +38,9 @@ export default (state = INITIAL_STATE, action) => {
       return {...state,
         errorOccured: action.payload.occured,
         invalidHashError: action.payload.occured};
+
+    case SET_FETCH_MESSAGES:
+      return {...state, fetchMessages: action.payload.fetchMessages};
 
     default:
       return state;

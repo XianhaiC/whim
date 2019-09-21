@@ -16,7 +16,8 @@ import {
   SET_SESSION,
   SET_ACTIVE_ITEMS,
   ERROR_OCCURED,
-  SET_INVALID_HASH_ERROR
+  SET_INVALID_HASH_ERROR,
+  SET_FETCH_MESSAGES
 } from '../actions/types';
 
 export const updateThreads = (threads) => {
@@ -132,6 +133,13 @@ export const setInvalidHashError = (occured) => {
   };
 }
 
+export const setFetchMessages = (fetchMessages) => {
+  return {
+    type: SET_FETCH_MESSAGES,
+    payload: { fetchMessages }
+  }
+}
+
 // TODO: update to allow spark session validation
 export const getThread = threadId => {
   return (dispatch, getState) => {
@@ -162,7 +170,7 @@ export const getThread = threadId => {
   }
 }
 
-export const getImpulses = accountId => {
+export const getLinkedImpulses = accountId => {
   return (dispatch, getState) => {
     const accountToken = getState().session.accountToken;
     if (!exists(accountToken)) {
@@ -278,7 +286,7 @@ export const getThreadMessages = threadId => {
   return (dispatch, getState) => {
     const accountToken = getState().session.accountToken;
     const sessionToken = getState().session.sessionToken;
-    let offset = getState.cachedThreadOffsets[threadId];
+    let offset = getState().threads.threadOffsets[threadId];
 
     // use current date to grab the most recent messages for the thread
     if (!exists(offset)) {
@@ -476,7 +484,7 @@ export const loginAccount = (email, password) => {
       const token = authPayload.auth_token;
       const accountId = authPayload.account.id;
 
-      sessionStorage.setItem('loginAccountId', accountId);
+      sessionStorage.setItem('accountId', accountId);
       sessionStorage.setItem('accountToken', token);
 
       dispatch(login(accountId, token));

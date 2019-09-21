@@ -17,7 +17,7 @@ class MessageThreadsController < ApplicationController
 
   def load
     # query the message thread for messages created after date given by offset
-    messages = Message.where("created_at < (?) AND message_thread_id = (?)",
+    messages = Message.where("created_at < (?) AND parent_thread_id = (?)",
                              params[:offset], params[:id])
       .order("created_at DESC").limit(MESSAGES_PER_PAGE)
     render json: messages

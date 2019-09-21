@@ -2,6 +2,7 @@ import React from 'react';
 
 import LoadAccount from './LoadAccount';
 import LoadSession from './LoadSession';
+import LoadMessages from './LoadMessages';
 import MessageThreadsChannel from './MessageThreadsChannel';
 
 const Functionals = () => {
@@ -9,6 +10,7 @@ const Functionals = () => {
     <div className="functionals">
       <LoadAccount />
       <LoadSession />
+      <LoadMessages />
       <MessageThreadsChannel />
     </div>
   );

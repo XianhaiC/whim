@@ -8,11 +8,16 @@ import Message from './Message';
 class ActiveThread extends React.Component {
   render() {
     const activeThread = this.props.threads[this.props.activeThreadId];
+    let messagesList = null;
+    if (exists(activeThread.messages)) {
+      messagesList = activeThread.messages.map(message =>
+        <li key={message.id}><Message message={message} /></li>
+      );
+    }
 
     return (
       <div className="active-thread">
-          {exists(activeThread.messages) && activeThread.messages.map(message => {
-            return <Message message={message} />})}
+        <ul>{messagesList}</ul>
       </div>
     );
   }
