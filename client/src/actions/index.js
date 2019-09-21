@@ -56,31 +56,35 @@ export const receiveMessage = (threadId, message) => {
   };
 }
 
-export const updateLinkedImpulses = (impulses) => {
+export const updateLinkedImpulses = (impulses,
+  remove = false, toRemoveIds = []) => {
   return {
     type: UPDATE_LINKED_IMPULSES,
-    payload: { impulses }
+    payload: { impulses, remove, toRemoveIds }
   };
 }
 
-export const updateSessionImpulses = (impulses) => {
+export const updateSessionImpulses = (impulses,
+  remove = false, toRemoveIds = []) => {
   return {
     type: UPDATE_SESSION_IMPULSES,
-    payload: { impulses }
+    payload: { impulses, remove, toRemoveIds }
   };
 }
 
-export const updateLinkedSparks = (sparks) => {
+export const updateLinkedSparks = (sparks,
+  remove = false, toRemoveIds = []) => {
   return {
     type: UPDATE_LINKED_SPARKS,
-    payload: { sparks }
+    payload: { sparks, remove, toRemoveIds }
   };
 }
 
-export const updateSessionSparks = (sparks) => {
+export const updateSessionSparks = (sparks,
+  remove = false, toRemoveIds = []) => {
   return {
     type: UPDATE_SESSION_SPARKS,
-    payload: { sparks }
+    payload: { sparks, remove, toRemoveIds }
   };
 }
 
@@ -505,9 +509,6 @@ export const registerSession = () => {
       headers: HEADERS
     })
     .then(res => {
-      console.log("REG");
-      console.log(res);
-
       if (!res.ok) throw Error(res.statusText);
       return res.json();
     })
@@ -550,10 +551,72 @@ export const receiveUpdate = (update) => {
     const message = update.message;
     const thread = update.message_thread;
 
-    console.log("REC");
-    console.log(message);
     dispatch(receiveMessage(message.parent_thread_id, message));
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));
+  }
+}
+
+export const createInvite = (impulseId) => {
+  return (dispatch, getState) => {
+
+    fetch(`${API_ROOT}/impulses/${impulseId}/invite/new`, {
+      method: 'GET',
+      headers: HEADERS
+    })
+    .then(res => {
+      if (!res.ok) throw Error(res.statusText);
+      return res.json();
+    })
+    .then(impulse => {
+      if (exists(getState().data.linkedImpulses[impulse.id]))
+        dispatch(updateLinkedImpulses([impulse]));
+      else
+        dispatch(updateSessionImpulses([impulse]));
+    })
+    .catch((e) => {
+      console.log(e);
+      dispatch(errorOccured(true));
+    });
+  }
+}
+
+export const linkAccount = (sparkId, accountId) => {
+  return (dispatch, getState) => {
+    const accountToken = getState().session.accountToken;
+    if (!exists(accountToken) || !exists(accountId)) {
+      console.log("getLinkedImpulses(): Not logged in!");
+      dispatch(errorOccured(true));
+      return;
+    }
+
+    fetch(`${API_ROOT}/sparks/${sparkId}`, {
+      method: 'PATCH',
+      headers: {
+        ...HEADERS,
+        AuthorizationLogin: `Bearer ${accountToken}`
+      },
+      body: JSON.stringify({ account_id: accountId })
+    })
+    .then(res => {
+      if (!res.ok) throw Error(res.statusText);
+      return res.json();
+    })
+    .then(spark => {
+      const linkedImpulse = {...getState().data.linkedImpulses,
+        ...getState().data.sessionImpulses}[spark.impulse_id];
+
+      // remove the linked spark and its impulse from the session lists
+      dispatch(updateSessionSparks([], true, [spark.id]));
+      dispatch(updateSessionImpulses([], true, [spark.impulse_id]));
+
+      // add the linked spark and its impulse to the linked lists
+      dispatch(updateLinkedSparks([spark]));
+      dispatch(updateLinkedImpulses([linkedImpulse]));
+    })
+    .catch((e) => {
+      console.log(e);
+      dispatch(errorOccured(true));
+    });
   }
 }

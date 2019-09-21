@@ -7,8 +7,12 @@ class ImpulseHeader extends React.Component {
     const activeImpulse =
       {...linkedImpulses, ...sessionImpulses}[activeImpulseId];
 
+    console.log("HASH");
+    console.log(activeImpulse.invite_hash);
+
     return (
       <div className="impulse-header">
+        {activeImpulse.invite_hash && <p>Invite hash: {activeImpulse.invite_hash}</p>}
         <div className="impulse-info-flex">
           <h3>{activeImpulse.name}</h3>
           <p>xxx Sparks</p>

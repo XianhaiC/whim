@@ -31,6 +31,8 @@ class Login extends React.Component {
   }
 
   render() {
+    if (this.props.loggedIn) return null;
+
     return (
       <div className="login">
         <h1>Login</h1>
@@ -55,6 +57,12 @@ class Login extends React.Component {
   }
 }
 
-export default connect(null, {
+const mapStateToProps = state => {
+  return {
+    loggedIn: state.session.loggedIn
+  };
+};
+
+export default connect(mapStateToProps, {
   loginAccount
 })(Login);

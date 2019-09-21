@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { API_ROOT, HEADERS } from '../constants';
-import FontAwesome from 'react-fontawesome'
+import { connect } from 'react-redux';
 
-class ImpulseOptionsList extends Component {
+import { API_ROOT, HEADERS } from '../constants';
+import { createInvite, linkAccount } from '../actions/index';
+
+class ImpulseOptions extends Component {
 
   constructor(props) {
     super(props);
@@ -40,7 +42,7 @@ class ImpulseOptionsList extends Component {
 
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.handleAccountLink = this.handleAccountLink.bind(this);
-    this.handleInviteCreate = this.handleInviteCreate.bind(this);
+    this.handleCreateInvite = this.handleCreateInvite.bind(this);
   }
 
   handleClickOutside() {
@@ -50,32 +52,11 @@ class ImpulseOptionsList extends Component {
   }
 
   handleAccountLink() {
-    const account_session_token = sessionStorage.getItem('account_session_token');
-    // TODO: redirect to login page
-    if (!this.props.logged_in) return
-    fetch(`${API_ROOT}/sparks/${this.props.active_spark_id}`, {
-      method: 'PATCH',
-      headers: {
-        ...HEADERS,
-        AuthorizationLogin: `Bearer ${account_session_token}`
-      },
-      body: JSON.stringify({ account_id: this.props.account_id })
-    })
-    .then(res => res.json())
-    .then(spark => {
-      this.props.onAccountLinked(spark.id);
-    });
+    this.props.linkAccount(this.props.activeSparkId, this.props.accountId);
   }
 
-  handleInviteCreate() {
-    fetch(`${API_ROOT}/impulses/${this.props.active_impulse_id}/invite/new`, {
-      method: 'GET',
-      headers: HEADERS
-    })
-    .then(res => res.json())
-    .then(impulse => {
-      this.props.onInviteCreated(impulse);
-    });
+  handleCreateInvite() {
+    this.props.createInvite(this.props.activeImpulseId);
   }
 
   toggleList() {
@@ -86,9 +67,9 @@ class ImpulseOptionsList extends Component {
     const {listOpen, headerTitle, optionItems} = this.state
 
     return (
-      <div className="right-impulse-options">
+      <div className="impulse-options">
         <ul className="options-list">
-          <button className="option-item" key="0" onClick={this.handleInviteCreate}> {optionItems[0].title} </button>
+          <button className="option-item" key="0" onClick={this.handleCreateInvite}> {optionItems[0].title} </button>
           <button className="option-item" key="1"> {optionItems[1].title} </button>
           <button className="option-item" key="2"> {optionItems[2].title} </button>
           <button className="option-item" key="3" onClick={this.handleAccountLink}> {optionItems[3].title} </button>
@@ -119,4 +100,15 @@ class ImpulseOptionsList extends Component {
   }
 }
 
-export default ImpulseOptionsList
+const mapStateToProps = state => {
+  return {
+    accountId: state.session.accountId,
+    activeImpulseId: state.control.activeImpulseId,
+    activeSparkId: state.control.activeSparkId
+  };
+};
+
+export default connect(mapStateToProps, {
+  createInvite,
+  linkAccount
+})(ImpulseOptions);
