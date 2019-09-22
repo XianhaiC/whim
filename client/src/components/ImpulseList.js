@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { switchImpulse } from '../actions/index';
 
 class ImpulseList extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.handleClick = this.handleClick.bind(this);
   }

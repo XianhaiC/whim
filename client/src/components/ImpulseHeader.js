@@ -12,12 +12,16 @@ class ImpulseHeader extends React.Component {
 
     return (
       <div className="impulse-header">
-        {activeImpulse.invite_hash && <p>Invite hash: {activeImpulse.invite_hash}</p>}
+        {activeImpulse.invite_hash &&
+            <p>Invite hash: {activeImpulse.invite_hash}</p>}
         <div className="impulse-info-flex">
           <h3>{activeImpulse.name}</h3>
           <p>xxx Sparks</p>
         </div>
-        <button className="right-sidebar-toggle">Right Sidebar</button>
+        <button className="link-btn">Link</button>
+        <button className="invite-btn">Invite</button>
+        <button className="info-btn">Info</button>
+        <button className="settings-btn">Settings</button>
       </div>
     );
   }

@@ -10,7 +10,7 @@ import {
   UPDATE_SESSION_IMPULSES,
   UPDATE_LINKED_SPARKS,
   UPDATE_SESSION_SPARKS,
-  SET_ACTIVE_THREAD,
+  SET_ACTIVE_THREAD_ID,
   SET_CENTER_COMPONENT,
   LOGIN,
   SET_SESSION,
@@ -88,10 +88,10 @@ export const updateSessionSparks = (sparks,
   };
 }
 
-export const setActiveThread = (thread) => {
+export const setActiveThreadId = (threadId) => {
   return {
-    type: SET_ACTIVE_THREAD,
-    payload: { thread }
+    type: SET_ACTIVE_THREAD_ID,
+    payload: { threadId }
   };
 }
 
@@ -195,16 +195,19 @@ export const getLinkedImpulses = accountId => {
       return res.json();
     })
     .then(impulses => {
-      dispatch(updateLinkedImpulses(impulses));
-
       let inspirationThreads = [];
       // note that threads will contain information about their parents
       // this allows us to distinguish between impulse threads and 
       // inspiration threads later on
       impulses.forEach(impulse => {
         inspirationThreads.push(...impulse.message_threads);
+
+        // we don't store thread data in the impulse list
+        delete impulse.message_threads;
       });
+
       dispatch(updateThreads(inspirationThreads));
+      dispatch(updateLinkedImpulses(impulses));
     })
     .catch((e) => {
       console.log(e);
@@ -311,6 +314,15 @@ export const getThreadMessages = threadId => {
       return res.json();
     })
     .then(messagesNew => {
+      let sparksNew = [];
+      messagesNew.forEach(message => {
+        sparksNew.push(message.spark);
+
+        // no longer need this
+        delete message.spark;
+      });
+      
+      dispatch(updateImpulseSparks(sparksNew));
       dispatch(appendThreadMessages(threadId, messagesNew.reverse()));
       dispatch(updateThreadOffset(threadId,
         new Date(messagesNew[messagesNew.length - 1].created_at)));
@@ -586,7 +598,7 @@ export const linkAccount = (sparkId, accountId) => {
   return (dispatch, getState) => {
     const accountToken = getState().session.accountToken;
     if (!exists(accountToken) || !exists(accountId)) {
-      console.log("getLinkedImpulses(): Not logged in!");
+      console.log("linkAccount(): Not logged in!");
       dispatch(errorOccured(true));
       return;
     }

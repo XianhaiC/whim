@@ -1,6 +1,6 @@
 import {
   SET_ACTIVE_ITEMS,
-  SET_ACTIVE_THREAD,
+  SET_ACTIVE_THREAD_ID,
   SET_CENTER_COMPONENT,
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
@@ -25,7 +25,7 @@ export default (state = INITIAL_STATE, action) => {
         activeThreadId: action.payload.threadId
       };
 
-    case SET_ACTIVE_THREAD:
+    case SET_ACTIVE_THREAD_ID:
       return {...state, activeThreadId: action.payload.threadId}
 
     case SET_CENTER_COMPONENT:

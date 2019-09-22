@@ -26,7 +26,12 @@ class AccountsController < ApplicationController
 
     account = Account.find(params[:id])
     if !account.nil?
-      render json: account.impulses
+      serialized_data = ActiveModel::Serializer::CollectionSerializer.new(
+        account.impulses, each_serializer: ImpulseSerializer)
+      puts "SENDING IMPS"
+      puts serialized_data
+
+      render json: serialized_data
     else
       render json: { errors: ["Account not found"] }, status => 400
     end
@@ -42,7 +47,7 @@ class AccountsController < ApplicationController
   end
 
   private
-    def account_params
-      params.require(:account).permit(:name, :email, :password, :password_confirmation)
-    end
+  def account_params
+    params.require(:account).permit(:name, :email, :password, :password_confirmation)
+  end
 end
