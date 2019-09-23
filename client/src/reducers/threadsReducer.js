@@ -13,6 +13,8 @@ const INITIAL_STATE = {
   threadOffsets: {},
 }
 
+// TODO create one thread message update function since we're now sorting
+// anyways
 export default (state = INITIAL_STATE, action) => {
   let newState = null;
   let thread = null;
@@ -34,8 +36,16 @@ export default (state = INITIAL_STATE, action) => {
 
       if (!exists(thread.messages))
         thread.messages = action.payload.messages;
-      else
-        thread.messages = [...action.payload.messages, ...thread.messages];
+      else {
+        thread.messages = [...thread.messages];
+        action.payload.messages.forEach(message => {
+          if (thread.messages.findIndex(x => x.id == message.id) <= -1) {
+            thread.messages.push(message);
+          }
+        });
+      }
+
+      thread.messages = sortedMessages(thread.messages);
       return newState;
 
     case PREPEND_THREAD_MESSAGES:
@@ -45,8 +55,16 @@ export default (state = INITIAL_STATE, action) => {
 
       if (!exists(thread.messages))
         thread.messages = action.payload.messages;
-      else
-        thread.messages = [...thread.messages, ...action.payload.messages];
+      else {
+        thread.messages = [...thread.messages];
+        action.payload.messages.forEach(message => {
+          if (thread.messages.findIndex(x => x.id == message.id) <= -1) {
+            thread.messages.push(message);
+          }
+        });
+      }
+
+      thread.messages = sortedMessages(thread.messages);
       return newState;
 
     case UPDATE_CACHED_THREAD_ID:
@@ -63,4 +81,12 @@ export default (state = INITIAL_STATE, action) => {
     default:
       return state;
   }
+}
+
+// helpers
+
+const sortedMessages = messages => {
+  return messages.sort(
+    (a, b) => new Date(a.created_at) - new Date(b.created_at)
+  );
 }

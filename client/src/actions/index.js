@@ -307,6 +307,8 @@ export const getThreadMessages = threadId => {
     const sessionToken = getState().session.sessionToken;
     let offset = getState().threads.threadOffsets[threadId];
 
+    console.log("GETTING");
+
     // use current date to grab the most recent messages for the thread
     if (!exists(offset)) {
       let date = new Date();
@@ -564,7 +566,8 @@ export const switchImpulse = (activeImpulse, activeSpark) => {
 
     let activeThreadId = getState().threads.cachedThreadIds[activeImpulse.id];
     if (!exists(activeThreadId)) {
-      activeThreadId = getState().threads.threads[activeImpulse.message_thread.id].id;
+      activeThreadId = getState().threads
+        .threads[activeImpulse.message_thread.id].id;
       dispatch(updateCachedThreadId(activeImpulse.id, activeThreadId));
     }
 
@@ -577,10 +580,23 @@ export const receiveUpdate = (update) => {
   return (dispatch, getState) => {
     const message = update.message;
     const thread = update.message_thread;
+    const thread_id = message.parent_thread_id;
 
+    // save the spark that posted the message
     dispatch(updateSparks([message.spark]));
     delete message.spark;
-    dispatch(receiveMessage(message.parent_thread_id, message));
+
+    // get the initial thread messages if they haven't been
+    // loaded yet
+    console.log("TEVBING");
+    console.log(!exists(getState().threads.threads[thread_id]));
+    console.log(getState().threads);
+    if (!exists(getState().threads.threads[thread_id].messages))
+      dispatch(getThreadMessages(thread_id));
+
+    // add the recieved message
+    dispatch(receiveMessage(thread_id, message));
+
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));
   }
