@@ -10,12 +10,12 @@ class Landing extends Component {
     this.state = {
       impulse_hash: '',
       invalid_hash: false,
-      redirect_login: false
+      redirect_board: false
     }
 
     this.handleJoinImpulse = this.handleJoinImpulse.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.redirectLogin = this.redirectLogin.bind(this);
+    this.handleRedirectBoard = this.handleRedirectBoard.bind(this);
   }
 
   handleJoinImpulse(e) {
@@ -39,18 +39,19 @@ class Landing extends Component {
     this.setState({ impulse_hash: e.target.value });
   }
 
-  redirectLogin() {
-    this.setState({ redirect_login: true });
+  redirectBoard() {
+    this.setState({ redirect_board: true });
   }
 
   renderRedirect() {
-    if (this.state.redirect_login) return <Redirect to={PATH_BOARD} />
+    if (this.state.redirect_board) return <Redirect to={PATH_BOARD} />
   }
 
   render() {
     return (
       <div className="Landing">
         {this.renderRedirect()}
+        <Login />
         <form onSubmit={this.handleJoinImpulse}>
           { this.state.invalid_hash && <p>Invalid hash!</p> }
           <label>Join Impulse:</label>
@@ -59,7 +60,7 @@ class Landing extends Component {
             onChange={this.handleChange} />
           <input type="submit" />
         </form>
-        <button onClick={this.redirectLogin}>Login</button>
+        <button onClick={this.redirectBoard}>Continue without signing in</button>
       </div>
     );
   }

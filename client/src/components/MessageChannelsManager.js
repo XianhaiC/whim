@@ -1,3 +1,4 @@
+// TODO: delete if obsolete
 import React, { Fragment } from 'react';
 import ActionCable from 'actioncable';
 

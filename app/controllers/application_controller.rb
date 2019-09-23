@@ -14,7 +14,6 @@ class ApplicationController < ActionController::API
 
     def authenticate_login
       unless login_authorized?
-        puts "LOGIN_RET #{@auth_token_session}"
         render json: { errors: ["Login not authenticated: Token mismatch"] }, status: :unauthorized
         return
       end
@@ -25,7 +24,6 @@ class ApplicationController < ActionController::API
 
     def authenticate_session
       unless session_authorized?
-        puts "OUT #{@auth_token_session}"
         render json: { errors: ["Session not authenticated: Token mismatch"] }, status: :unauthorized
         return
       end
@@ -54,7 +52,6 @@ class ApplicationController < ActionController::API
     end
 
     def http_token_session
-      puts "PROBELM HTTP"
       @http_token_session ||= if request.headers['AuthorizationSession'].present?
         request.headers['AuthorizationSession'].split(' ').last
       end

@@ -1,8 +1,8 @@
-import { API_ROOT, HEADERS, UNDEFINED } from '../constants';
+import { UNDEFINED } from './constants';
 
 // enum for center components
 
-export const CenterState = {
+export const CenterComponent = {
   BLANK: 0,
   ACTIVE: 1,
   CREATE: 2,

@@ -1,48 +1,52 @@
 import React from 'react';
-import { API_ROOT, HEADERS } from '../constants';
+import { connect } from 'react-redux';
+
+import { createMessage } from '../actions/index';
 
 class CreateMessage extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
+
     this.state = {
-      body: '',
-      impulse_id: this.props.impulse_id,
-      spark_id: this.props.spark_id
+      body: ''
     };
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillReceiveProps = nextProps => {
-    this.setState({ impulse_id: nextProps.impulse_id, spark_id: nextProps.spark_id });
-  };
-
-  handleChange = e => {
+  handleChange(e) {
     this.setState({ body: e.target.value });
-  };
+  }
 
-  handleSubmit = e => {
+  handleSubmit(e) {
+    const {activeImpulseId, activeSparkId, activeThreadId,
+      linkedImpulses, sessionImpulses,
+      linkedSparks, sessionSparks, threads} = this.props;
+    const { createMessage } = this.props;
+
+    const activeImpulse =
+      {...linkedImpulses, ...sessionImpulses}[activeImpulseId];
+    const activeSpark =
+      {...linkedSparks, ...sessionSparks}[activeSparkId];
+    const activeThread = threads[activeThreadId];
+
     e.preventDefault();
-    const account_session_token = sessionStorage.getItem('account_session_token');
-    const spark_session_token = sessionStorage.getItem('spark_session_token');
 
-    // note that login authentication may fail but session authentication can succeed
-    // so long as one succeeds the message will be successfully sent
-    fetch(`${API_ROOT}/messages`, {
-      method: 'POST',
-      headers: {
-        ...HEADERS,
-        AuthorizationLogin: `Bearer ${account_session_token}`,
-        AuthorizationSession: `Bearer ${spark_session_token}`
-      },
-      body: JSON.stringify(this.state)
-    });
+    createMessage(
+      activeImpulse.id,
+      activeSpark.id,
+      activeThread.id,
+      this.state.body,
+      false
+    );
+
     this.setState({ body: '' });
-  };
+  }
 
-  render = () => {
+  render() {
     return (
-      <div className="CreateMessage">
+      <div className="create-message">
         <form onSubmit={this.handleSubmit}>
           <input className="message-text"
             type="text"
@@ -52,7 +56,22 @@ class CreateMessage extends React.Component {
         </form>
       </div>
     );
-  };
+  }
 }
 
-export default CreateMessage;
+const mapStateToProps = state => {
+  return {
+    activeImpulseId: state.control.activeImpulseId,
+    activeSparkId: state.control.activeSparkId,
+    activeThreadId: state.control.activeThreadId,
+    linkedImpulses: state.data.linkedImpulses,
+    sessionImpulses: state.data.sessionImpulses,
+    linkedSparks: state.data.linkedSparks,
+    sessionSparks: state.data.sessionSparks,
+    threads: state.threads.threads
+  };
+};
+
+export default connect(mapStateToProps, {
+  createMessage
+})(CreateMessage);

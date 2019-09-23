@@ -1,7 +1,8 @@
 import React from 'react';
 
 class Message extends React.Component {
-  render = () => {
+  render() {
+    console.log("MESGF");
     let createDate = new Date(this.props.message.created_at);
     return (
       <div className="Message">
@@ -20,6 +21,6 @@ export default Message;
 // helpers
 
 function getTimeAMPM(time) {
-  let isPM = time.getHours() / 12 == 1;
+  let isPM = time.getHours() / 12 === 1;
   return `${time.getHours() % 12}:${time.getMinutes()} ${isPM ? "PM" : "AM"}`;
 }
