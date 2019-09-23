@@ -589,6 +589,7 @@ export const receiveUpdate = (update) => {
     // get the initial thread messages if they haven't been
     // loaded yet
     console.log("TEVBING");
+    console.log(message);
     console.log(!exists(getState().threads.threads[thread_id]));
     console.log(getState().threads);
     if (!exists(getState().threads.threads[thread_id].messages))

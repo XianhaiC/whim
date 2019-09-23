@@ -7,7 +7,7 @@ class MessagesController < ApplicationController
     authenticate_spark_session(Spark.find(params[:spark_id]))
 
     message = Message.new(message_params)
-    thread = MessageThread.find(params[:parent_thread_id])
+    parent_thread = MessageThread.find(params[:parent_thread_id])
 
     if !message.save
       return render json: { errors: message.errors }, status => 400
@@ -32,7 +32,7 @@ class MessagesController < ApplicationController
     serialized_data = ActiveModelSerializers::Adapter::Json.new(
       MessageSerializer.new(message)).serializable_hash.merge(thread_data)
 
-    MessageThreadsChannel.broadcast_to thread, serialized_data
+    MessageThreadsChannel.broadcast_to parent_thread, serialized_data
     head :ok
   end
 
