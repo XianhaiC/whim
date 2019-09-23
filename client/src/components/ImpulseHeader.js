@@ -3,12 +3,8 @@ import { connect } from 'react-redux';
 
 class ImpulseHeader extends React.Component {
   render() {
-    const { activeImpulseId, linkedImpulses, sessionImpulses } = this.props;
-    const activeImpulse =
-      {...linkedImpulses, ...sessionImpulses}[activeImpulseId];
-
-    console.log("HASH");
-    console.log(activeImpulse.invite_hash);
+    const { activeImpulseId, impulses } = this.props;
+    const activeImpulse = impulses[activeImpulseId];
 
     return (
       <div className="impulse-header">
@@ -30,8 +26,7 @@ class ImpulseHeader extends React.Component {
 const mapStateToProps = state => {
   return {
     activeImpulseId: state.control.activeImpulseId,
-    linkedImpulses: state.data.linkedImpulses,
-    sessionImpulses: state.data.sessionImpulses
+    impulses: state.data.impulses
   };
 };
 

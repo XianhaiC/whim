@@ -21,14 +21,11 @@ class CreateMessage extends React.Component {
 
   handleSubmit(e) {
     const {activeImpulseId, activeSparkId, activeThreadId,
-      linkedImpulses, sessionImpulses,
-      linkedSparks, sessionSparks, threads} = this.props;
+      impulses, sparks, threads} = this.props;
     const { createMessage } = this.props;
 
-    const activeImpulse =
-      {...linkedImpulses, ...sessionImpulses}[activeImpulseId];
-    const activeSpark =
-      {...linkedSparks, ...sessionSparks}[activeSparkId];
+    const activeImpulse = impulses[activeImpulseId];
+    const activeSpark = sparks[activeSparkId];
     const activeThread = threads[activeThreadId];
 
     e.preventDefault();
@@ -64,10 +61,8 @@ const mapStateToProps = state => {
     activeImpulseId: state.control.activeImpulseId,
     activeSparkId: state.control.activeSparkId,
     activeThreadId: state.control.activeThreadId,
-    linkedImpulses: state.data.linkedImpulses,
-    sessionImpulses: state.data.sessionImpulses,
-    linkedSparks: state.data.linkedSparks,
-    sessionSparks: state.data.sessionSparks,
+    impulses: state.data.impulses,
+    sparks: state.data.sparks,
     threads: state.threads.threads
   };
 };

@@ -6,10 +6,10 @@ import {
   PREPEND_THREAD_MESSAGES,
   UPDATE_CACHED_THREAD_ID,
   UPDATE_THREAD_OFFSET,
-  UPDATE_LINKED_IMPULSES,
-  UPDATE_SESSION_IMPULSES,
-  UPDATE_LINKED_SPARKS,
-  UPDATE_SESSION_SPARKS,
+  UPDATE_IMPULSES,
+  UPDATE_SPARKS,
+  UPDATE_SESSION_IMPULSE_IDS,
+  UPDATE_SESSION_SPARK_IDS,
   SET_ACTIVE_THREAD_ID,
   SET_CENTER_COMPONENT,
   LOGIN,
@@ -56,35 +56,35 @@ export const receiveMessage = (threadId, message) => {
   };
 }
 
-export const updateLinkedImpulses = (impulses,
+export const updateImpulses = (impulses,
   remove = false, toRemoveIds = []) => {
   return {
-    type: UPDATE_LINKED_IMPULSES,
+    type: UPDATE_IMPULSES,
     payload: { impulses, remove, toRemoveIds }
   };
 }
 
-export const updateSessionImpulses = (impulses,
+export const updateSparks = (sparks,
   remove = false, toRemoveIds = []) => {
   return {
-    type: UPDATE_SESSION_IMPULSES,
-    payload: { impulses, remove, toRemoveIds }
-  };
-}
-
-export const updateLinkedSparks = (sparks,
-  remove = false, toRemoveIds = []) => {
-  return {
-    type: UPDATE_LINKED_SPARKS,
+    type: UPDATE_SPARKS,
     payload: { sparks, remove, toRemoveIds }
   };
 }
 
-export const updateSessionSparks = (sparks,
+export const updateSessionImpulseIds = (impulseIds,
   remove = false, toRemoveIds = []) => {
   return {
-    type: UPDATE_SESSION_SPARKS,
-    payload: { sparks, remove, toRemoveIds }
+    type: UPDATE_SESSION_IMPULSE_IDS,
+    payload: { impulseIds, remove, toRemoveIds }
+  };
+}
+
+export const updateSessionSparkIds = (sparkIds,
+  remove = false, toRemoveIds = []) => {
+  return {
+    type: UPDATE_SESSION_SPARK_IDS,
+    payload: { sparkIds, remove, toRemoveIds }
   };
 }
 
@@ -207,7 +207,7 @@ export const getLinkedImpulses = accountId => {
       });
 
       dispatch(updateThreads(inspirationThreads));
-      dispatch(updateLinkedImpulses(impulses));
+      dispatch(updateImpulses(impulses));
     })
     .catch((e) => {
       console.log(e);
@@ -240,8 +240,12 @@ export const getSession = () => {
       return res.json();
     })
     .then(session => {
-      dispatch(updateSessionImpulses(session.impulses));
-      dispatch(updateSessionSparks(session.sparks));
+      dispatch(updateImpulses(session.impulses));
+      dispatch(updateSparks(session.sparks));
+      dispatch(updateSessionImpulseIds(
+        session.impulses.map(impulse => impulse.id)));
+      dispatch(updateSessionSparkIds(
+        session.sparks.map(spark => spark.id)));
 
       // update with session threads as well
       let inspirationThreads = [];
@@ -279,7 +283,7 @@ export const getLinkedSparks = accountId => {
       return res.json();
     })
     .then(sparks => {
-      dispatch(updateLinkedSparks(sparks));
+      dispatch(updateSparks(sparks));
     })
     .catch((e) => {
       console.log(e);
@@ -322,7 +326,7 @@ export const getThreadMessages = threadId => {
         delete message.spark;
       });
       
-      dispatch(updateImpulseSparks(sparksNew));
+      dispatch(updateSparks(sparksNew));
       dispatch(appendThreadMessages(threadId, messagesNew.reverse()));
       dispatch(updateThreadOffset(threadId,
         new Date(messagesNew[messagesNew.length - 1].created_at)));
@@ -376,7 +380,8 @@ export const createImpulse = (name, description) => {
     .then(newImpulse => {
       // add the new impulse and set the active impulse to allow the user
       // to create a new spark
-      dispatch(updateSessionImpulses([newImpulse]));
+      dispatch(updateImpulses([newImpulse]));
+      dispatch(updateSessionImpulseIds([newImpulse.id]));
       dispatch(updateThreads([newImpulse.message_thread]));
       dispatch(switchImpulse(newImpulse, null));
     })
@@ -422,12 +427,12 @@ export const createSpark = (name, impulseId, accountId) => {
     .then(newSpark => {
       // get the set the active impulse to be the impulse the spark was
       // made for
-      const activeImpulse = {...getState().data.linkedImpulses,
-        ...getState().data.sessionImpulses}[impulseId];
+      const activeImpulse = getState().data.impulses[impulseId];
 
       // add the new spark to the list of session sparks
       // update the active impulse information to include this new spark
-      dispatch(updateSessionSparks([newSpark]));
+      dispatch(updateSparks([newSpark]));
+      dispatch(updateSessionSparkIds([newSpark.id]));
       dispatch(switchImpulse(activeImpulse, newSpark));
     })
     .catch((e) => {
@@ -449,22 +454,19 @@ export const joinImpulse = (impulseHash) => {
       return res.json();
     })
     .then(newImpulse => {
-      let existingImpulse = {...getState().data.linkedImpulses,
-        ...getState().data.sessionImpulses}[newImpulse.id];
+      let existingImpulse = getState().data.impulses[newImpulse.id];
       let existingSpark = null;
 
       // add the new impulse to the list of session impulses
       if (!exists(existingImpulse)) {
-        dispatch(updateSessionImpulses([newImpulse]));
+        dispatch(updateImpulses([newImpulse]));
+        dispatch(updateSessionImpulseIds([newImpulse.id]));
         dispatch(updateThreads([newImpulse.message_thread]));
         existingImpulse = newImpulse;
       }
       else {
-        // iterate through the values in the spark dicts and find the
-        // impulses' corresponding spark
-        const sparks =
-          {...getState().data.linkedSparks, ...getState().data.sessionSparks};
-        for (const [sparkId, spark] of Object.entries(sparks)) {
+        // find the impulses' corresponding spark
+        for (const [sparkId, spark] of Object.entries(getState().data.sparks)) {
           if (spark.impulse_id === existingImpulse.id) existingSpark = spark;
         }
       }
@@ -582,10 +584,7 @@ export const createInvite = (impulseId) => {
       return res.json();
     })
     .then(impulse => {
-      if (exists(getState().data.linkedImpulses[impulse.id]))
-        dispatch(updateLinkedImpulses([impulse]));
-      else
-        dispatch(updateSessionImpulses([impulse]));
+      dispatch(updateImpulses([impulse]));
     })
     .catch((e) => {
       console.log(e);
@@ -616,16 +615,11 @@ export const linkAccount = (sparkId, accountId) => {
       return res.json();
     })
     .then(spark => {
-      const linkedImpulse = {...getState().data.linkedImpulses,
-        ...getState().data.sessionImpulses}[spark.impulse_id];
+      const linkedImpulse = getState().data.impulses[spark.impulse_id];
 
       // remove the linked spark and its impulse from the session lists
-      dispatch(updateSessionSparks([], true, [spark.id]));
-      dispatch(updateSessionImpulses([], true, [spark.impulse_id]));
-
-      // add the linked spark and its impulse to the linked lists
-      dispatch(updateLinkedSparks([spark]));
-      dispatch(updateLinkedImpulses([linkedImpulse]));
+      dispatch(updateSessionSparkIds([], true, [spark.id]));
+      dispatch(updateSessionImpulseIds([], true, [spark.impulse_id]));
     })
     .catch((e) => {
       console.log(e);

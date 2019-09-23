@@ -23,21 +23,37 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    const {
-      linkedImpulses, sessionImpulses,
-      linkedSparks, sessionSparks
-    } = this.props;
+    const { impulses, sparks, sessionImpulseIds, sessionSparkIds } = this.props;
+
+    let linkedImpulses = [];
+    let sessionImpulses = [];
+    let linkedSparks = [];
+    let sessionSparks = [];
+
+    Object.values(impulses).forEach(impulse => {
+      if (sessionImpulseIds[impulse.id] === true)
+        sessionImpulses.push(impulse);
+      else
+        linkedImpulses.push(impulse);
+    });
+
+    Object.values(sparks).forEach(spark => {
+      if (sessionImpulseIds[spark.id] === true)
+        sessionSparks.push(spark);
+      else
+        linkedSparks.push(spark);
+    });
 
     // call .values() on each dict so we retrieve a list of their values
     // that can be used by ImpulseList
     return (
       <div className="sidebar">
         <ImpulseList listName="Linked Impulses"
-          impulses={Object.values(linkedImpulses)}
-          sparks={Object.values(linkedSparks)} />
+          impulses={linkedImpulses}
+          sparks={linkedSparks} />
         <ImpulseList listName="Session Impulses"
-          impulses={Object.values(sessionImpulses)}
-          sparks={Object.values(sessionSparks)} />
+          impulses={sessionImpulses}
+          sparks={sessionSparks} />
         <div className="sidebar-buttons">
           <div className="create-impulse">
             <button onClick={this.handleCreateImpulse}>Create Impulse</button>
@@ -53,10 +69,10 @@ class Sidebar extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    linkedImpulses: state.data.linkedImpulses,
-    sessionImpulses: state.data.sessionImpulses,
-    linkedSparks: state.data.linkedSparks,
-    sessionSparks: state.data.sessionSparks
+    impulses: state.data.impulses,
+    sparks: state.data.sparks,
+    sessionImpulseIds: state.session.sessionImpulseIds,
+    sessionSparkIds: state.session.sessionSparkIds,
   };
 };
 
