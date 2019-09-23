@@ -18,11 +18,14 @@ class InspirationList extends React.Component {
     ));
 
     // map threads to card components
-    const cardsList = inspirationThreads.map(thread => (
+    const cardsList = inspirationThreads.map(thread => {
+      console.log("INSPO");
+      console.log(thread.parent.spark);
+      return (
       <li key={thread.parent.id}>
         <InspirationCard message={thread.parent} threadId={thread.id} />
       </li>
-    ));
+    )});
 
     return (
       <div className="inspiration-list">

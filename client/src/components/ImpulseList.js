@@ -12,12 +12,38 @@ class ImpulseList extends React.Component {
 
   handleClick(impulse) {
     // find the impulses' corresponding spark
-    const spark = this.props.sparks.find(
-      spark => spark.impulse_id === impulse.id);
+    const { sessionToken, accountId } = this.props;
+
+    console.log("FINDING");
+    console.log(this.props.sparks);
+    console.log(sessionToken);
+    console.log(accountId);
+
+    /*
+    let found = null;
+    found  = Object.values(this.props.sparks).find(spark =>
+      spark.impulse_id == impulse.id
+      && (spark.account_id == accountId
+        || spark.session_token === sessionToken)
+    );
+    */
+    let found = null;
+    Object.values(this.props.sparks).forEach(spark => {
+      let imp = spark.impulse_id == impulse.id;
+      let sec = spark.account_id == accountId;
+      let sess = spark.session_token === sessionToken;
+      console.log("PER");
+      console.log(spark.accountId);
+      console.log(spark.session_token);
+      console.log(imp);
+      console.log(sec);
+      console.log(sess);
+      if (imp && (sec || sess)) found = spark
+    });
 
     // update the state with the new impulse
     // this sets the active spark and thread as well
-    this.props.switchImpulse(impulse, spark);
+    this.props.switchImpulse(impulse, found);
   }
 
   render() {
@@ -37,7 +63,17 @@ class ImpulseList extends React.Component {
   }
 }
 
-export default connect(null, { switchImpulse })(ImpulseList);
+const mapStateToProps = state => {
+  return {
+    accountId: state.session.accountId,
+    sessionToken: state.session.sessionToken,
+    sparks: state.data.sparks
+  };
+};
+
+export default connect(mapStateToProps, {
+  switchImpulse
+})(ImpulseList);
 
 // helpers
 const createImpulseCards = (impulses, handleClick) => {

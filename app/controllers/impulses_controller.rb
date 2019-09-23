@@ -43,8 +43,24 @@ class ImpulsesController < ApplicationController
 
   def invite
     impulse = Impulse.find_by(invite_hash: params[:invite_hash])
+
     if !impulse.nil?
-      render json: impulse
+      sparks = []
+
+      # get sparks for each impulses' inspiration messages
+      impulse.message_threads.each {|thread|
+        sparks << thread.parent.spark if thread.parent_type === "Message"
+      }
+      sparks = sparks.uniq
+
+      impulse_data = ActiveModelSerializers::Adapter::Json.new(
+        ImpulseSerializer.new(impulse)
+      ).serializable_hash
+
+      render json: impulse_data.merge({
+        sparks: ActiveModel::Serializer::CollectionSerializer.new(
+          sparks, each_serializer: SparkSerializer)
+      })
     else
       render json: { errors: ['Impulse not found'] }, status => 400
     end

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { exists } from '../helpers';
-import { login, getLinkedImpulses, getLinkedSparks } from '../actions/index';
+import { login, getAccountData } from '../actions/index';
 
 class LoadAccount extends React.Component {
   componentDidMount() {
@@ -23,8 +23,7 @@ class LoadAccount extends React.Component {
   }
 
   loadAccount() {
-    this.props.getLinkedImpulses(this.props.accountId);
-    this.props.getLinkedSparks(this.props.accountId);
+    this.props.getAccountData(this.props.accountId);
   }
 
   render() {
@@ -41,6 +40,5 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {
   login,
-  getLinkedImpulses,
-  getLinkedSparks
+  getAccountData
 })(LoadAccount);

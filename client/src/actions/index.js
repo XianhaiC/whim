@@ -174,16 +174,16 @@ export const getThread = threadId => {
   }
 }
 
-export const getLinkedImpulses = accountId => {
+export const getAccountData = accountId => {
   return (dispatch, getState) => {
     const accountToken = getState().session.accountToken;
     if (!exists(accountToken)) {
-      console.log("getLinkedImpulses(): Not logged in!");
+      console.log("getAccountData(): Not logged in!");
       dispatch(errorOccured(true));
       return;
     }
 
-    fetch(`${API_ROOT}/accounts/${accountId}/impulses`, {
+    fetch(`${API_ROOT}/accounts/${accountId}/data`, {
       method: 'GET',
       headers: {
         ...HEADERS,
@@ -194,12 +194,17 @@ export const getLinkedImpulses = accountId => {
       if (!res.ok) throw Error(res.statusText);
       return res.json();
     })
-    .then(impulses => {
+    .then(data => {
+      const { impulses, sparks } = data
+      console.log("GET IMPS")
+      console.log(impulses);
+
       let inspirationThreads = [];
       // note that threads will contain information about their parents
-      // this allows us to distinguish between impulse threads and 
+      // this allows us to distinguish between impulse threads and
       // inspiration threads later on
       impulses.forEach(impulse => {
+        console.log(impulse.message_threads);
         inspirationThreads.push(...impulse.message_threads);
 
         // we don't store thread data in the impulse list
@@ -208,6 +213,7 @@ export const getLinkedImpulses = accountId => {
 
       dispatch(updateThreads(inspirationThreads));
       dispatch(updateImpulses(impulses));
+      dispatch(updateSparks(sparks));
     })
     .catch((e) => {
       console.log(e);
@@ -225,7 +231,7 @@ export const getSession = () => {
       return;
     }
 
-    // token is not sent as a parameter in the url because it won't be 
+    // token is not sent as a parameter in the url because it won't be
     // encrypted
     fetch(`${API_ROOT}/session`, {
       method: 'POST',
@@ -239,17 +245,19 @@ export const getSession = () => {
       if (!res.ok) throw Error(res.statusText);
       return res.json();
     })
-    .then(session => {
-      dispatch(updateImpulses(session.impulses));
-      dispatch(updateSparks(session.sparks));
+    .then(data => {
+      const { impulses, sparks } = data;
+      console.log("SESS");
+      console.log(data);
+      dispatch(updateImpulses(impulses));
+      dispatch(updateSparks(sparks));
       dispatch(updateSessionImpulseIds(
-        session.impulses.map(impulse => impulse.id)));
-      dispatch(updateSessionSparkIds(
-        session.sparks.map(spark => spark.id)));
+        impulses.map(impulse => impulse.id)));
+      dispatch(updateSessionSparkIds(data.session_spark_ids));
 
       // update with session threads as well
       let inspirationThreads = [];
-      session.impulses.forEach(impulse => {
+      impulses.forEach(impulse => {
         inspirationThreads.push(...impulse.message_threads);
       });
       dispatch(updateThreads(inspirationThreads));
@@ -318,6 +326,7 @@ export const getThreadMessages = threadId => {
       return res.json();
     })
     .then(messagesNew => {
+      if (messagesNew.length <= 0) return;
       let sparksNew = [];
       messagesNew.forEach(message => {
         sparksNew.push(message.spark);
@@ -325,7 +334,7 @@ export const getThreadMessages = threadId => {
         // no longer need this
         delete message.spark;
       });
-      
+
       dispatch(updateSparks(sparksNew));
       dispatch(appendThreadMessages(threadId, messagesNew.reverse()));
       dispatch(updateThreadOffset(threadId,
@@ -453,16 +462,21 @@ export const joinImpulse = (impulseHash) => {
       if (!res.ok) throw Error(res.statusText);
       return res.json();
     })
-    .then(newImpulse => {
-      let existingImpulse = getState().data.impulses[newImpulse.id];
+    .then(data => {
+      const { impulse, sparks } = data;
+      console.log("JOINING");
+      console.log(data);
+
+      let existingImpulse = getState().data.impulses[impulse.id];
       let existingSpark = null;
 
       // add the new impulse to the list of session impulses
       if (!exists(existingImpulse)) {
-        dispatch(updateImpulses([newImpulse]));
-        dispatch(updateSessionImpulseIds([newImpulse.id]));
-        dispatch(updateThreads([newImpulse.message_thread]));
-        existingImpulse = newImpulse;
+        dispatch(updateImpulses([impulse]));
+        dispatch(updateSparks(sparks));
+        dispatch(updateSessionImpulseIds([impulse.id]));
+        dispatch(updateThreads([impulse.message_thread]));
+        existingImpulse = impulse;
       }
       else {
         // find the impulses' corresponding spark
@@ -533,8 +547,6 @@ export const registerSession = () => {
       sessionStorage.setItem('sessionToken', token);
 
       dispatch(setSession(token));
-
-      this.loadSessionImpulses();
     })
     .catch((e) => {
       // set invalid hash error flag
@@ -566,6 +578,8 @@ export const receiveUpdate = (update) => {
     const message = update.message;
     const thread = update.message_thread;
 
+    dispatch(updateSparks([message.spark]));
+    delete message.spark;
     dispatch(receiveMessage(message.parent_thread_id, message));
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));

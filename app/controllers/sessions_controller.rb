@@ -18,17 +18,28 @@ class SessionsController < ApplicationController
   def register
     time = Time.now.to_i
     tok = JsonWebToken.encode({ timestamp: time })
-    puts "TIME #{time}"
-    puts "GEN #{tok}"
     render json: { auth_token: tok }
   end
 
   def session
     sparks = Spark.where(session_token: params[:session_token])
+    session_spark_ids = sparks.map {|spark| spark.id}
     impulses = sparks.map { |spark| spark.impulse }
-    render json: { 
-      impulses: ActiveModel::Serializer::CollectionSerializer.new(impulses, each_serializer: ImpulseSerializer), 
-      sparks: ActiveModel::Serializer::CollectionSerializer.new(sparks, each_serializer: SparkSerializer)
+
+    # get sparks for each impulses' inspiration messages
+    impulses.each {|impulse|
+      impulse.message_threads.each {|thread|
+        sparks << thread.parent.spark if thread.parent_type === "Message"
+      }
+    }
+    sparks = sparks.uniq
+
+    render json: {
+      impulses: ActiveModel::Serializer::CollectionSerializer.new(
+        impulses, each_serializer: ImpulseSerializer),
+      sparks: ActiveModel::Serializer::CollectionSerializer.new(
+        sparks, each_serializer: SparkSerializer),
+      session_spark_ids: session_spark_ids
     }
   end
 

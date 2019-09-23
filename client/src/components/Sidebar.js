@@ -27,8 +27,6 @@ class Sidebar extends React.Component {
 
     let linkedImpulses = [];
     let sessionImpulses = [];
-    let linkedSparks = [];
-    let sessionSparks = [];
 
     Object.values(impulses).forEach(impulse => {
       if (sessionImpulseIds[impulse.id] === true)
@@ -37,23 +35,14 @@ class Sidebar extends React.Component {
         linkedImpulses.push(impulse);
     });
 
-    Object.values(sparks).forEach(spark => {
-      if (sessionImpulseIds[spark.id] === true)
-        sessionSparks.push(spark);
-      else
-        linkedSparks.push(spark);
-    });
-
     // call .values() on each dict so we retrieve a list of their values
     // that can be used by ImpulseList
     return (
       <div className="sidebar">
         <ImpulseList listName="Linked Impulses"
-          impulses={linkedImpulses}
-          sparks={linkedSparks} />
+          impulses={linkedImpulses} />
         <ImpulseList listName="Session Impulses"
-          impulses={sessionImpulses}
-          sparks={sessionSparks} />
+          impulses={sessionImpulses} />
         <div className="sidebar-buttons">
           <div className="create-impulse">
             <button onClick={this.handleCreateImpulse}>Create Impulse</button>
