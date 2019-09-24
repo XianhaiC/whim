@@ -14,8 +14,8 @@ class Message extends React.Component {
       <div className="message">
         <hr/>
         <div className="message-header">
-          <div className="message-spark-pic">Profile Pic</div>
-          <h3 className="message-spark-name">{spark.name}</h3>
+          <div className="message-spark-pic spark-pic"></div>
+          <h4 className="message-spark-name">{spark.name}</h4>
           <p className="message-created-at">{getTimeAMPM(createDate)}</p>
         </div>
         <p className="message-body">{message.body}</p>

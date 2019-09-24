@@ -20,12 +20,16 @@ class InspirationCard extends React.Component {
     const spark = sparks[message.spark_id];
 
     return (
-      <div className="inspiration-card" onClick={this.handleClick}>
+      <div className="inspiration-card message" onClick={this.handleClick}>
+        <div className="inspiration-card-header message-header">
+          <div className="inspiration-card-spark-pic spark-pic"></div>
+          <h3 className="inspiration-card-spark-name message-spark-name">{spark.name}</h3>
+          <p className="inspiration-card-created-at">Last updated at {getTimeAMPM(createDate)}</p>
+        </div>
+        <div className="inspiration-card-body">
+          <p className="inspiration-card-text">{message.body}</p>
+        </div>
         <hr/>
-        <div className="inspiration-card-spark-pic">Profile Pic</div>
-        <h3 className="inspiration-card-spark-name">{spark.name}</h3>
-        <p className="inspiration-card-created-at">Last updated at {getTimeAMPM(createDate)}</p>
-        <p className="inspiration-card-body">{message.body}</p>
       </div>
     );
   };

@@ -25,17 +25,19 @@ class ImpulseHeader extends React.Component {
 
     return (
       <div className="impulse-header">
-        <div className="impulse-header-info">
+        <div className="impulse-header-info top-info">
           <h3>{activeImpulse.name}</h3>
-          <p>xxx Sparks</p>
-          {activeImpulse.invite_hash 
-              && <p>Invite hash: {activeImpulse.invite_hash}</p>}
+          <div className="impulse-header-sub top-info-sub">
+            <p>X Sparks joined</p>
+            {activeImpulse.invite_hash 
+                && <p>Invite hash: {activeImpulse.invite_hash}</p>}
+          </div>
         </div>
         <div className="impulse-header-buttons">
-          <button className="link-btn" onClick={this.handleLinkAccount}>Link</button>
-          <button className="invite-btn" onClick={this.handleCreateInvite}>Invite</button>
-          <button className="info-btn">Info</button>
-          <button className="settings-btn">Settings</button>
+          <div className="impulse-header-button" onClick={this.handleLinkAccount}>Link</div>
+          <div className="impulse-header-button" onClick={this.handleCreateInvite}>Invite</div>
+          <div className="impulse-header-button">Info</div>
+          <div className="impulse-header-button">Settings</div>
         </div>
       </div>
     );

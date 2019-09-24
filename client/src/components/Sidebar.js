@@ -40,17 +40,17 @@ class Sidebar extends React.Component {
     return (
       <div className="sidebar">
         <div className="sidebar-lists">
-          <ImpulseList listName="Linked Impulses"
+          <ImpulseList listName="Impulses"
             impulses={linkedImpulses} />
-          <ImpulseList listName="Session Impulses"
+          <ImpulseList listName="Un-linked"
             impulses={sessionImpulses} />
         </div>
         <div className="sidebar-buttons">
-          <div className="create-impulse">
-            <button onClick={this.handleCreateImpulse}>Create Impulse</button>
+          <div className="sidebar-button" onClick={this.handleCreateImpulse}>
+            <i class="fas fa-plus"></i>  Create
           </div>
-          <div className="join-impulse">
-            <button onClick={this.handleJoinImpulse}>Join Impulse</button>
+          <div className="sidebar-button" onClick={this.handleJoinImpulse}>
+            <i class="fas fa-link"></i>  Join
           </div>
         </div>
       </div>

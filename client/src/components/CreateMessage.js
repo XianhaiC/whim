@@ -64,13 +64,18 @@ class CreateMessage extends React.Component {
           <input className="create-message-text"
             type="text"
             value={this.state.body}
-            onChange={this.handleChange} />
+            onChange={this.handleChange}
+            placeholder="Enter a message..." />
           {showInspirationSubmit &&
-            <input className="create-message-submit" type="submit"
-            value="Inspiration" onClick={this.handleInspirationSubmit} />
+            <button className="create-message-submit"
+              onClick={this.handleInspirationSubmit}>
+              <i className="fas fa-lightbulb"></i>
+            </button>
           }
-          <input className="create-message-submit" type="submit" value="Message"
-            onClick={this.handleMessageSubmit} />
+          <button className="create-message-submit"
+            onClick={this.handleMessageSubmit}>
+            <i className="fas fa-paper-plane"></i>
+          </button>
         </form>
       </div>
     );

@@ -47,11 +47,15 @@ class ImpulseList extends React.Component {
   }
 
   render() {
+    if (this.props.impulses.length === 0) return null;
     return (
       <div className="impulse-list">
-        <p>{this.props.listName}</p>
-        <hr />
-        <ul className="impulse-list-flex">
+        <div className="impulse-list-header">
+          <hr className="hr-pre" />
+          <h3>{this.props.listName}</h3>
+          <hr className="hr-post" />
+        </div>
+        <ul className="impulse-list-container">
           {
             createImpulseCards(
             sortImpulses(this.props.impulses),
@@ -77,16 +81,21 @@ export default connect(mapStateToProps, {
 
 // helpers
 const createImpulseCards = (impulses, handleClick) => {
-  return impulses.map(impulse => {
-    return (
-      <li className="impulse_card" key={impulse.id}
+  let cards = [];
+  impulses.forEach((impulse, index) => {
+    cards.push((
+      <li className="impulse-card" key={impulse.id}
         onClick={() => handleClick (impulse)}>
-        <img src={"../images/flame.jpg"} alt="Impulse pic" />
-        <p>{impulse.name}</p>
-        <hr />
+        <div className="impulse-card-pic"></div>
+        <div className="impulse-card-info">
+          <p className="impulse-card-name">{impulse.name}</p>
+          <p className="impulse-card-sparks">X Sparks joined</p>
+        </div>
       </li>
-    );
+    ));
   });
+
+  return cards;
 };
 
 const sortImpulses = impulses => {
