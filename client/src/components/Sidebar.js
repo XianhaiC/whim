@@ -39,10 +39,12 @@ class Sidebar extends React.Component {
     // that can be used by ImpulseList
     return (
       <div className="sidebar">
-        <ImpulseList listName="Linked Impulses"
-          impulses={linkedImpulses} />
-        <ImpulseList listName="Session Impulses"
-          impulses={sessionImpulses} />
+        <div className="sidebar-lists">
+          <ImpulseList listName="Linked Impulses"
+            impulses={linkedImpulses} />
+          <ImpulseList listName="Session Impulses"
+            impulses={sessionImpulses} />
+        </div>
         <div className="sidebar-buttons">
           <div className="create-impulse">
             <button onClick={this.handleCreateImpulse}>Create Impulse</button>

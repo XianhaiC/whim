@@ -35,7 +35,11 @@ class Center extends React.Component {
     console.log(centerComponent);
     console.log(this.props);
 
-    return centerComponent;
+    return (
+      <div className="center">
+        {centerComponent}
+      </div>
+    );
   }
 }
 

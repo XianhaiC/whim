@@ -12,7 +12,6 @@ class ActiveImpulse extends React.Component {
       <div className="active-impulse">
         <div className="active-impulse-mid">
           <ImpulseHeader />
-          <ImpulseOptions />
           <ActiveThread />
           <CreateMessage />
         </div>

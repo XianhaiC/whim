@@ -61,16 +61,16 @@ class CreateMessage extends React.Component {
     return (
       <div className="create-message">
         <form>
-          <input className="message-text"
+          <input className="create-message-text"
             type="text"
             value={this.state.body}
             onChange={this.handleChange} />
-          <input className="message-submit" type="submit" value="Message"
+          {showInspirationSubmit &&
+            <input className="create-message-submit" type="submit"
+            value="Inspiration" onClick={this.handleInspirationSubmit} />
+          }
+          <input className="create-message-submit" type="submit" value="Message"
             onClick={this.handleMessageSubmit} />
-            {showInspirationSubmit &&
-              <input className="message-submit" type="submit"
-              value="Inspiration" onClick={this.handleInspirationSubmit} />
-            }
         </form>
       </div>
     );

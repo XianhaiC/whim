@@ -8,10 +8,12 @@ import Functionals from '../functionals/Functionals';
 // TODO move login to its own page
 const Board = () => {
   return (
-    <div className="board">
+    <div className="board-outer">
       <Login />
-      <Sidebar />
-      <Center />
+      <div className="board">
+        <Sidebar />
+        <Center />
+      </div>
       <Functionals />
     </div>
   );

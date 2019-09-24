@@ -11,11 +11,13 @@ class Message extends React.Component {
     const spark = sparks[message.spark_id];
 
     return (
-      <div className="Message">
+      <div className="message">
         <hr/>
-        <div className="message-spark-pic">Profile Pic</div>
-        <h3 className="message-spark-name">{spark.name}</h3>
-        <p className="message-created-at">{getTimeAMPM(createDate)}</p>
+        <div className="message-header">
+          <div className="message-spark-pic">Profile Pic</div>
+          <h3 className="message-spark-name">{spark.name}</h3>
+          <p className="message-created-at">{getTimeAMPM(createDate)}</p>
+        </div>
         <p className="message-body">{message.body}</p>
       </div>
     );
