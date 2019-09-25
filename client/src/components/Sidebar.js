@@ -47,10 +47,10 @@ class Sidebar extends React.Component {
         </div>
         <div className="sidebar-buttons">
           <div className="sidebar-button" onClick={this.handleCreateImpulse}>
-            <i class="fas fa-plus"></i>  Create
+            <i className="fas fa-plus"></i>  Create
           </div>
           <div className="sidebar-button" onClick={this.handleJoinImpulse}>
-            <i class="fas fa-users"></i>  Join
+            <i className="fas fa-users"></i>  Join
           </div>
         </div>
       </div>

@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
   end
 
   def session
-    sparks = Spark.where(session_token: params[:session_token])
+    sparks = Spark.where(session_token: params[:session_token]).to_a
     session_spark_ids = sparks.map {|spark| spark.id}
     impulses = sparks.map { |spark| spark.impulse }
 

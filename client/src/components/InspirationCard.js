@@ -16,7 +16,7 @@ class InspirationCard extends React.Component {
 
   render() {
     const { message, sparks } = this.props;
-    let createDate = new Date(message.created_at);
+    const updateDate = new Date(message.updated_at);
     const spark = sparks[message.spark_id];
 
     return (
@@ -24,7 +24,7 @@ class InspirationCard extends React.Component {
         <p className="inspiration-card-text">{message.body}</p>
         <div className="inspiration-card-footer">
           <p className="inspiration-card-spark-name">{spark.name}</p>
-          <p className="inspiration-card-created-at">Last updated at {getTimeAMPM(createDate)}</p>
+          <p className="inspiration-card-created-at">Last updated at {getTimeAMPM(updateDate)}</p>
         </div>
       </div>
     );

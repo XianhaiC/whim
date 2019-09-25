@@ -35,16 +35,16 @@ class ImpulseHeader extends React.Component {
         </div>
         <div className="impulse-header-buttons">
           <div className="impulse-header-button" onClick={this.handleLinkAccount}>
-            <i class="fas fa-users"></i>  Link
+            <i className="fas fa-link"></i>  Link
           </div>
           <div className="impulse-header-button" onClick={this.handleCreateInvite}>
-            <i class="fas fa-share-alt"></i>  Invite
+            <i className="fas fa-share-alt"></i>  Invite
           </div>
           <div className="impulse-header-button">
-            <i class="fas fa-info"></i>
+            <i className="fas fa-info"></i>
           </div>
           <div className="impulse-header-button">
-            <i class="fas fa-cog"></i>
+            <i className="fas fa-cog"></i>
           </div>
         </div>
       </div>

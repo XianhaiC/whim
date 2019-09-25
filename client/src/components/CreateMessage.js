@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import autosize from 'autosize';
 
 import { createMessage } from '../actions/index';
 
@@ -12,21 +13,33 @@ class CreateMessage extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.onEnterPress = this.onEnterPress.bind(this);
     this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
     this.handleInspirationSubmit = this.handleInspirationSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    autosize(this.textarea);
   }
 
   handleChange(e) {
     this.setState({ body: e.target.value });
   }
 
+  onEnterPress(e) {
+    if (e.keyCode == 13 && e.shiftKey == false) {
+      e.preventDefault();
+      this.handleMessageSubmit();
+    }
+  }
+
   handleMessageSubmit(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     this.submitMessage(false);
   }
 
   handleInspirationSubmit(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     this.submitMessage(true);
   }
 
@@ -60,22 +73,26 @@ class CreateMessage extends React.Component {
 
     return (
       <div className="create-message">
-        <form>
-          <input className="create-message-text"
-            type="text"
+        <form ref={element => this.form = element}
+          onSubmit={this.handleMessageSubmit}>
+          <textarea className="create-message-text"
+            type="textarea"
+            rows="1"
             value={this.state.body}
             onChange={this.handleChange}
-            placeholder="Enter a message..." />
+            placeholder="Enter a message..."
+            onKeyDown={this.onEnterPress} 
+            ref={el => this.textarea = el}/>
           <button className="create-message-submit tooltip"
             onClick={this.handleMessageSubmit}>
             <i className="fas fa-paper-plane"></i>
-            <span class="tooltiptext">Send message</span>
+            <span className="tooltiptext">Send message</span>
           </button>
           {showInspirationSubmit &&
             <button className="create-message-submit tooltip"
               onClick={this.handleInspirationSubmit}>
               <i className="fas fa-lightbulb"></i>
-              <span class="tooltiptext">Create inspiration</span>
+              <span className="tooltiptext">Create inspiration</span>
             </button>
           }
         </form>
