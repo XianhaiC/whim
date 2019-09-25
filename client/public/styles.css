@@ -402,7 +402,7 @@ hr {
 
 /* CreateImpulse */
 
-.create-impulse {
+.new-impulse {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -410,8 +410,9 @@ hr {
   align-items: stretch;
 }
 
-.create-impulse-header {
+.new-impulse-header {
   display: flex;
+  flex-shrink: 0;
   flex-direction: row;
   border-width: 0px 0px 1px 0px;
   border-style: solid;
@@ -419,35 +420,69 @@ hr {
   height: 50px;
 }
 
-.create-impulse-title {
+.new-impulse-title {
   padding: 20px 0px 5px 20px;
   color: #2f0508;
 }
 
-.create-impulse form {
+.new-impulse form {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
 }
 
-.create-impulse form > * {
+.new-impulse-fill {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.new-impulse-fill label {
+  font-size: 20px;
+  padding: 50px 0px 5px 20px;
+}
+
+.new-impulse * {
   color: #2f0508;
-  background-color: #e7e0d9;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.new-impulse-text:focus,
+.new-impulse-textarea:focus,
+.new-impulse-submit:hover {
+  background-color: #d2c4b6;
+}
+
+.new-impulse-text,
+.new-impulse-textarea,
+.new-impulse-submit {
+  background-color: #e7e0d9;
+}
+
+.new-impulse-text {
   font-size: 16px;
-}
-
-.create-impulse-name {
   border-radius: 0px;
   border: 0;
   outline: none;
   padding: 12px 0px 11px 20px;
 }
 
-.create-impulse-description {
+.new-impulse-textarea {
+  font-size: 16px;
   border-radius: 0px;
   border: 0;
   outline: none;
   padding: 12px 0px 11px 20px;
+  resize: none;
 }
+
+.new-impulse-submit {
+  border: 0;
+  text-align: center;
+  padding: 15px 20px 10px 20px;
+  font-size: 14px;
+}
+
+/* JoinImpulse */
