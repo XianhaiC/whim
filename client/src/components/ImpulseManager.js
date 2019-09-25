@@ -343,7 +343,10 @@ class ImpulseManager extends React.Component {
         center_component = <emptyimpulse />
           break;
     }
-
+    console.log('CENTER_COMPONENT');
+    console.log(center_component);
+    console.log('RENDER_CENTER');
+    console.log(this.state.render_center);
     return (
       <div className="impulse_manager">
           {this.props.invited_impulse != null && <p>{this.props.invited_impulse.invite_hash}</p>}

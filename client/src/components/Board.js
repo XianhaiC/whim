@@ -9,7 +9,6 @@ import Functionals from '../functionals/Functionals';
 const Board = () => {
   return (
     <div className="board-outer">
-      <Login />
       <div className="board">
         <Sidebar />
         <Center />

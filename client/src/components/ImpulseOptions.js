@@ -12,32 +12,6 @@ class ImpulseOptions extends Component {
     this.state = {
       listOpen: false,
       headerTitle: 'Options',
-      optionItems: [
-        {
-          index: 0,
-          title: 'Create Invite Link',
-          selection: false,
-          key: 'option-links:'
-        },
-        {
-          index: 1,
-          title: 'Edit Channel Account',
-          selection: false,
-          key: 'option-links'
-        },
-        {
-          index: 2,
-          title: 'Channel Settings',
-          selection: false,
-          key: 'option-links'
-        },
-        {
-          index: 3,
-          title: 'Link Account',
-          selection: false,
-          key: 'option-links'
-        }
-      ]
     }
 
     this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -93,10 +67,9 @@ class ImpulseOptions extends Component {
             </button>
           </div>
         </div>
-
       </div>
     )
-    */
+   */ 
   }
 }
 
