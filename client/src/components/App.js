@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { API_ROOT, HEADERS, PATH_ROOT, PATH_INVITE,
-  PATH_INVALID_INVITE, PATH_BOARD } from '../constants';
+  PATH_INVALID_INVITE, PATH_BOARD, PATH_LOGIN } from '../constants';
 import { exists } from '../helpers';
 import Board from './Board';
+import Login from './Login';
 //import Landing from './Landing'
 import InvalidInvite from './InvalidInvite';
 
@@ -89,6 +90,7 @@ class App extends Component {
           <Route exact path={PATH_BOARD} render={this.renderBoard} />
           <Route path={PATH_INVITE} render={this.parseInvite} />
           <Route exact path={PATH_INVALID_INVITE} component={InvalidInvite} />
+          <Route exact path={PATH_LOGIN} render={() => {return <Login />}} />
         </Switch>
       </div>
     );

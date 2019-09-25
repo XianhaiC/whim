@@ -1,10 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Route, Link, withRouter } from 'react-router-dom';
 
+import { PATH_LOGIN } from '../constants';
 import { CenterComponent } from '../helpers';
 import { setCenterComponent } from '../actions/index';
 
 import ImpulseList from './ImpulseList';
+import Login from './Login';
 
 class Sidebar extends React.Component {
   constructor() {
@@ -39,6 +42,9 @@ class Sidebar extends React.Component {
     // that can be used by ImpulseList
     return (
       <div className="sidebar">
+        <div className="login-button">
+          <Link to={PATH_LOGIN}>Click to Log In</Link>
+        </div>
         <div className="sidebar-lists">
           <ImpulseList listName="Impulses"
             impulses={linkedImpulses} />
@@ -67,6 +73,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
   setCenterComponent
-})(Sidebar);
+})(Sidebar));
