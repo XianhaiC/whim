@@ -66,16 +66,18 @@ class CreateMessage extends React.Component {
             value={this.state.body}
             onChange={this.handleChange}
             placeholder="Enter a message..." />
-          {showInspirationSubmit &&
-            <button className="create-message-submit"
-              onClick={this.handleInspirationSubmit}>
-              <i className="fas fa-lightbulb"></i>
-            </button>
-          }
-          <button className="create-message-submit"
+          <button className="create-message-submit tooltip"
             onClick={this.handleMessageSubmit}>
             <i className="fas fa-paper-plane"></i>
+            <span class="tooltiptext">Send message</span>
           </button>
+          {showInspirationSubmit &&
+            <button className="create-message-submit tooltip"
+              onClick={this.handleInspirationSubmit}>
+              <i className="fas fa-lightbulb"></i>
+              <span class="tooltiptext">Create inspiration</span>
+            </button>
+          }
         </form>
       </div>
     );

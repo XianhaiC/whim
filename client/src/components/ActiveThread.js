@@ -1,8 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import  * as ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
+
 import { exists } from '../helpers';
 import Message from './Message';
+import EmptyThread from './EmptyThread';
 import { setFetchMessages } from  '../actions/index';
 
 // is in charge of loading messages given an impulse id
@@ -39,6 +41,7 @@ class ActiveThread extends React.Component {
         <li key={message.id}><Message message={message} /></li>
       );
     }
+    else return <EmptyThread />
 
     return (
       <div className="active-thread">
