@@ -312,7 +312,10 @@ export const getThreadMessages = threadId => {
     // use current date to grab the most recent messages for the thread
     if (!exists(offset)) {
       let date = new Date();
-      offset = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      offset = dateToString(date);
+      console.log(date.getUTCHours());
+      console.log("OFFSET STRING");
+      console.log(offset);
     }
 
     fetch(`${API_ROOT}${PATH_THREADS}/${threadId}/messages?offset=${offset}`, {
@@ -328,6 +331,8 @@ export const getThreadMessages = threadId => {
       return res.json();
     })
     .then(messagesNew => {
+      console.log("NEW MESSAGES ARE BEING RETURNED");
+      console.log(messagesNew);
       if (messagesNew.length <= 0) return;
       let sparksNew = [];
       messagesNew.forEach(message => {
@@ -340,7 +345,7 @@ export const getThreadMessages = threadId => {
       dispatch(updateSparks(sparksNew));
       dispatch(appendThreadMessages(threadId, messagesNew.reverse()));
       dispatch(updateThreadOffset(threadId,
-        new Date(messagesNew[messagesNew.length - 1].created_at)));
+        dateToString(new Date(messagesNew[0].created_at))));
     })
     .catch((e) => {
       console.log(e);
@@ -657,4 +662,8 @@ export const linkAccount = (sparkId, accountId) => {
       dispatch(errorOccured(true));
     });
   }
+}
+
+const dateToString = (date) => {
+  return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()}.${date.getUTCMilliseconds()}`
 }
