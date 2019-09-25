@@ -35,17 +35,22 @@ class CreateImpulse extends React.Component {
   render() {
     return (
       <div className="create-impulse">
-        <form onSubmit={this.handleSubmit}>
-          <label>Create a new Impulse</label>
-          <br />
+        <div className="create-impulse-header">
+          <h3 className="create-impulse-title">Create a new impulse</h3>
+        </div>
+        <form>
           <input 
+            className="create-impulse-name"
             type="text"
             value={this.state.name}
-            onChange={this.handleNameChange}/>
-          <textarea name="description" 
-            rows="10" cols="30" onChange={this.handleDescriptionChange}>
-            Description...</textarea>
-          <input type="submit" />
+            onChange={this.handleNameChange}
+            placeholder="Impulse name" />
+          <textarea className="create-impulse-description"
+            name="description" 
+            rows="10" cols="30" onChange={this.handleDescriptionChange}
+            placeholder="Impulse description"></textarea>
+          <button className="create-impulse-submit"
+            onClick={this.handleSubmit}>Create</button>
         </form>
       </div>
     );

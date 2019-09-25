@@ -50,7 +50,7 @@ class Sidebar extends React.Component {
             <i class="fas fa-plus"></i>  Create
           </div>
           <div className="sidebar-button" onClick={this.handleJoinImpulse}>
-            <i class="fas fa-link"></i>  Join
+            <i class="fas fa-users"></i>  Join
           </div>
         </div>
       </div>

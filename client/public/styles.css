@@ -43,7 +43,7 @@ hr {
   justify-content: space-between;
   background-color: #3a3a3a;
   min-width: 300px;
-  padding-top: 22px;
+  padding-top: 20px;
 }
 
 .sidebar hr {
@@ -145,6 +145,7 @@ hr {
 .center {
   height: 100%;
   flex-grow: 1;
+  background-color: #f5efe9;
 }
 
 /* ActiveImpulse */
@@ -162,7 +163,6 @@ hr {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  background-color: #f5efe9;
 }
 
 .active-impulse-mid hr {
@@ -178,16 +178,18 @@ hr {
   border-width: 0px 0px 0px 1px;
   border-style: solid;
   border-color: #d8c5c6;
+  background-color: #735a55;
 }
 
 /* ImpulseHeader */
 
-.impulse-header {
+.top-header {
   display: flex;
   flex-direction: row;
   border-width: 0px 0px 1px 0px;
   border-style: solid;
   border-color: #d8c5c6;
+  height: 50px;
 }
 
 .top-info h3 {
@@ -252,16 +254,37 @@ hr {
   margin-right: 0;
 }
 
+.message-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 20px 20px 10px 20px;
+}
+
+.message-spark-pic {
+  height: 36px;
+  width: 36px;
+  background-color: #cc6666;
+  border-radius: 18px;
+  flex-shrink: 0;
+}
+
+.message-body {
+  color: #2f0508;
+  padding: 10px 0px 10px 10px;
+  flex-grow: 1;
+}
+
 .message-header {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  margin: 10px 0px 0px 20px;
 }
 
 .message-header > * {
   margin: 0px 10px 0px 0px;
+  color: #2f0508;
 }
 
 .message-header h4 {
@@ -271,21 +294,10 @@ hr {
   font-size: 10px;
 }
 
-.spark-pic {
-  height: 36px;
-  width: 36px;
-  background-color: #cc6666;
-  border-radius: 18px;
-}
-
-.message-spark-name {
+.message-text {
   color: #2f0508;
 }
 
-.message-body {
-  color: #2f0508;
-  margin: 0px 0px 15px 65px;
-}
 
 /* CreateMessage */
 
@@ -322,15 +334,36 @@ hr {
 
 /* InspirationList */
 
-.inspiration-list {
-  width: 400px;
-  background-color: #fdfbfa;
+.active-impulse-right h4,
+.active-impulse-right h3,
+.active-impulse-right p {
+  color: #2f0508;
 }
 
-.inspiration-list-info {
+.active-impulse-right hr {
+  background-color: #aa978c;
+}
+
+.inspiration-list {
+  width: 400px;
+  /*background-color: #fdfbfa;
+   */
+}
+
+
+.inspiration-list-header {
   border-width: 0px 0px 1px 0px;
   border-style: solid;
-  border-color: #d8c5c6;
+  border-color: #aa978c;
+  height: 50px;
+}
+
+.inspiration-list-info > h3 {
+  color: #f5efe9;
+}
+
+.inspiration-list-info p {
+  color: #f0e1d3;
 }
 
 .inspiration-list-container {
@@ -340,28 +373,76 @@ hr {
   align-items: stretch;
 }
 
-.inspiration-card-header {
+.inspiration-card {
+  background-color: #f5efe9;
+  border-radius: 5px;
+  margin: 10px 20px 0px 20px;
+}
+
+.inspiration-card-footer {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  padding: 5px 10px 10px 20px;
 }
 
-.inspiration-card-header > * {
-  margin: 0px 10px 0px 0px;
-}
-
-.inspiration-card hr {
-  background-color: #d8c5c6;
-}
-
-.inspiration-card-body {
-  background-color: #620909;
-  margin: 10px 0px 10px 30px;
-  padding: 15px;
-  border-radius: 0px 0px 0px 5px;
+.inspiration-card-footer > p {
+  font-size: 10px;
 }
 
 .inspiration-card-text {
-  color: white;
+  padding: 20px 10px 0px 20px;
+}
+
+/* CreateImpulse */
+
+.create-impulse {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.create-impulse-header {
+  display: flex;
+  flex-direction: row;
+  border-width: 0px 0px 1px 0px;
+  border-style: solid;
+  border-color: #d8c5c6;
+  height: 50px;
+}
+
+.create-impulse-title {
+  padding: 20px 0px 5px 20px;
+  color: #2f0508;
+}
+
+.create-impulse form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.create-impulse form > * {
+  color: #2f0508;
+  background-color: #e7e0d9;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+.create-impulse-name {
+  border-radius: 0px;
+  border: 0;
+  outline: none;
+  padding: 12px 0px 11px 20px;
+}
+
+.create-impulse-description {
+  border-radius: 0px;
+  border: 0;
+  outline: none;
+  padding: 12px 0px 11px 20px;
 }

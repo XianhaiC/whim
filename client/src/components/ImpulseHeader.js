@@ -24,7 +24,7 @@ class ImpulseHeader extends React.Component {
     const activeImpulse = impulses[activeImpulseId];
 
     return (
-      <div className="impulse-header">
+      <div className="impulse-header top-header">
         <div className="impulse-header-info top-info">
           <h3>{activeImpulse.name}</h3>
           <div className="impulse-header-sub top-info-sub">
@@ -34,10 +34,18 @@ class ImpulseHeader extends React.Component {
           </div>
         </div>
         <div className="impulse-header-buttons">
-          <div className="impulse-header-button" onClick={this.handleLinkAccount}>Link</div>
-          <div className="impulse-header-button" onClick={this.handleCreateInvite}>Invite</div>
-          <div className="impulse-header-button">Info</div>
-          <div className="impulse-header-button">Settings</div>
+          <div className="impulse-header-button" onClick={this.handleLinkAccount}>
+            <i class="fas fa-users"></i>  Link
+          </div>
+          <div className="impulse-header-button" onClick={this.handleCreateInvite}>
+            <i class="fas fa-share-alt"></i>  Invite
+          </div>
+          <div className="impulse-header-button">
+            <i class="fas fa-info"></i>
+          </div>
+          <div className="impulse-header-button">
+            <i class="fas fa-cog"></i>
+          </div>
         </div>
       </div>
     );
