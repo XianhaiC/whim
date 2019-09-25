@@ -6,9 +6,10 @@ import { getThreadMessages, setFetchMessages } from '../actions/index';
 
 class LoadMessages extends React.Component {
   componentDidUpdate() {
+    console.log('LoadMessages component rendering');
     const { activeThreadId, fetchMessages, threads } = this.props;
     const { setFetchMessages } = this.props;
-
+    console.log(fetchMessages);
     if (fetchMessages && exists(activeThreadId)) {
       this.loadThreadMessages();
       setFetchMessages(false);
@@ -18,9 +19,11 @@ class LoadMessages extends React.Component {
       if (!exists(activeThread.messages))
         this.loadThreadMessages();
     }
+
   }
 
   loadThreadMessages() {
+    console.log('LoadThreadMessages is being called');
     this.props.getThreadMessages(this.props.activeThreadId);
   }
 
@@ -32,7 +35,7 @@ class LoadMessages extends React.Component {
 const mapStateToProps = state => {
   return {
     activeThreadId: state.control.activeThreadId,
-    fetchMessage: state.control.fetchMessages,
+    fetchMessages: state.control.fetchMessages,
     threads: state.threads.threads
   }
 };

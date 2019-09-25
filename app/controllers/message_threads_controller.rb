@@ -16,10 +16,21 @@ class MessageThreadsController < ApplicationController
   end
 
   def load
+    puts "PARAMS[:OFFSET]"
+    puts params[:offset]
+    puts "OFFSET VAR"
+    offset = params[:offset].to_datetime.strftime('%Y-%m-%d %H:%M:%S.%N')
+    puts offset
     # query the message thread for messages created after date given by offset
     messages = Message.where("created_at < (?) AND parent_thread_id = (?)",
-                             params[:offset], params[:id])
+                             offset, params[:id])
       .order("created_at DESC").limit(MESSAGES_PER_PAGE)
+    puts "Message.order(:id).offset(8).first.created_at"
+    puts Message.order(:id).offset(8).first.created_at
+    puts messages: ActiveModel::Serializer::CollectionSerializer.new(
+         messages, each_serializer: MessageSerializer)
+
+
     render json: messages
   end
 
