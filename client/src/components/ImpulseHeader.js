@@ -1,23 +1,52 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-class ImpulseHeader extends React.Component {
-  render() {
-    const { activeImpulseId, linkedImpulses, sessionImpulses } = this.props;
-    const activeImpulse =
-      {...linkedImpulses, ...sessionImpulses}[activeImpulseId];
+import { createInvite, linkAccount } from '../actions/index';
 
-    console.log("HASH");
-    console.log(activeImpulse.invite_hash);
+class ImpulseHeader extends React.Component {
+  constructor() {
+    super();
+
+    this.handleLinkAccount = this.handleLinkAccount.bind(this);
+    this.handleCreateInvite = this.handleCreateInvite.bind(this);
+  }
+
+  handleLinkAccount() {
+    this.props.linkAccount(this.props.activeSparkId, this.props.accountId);
+  }
+
+  handleCreateInvite() {
+    this.props.createInvite(this.props.activeImpulseId);
+  }
+
+  render() {
+    const { activeImpulseId, impulses } = this.props;
+    const activeImpulse = impulses[activeImpulseId];
 
     return (
-      <div className="impulse-header">
-        {activeImpulse.invite_hash && <p>Invite hash: {activeImpulse.invite_hash}</p>}
-        <div className="impulse-info-flex">
+      <div className="impulse-header top-header">
+        <div className="impulse-header-info top-info">
           <h3>{activeImpulse.name}</h3>
-          <p>xxx Sparks</p>
+          <div className="impulse-header-sub top-info-sub">
+            <p>X Sparks joined</p>
+            {activeImpulse.invite_hash 
+                && <p>Invite hash: {activeImpulse.invite_hash}</p>}
+          </div>
         </div>
-        <button className="right-sidebar-toggle">Right Sidebar</button>
+        <div className="impulse-header-buttons">
+          <div className="impulse-header-button" onClick={this.handleLinkAccount}>
+            <i class="fas fa-users"></i>  Link
+          </div>
+          <div className="impulse-header-button" onClick={this.handleCreateInvite}>
+            <i class="fas fa-share-alt"></i>  Invite
+          </div>
+          <div className="impulse-header-button">
+            <i class="fas fa-info"></i>
+          </div>
+          <div className="impulse-header-button">
+            <i class="fas fa-cog"></i>
+          </div>
+        </div>
       </div>
     );
   }
@@ -25,10 +54,14 @@ class ImpulseHeader extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    accountId: state.session.accountId,
     activeImpulseId: state.control.activeImpulseId,
-    linkedImpulses: state.data.linkedImpulses,
-    sessionImpulses: state.data.sessionImpulses
+    activeSparkId: state.control.activeSparkId,
+    impulses: state.data.impulses
   };
 };
 
-export default connect(mapStateToProps)(ImpulseHeader);
+export default connect(mapStateToProps, {
+  createInvite,
+  linkAccount
+})(ImpulseHeader);

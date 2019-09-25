@@ -9,8 +9,7 @@ Rails.application.routes.draw do
     resources :messages, only: [:show, :create, :update]
 
     # retrieving array information
-    get '/accounts/:id/impulses', to: 'accounts#impulses'
-    get '/accounts/:id/sparks', to: 'accounts#sparks'
+    get '/accounts/:id/data', to: 'accounts#data'
     get '/sparks/:id/messages', to: 'sparks#messages'
     get '/impulses/:id/messages', to: 'impulses#messages'
     get '/impulses/:id/sparks', to: 'impulses#sparks'

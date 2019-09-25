@@ -12,47 +12,72 @@ class CreateMessage extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
+    this.handleInspirationSubmit = this.handleInspirationSubmit.bind(this);
   }
 
   handleChange(e) {
     this.setState({ body: e.target.value });
   }
 
-  handleSubmit(e) {
+  handleMessageSubmit(e) {
+    e.preventDefault();
+    this.submitMessage(false);
+  }
+
+  handleInspirationSubmit(e) {
+    e.preventDefault();
+    this.submitMessage(true);
+  }
+
+  submitMessage(isInspiration) {
+    if (this.state.body === '') return;
+
     const {activeImpulseId, activeSparkId, activeThreadId,
-      linkedImpulses, sessionImpulses,
-      linkedSparks, sessionSparks, threads} = this.props;
+      impulses, sparks, threads} = this.props;
     const { createMessage } = this.props;
 
-    const activeImpulse =
-      {...linkedImpulses, ...sessionImpulses}[activeImpulseId];
-    const activeSpark =
-      {...linkedSparks, ...sessionSparks}[activeSparkId];
+    const activeImpulse = impulses[activeImpulseId];
+    const activeSpark = sparks[activeSparkId];
     const activeThread = threads[activeThreadId];
-
-    e.preventDefault();
 
     createMessage(
       activeImpulse.id,
       activeSpark.id,
       activeThread.id,
       this.state.body,
-      false
+      isInspiration
     );
 
     this.setState({ body: '' });
   }
 
   render() {
+    // only allow inspirations to be posted in an impulse thread
+    // inspirations cannot be nested within other inspirations
+    const activeThread = this.props.threads[this.props.activeThreadId];
+    const showInspirationSubmit = activeThread.parent_type === "Impulse";
+
     return (
       <div className="create-message">
-        <form onSubmit={this.handleSubmit}>
-          <input className="message-text"
+        <form>
+          <input className="create-message-text"
             type="text"
             value={this.state.body}
-            onChange={this.handleChange}/>
-          <input className="message-submit" type="submit"/>
+            onChange={this.handleChange}
+            placeholder="Enter a message..." />
+          <button className="create-message-submit tooltip"
+            onClick={this.handleMessageSubmit}>
+            <i className="fas fa-paper-plane"></i>
+            <span class="tooltiptext">Send message</span>
+          </button>
+          {showInspirationSubmit &&
+            <button className="create-message-submit tooltip"
+              onClick={this.handleInspirationSubmit}>
+              <i className="fas fa-lightbulb"></i>
+              <span class="tooltiptext">Create inspiration</span>
+            </button>
+          }
         </form>
       </div>
     );
@@ -64,10 +89,8 @@ const mapStateToProps = state => {
     activeImpulseId: state.control.activeImpulseId,
     activeSparkId: state.control.activeSparkId,
     activeThreadId: state.control.activeThreadId,
-    linkedImpulses: state.data.linkedImpulses,
-    sessionImpulses: state.data.sessionImpulses,
-    linkedSparks: state.data.linkedSparks,
-    sessionSparks: state.data.sessionSparks,
+    impulses: state.data.impulses,
+    sparks: state.data.sparks,
     threads: state.threads.threads
   };
 };

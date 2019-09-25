@@ -1,22 +1,40 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 class Message extends React.Component {
   render() {
-    console.log("MESGF");
-    let createDate = new Date(this.props.message.created_at);
+    const { message, sparks } = this.props;
+    let createDate = new Date(message.created_at);
+    console.log("ALL S");
+    console.log(sparks);
+    console.log(message);
+    const spark = sparks[message.spark_id];
+
     return (
-      <div className="Message">
+      <div className="message">
+        <div className="message-container">
+          <div className="message-spark-pic"></div>
+          <div className="message-body">
+            <div className="message-header">
+              <h4 className="message-spark-name">{spark.name}</h4>
+              <p className="message-created-at">{getTimeAMPM(createDate)}</p>
+            </div>
+            <p className="message-text">{message.body}</p>
+          </div>
+        </div>
         <hr/>
-        <div className="message-spark-pic">Profile Pic</div>
-        <h3 className="message-spark-name">{this.props.message.spark.name}</h3>
-        <p className="message-created-at">{getTimeAMPM(createDate)}</p>
-        <p className="message-body">{this.props.message.body}</p>
       </div>
     );
   };
 }
 
-export default Message;
+const mapStateToProps = state => {
+  return {
+    sparks: state.data.sparks,
+  };
+};
+
+export default connect(mapStateToProps)(Message);
 
 // helpers
 

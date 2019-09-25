@@ -23,27 +23,34 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    const {
-      linkedImpulses, sessionImpulses,
-      linkedSparks, sessionSparks
-    } = this.props;
+    const { impulses, sparks, sessionImpulseIds, sessionSparkIds } = this.props;
+
+    let linkedImpulses = [];
+    let sessionImpulses = [];
+
+    Object.values(impulses).forEach(impulse => {
+      if (sessionImpulseIds[impulse.id] === true)
+        sessionImpulses.push(impulse);
+      else
+        linkedImpulses.push(impulse);
+    });
 
     // call .values() on each dict so we retrieve a list of their values
     // that can be used by ImpulseList
     return (
       <div className="sidebar">
-        <ImpulseList listName="Linked Impulses"
-          impulses={Object.values(linkedImpulses)}
-          sparks={Object.values(linkedSparks)} />
-        <ImpulseList listName="Session Impulses"
-          impulses={Object.values(sessionImpulses)}
-          sparks={Object.values(sessionSparks)} />
+        <div className="sidebar-lists">
+          <ImpulseList listName="Impulses"
+            impulses={linkedImpulses} />
+          <ImpulseList listName="Un-linked"
+            impulses={sessionImpulses} />
+        </div>
         <div className="sidebar-buttons">
-          <div className="create-impulse">
-            <button onClick={this.handleCreateImpulse}>Create Impulse</button>
+          <div className="sidebar-button" onClick={this.handleCreateImpulse}>
+            <i class="fas fa-plus"></i>  Create
           </div>
-          <div className="join-impulse">
-            <button onClick={this.handleJoinImpulse}>Join Impulse</button>
+          <div className="sidebar-button" onClick={this.handleJoinImpulse}>
+            <i class="fas fa-users"></i>  Join
           </div>
         </div>
       </div>
@@ -53,10 +60,10 @@ class Sidebar extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    linkedImpulses: state.data.linkedImpulses,
-    sessionImpulses: state.data.sessionImpulses,
-    linkedSparks: state.data.linkedSparks,
-    sessionSparks: state.data.sessionSparks
+    impulses: state.data.impulses,
+    sparks: state.data.sparks,
+    sessionImpulseIds: state.session.sessionImpulseIds,
+    sessionSparkIds: state.session.sessionSparkIds,
   };
 };
 

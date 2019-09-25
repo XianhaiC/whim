@@ -6,11 +6,11 @@ import {
   PREPEND_THREAD_MESSAGES,
   UPDATE_CACHED_THREAD_ID,
   UPDATE_THREAD_OFFSET,
-  UPDATE_LINKED_IMPULSES,
-  UPDATE_SESSION_IMPULSES,
-  UPDATE_LINKED_SPARKS,
-  UPDATE_SESSION_SPARKS,
-  SET_ACTIVE_THREAD,
+  UPDATE_IMPULSES,
+  UPDATE_SPARKS,
+  UPDATE_SESSION_IMPULSE_IDS,
+  UPDATE_SESSION_SPARK_IDS,
+  SET_ACTIVE_THREAD_ID,
   SET_CENTER_COMPONENT,
   LOGIN,
   SET_SESSION,
@@ -56,42 +56,42 @@ export const receiveMessage = (threadId, message) => {
   };
 }
 
-export const updateLinkedImpulses = (impulses,
+export const updateImpulses = (impulses,
   remove = false, toRemoveIds = []) => {
   return {
-    type: UPDATE_LINKED_IMPULSES,
+    type: UPDATE_IMPULSES,
     payload: { impulses, remove, toRemoveIds }
   };
 }
 
-export const updateSessionImpulses = (impulses,
+export const updateSparks = (sparks,
   remove = false, toRemoveIds = []) => {
   return {
-    type: UPDATE_SESSION_IMPULSES,
-    payload: { impulses, remove, toRemoveIds }
-  };
-}
-
-export const updateLinkedSparks = (sparks,
-  remove = false, toRemoveIds = []) => {
-  return {
-    type: UPDATE_LINKED_SPARKS,
+    type: UPDATE_SPARKS,
     payload: { sparks, remove, toRemoveIds }
   };
 }
 
-export const updateSessionSparks = (sparks,
+export const updateSessionImpulseIds = (impulseIds,
   remove = false, toRemoveIds = []) => {
   return {
-    type: UPDATE_SESSION_SPARKS,
-    payload: { sparks, remove, toRemoveIds }
+    type: UPDATE_SESSION_IMPULSE_IDS,
+    payload: { impulseIds, remove, toRemoveIds }
   };
 }
 
-export const setActiveThread = (thread) => {
+export const updateSessionSparkIds = (sparkIds,
+  remove = false, toRemoveIds = []) => {
   return {
-    type: SET_ACTIVE_THREAD,
-    payload: { thread }
+    type: UPDATE_SESSION_SPARK_IDS,
+    payload: { sparkIds, remove, toRemoveIds }
+  };
+}
+
+export const setActiveThreadId = (threadId) => {
+  return {
+    type: SET_ACTIVE_THREAD_ID,
+    payload: { threadId }
   };
 }
 
@@ -174,16 +174,16 @@ export const getThread = threadId => {
   }
 }
 
-export const getLinkedImpulses = accountId => {
+export const getAccountData = accountId => {
   return (dispatch, getState) => {
     const accountToken = getState().session.accountToken;
     if (!exists(accountToken)) {
-      console.log("getLinkedImpulses(): Not logged in!");
+      console.log("getAccountData(): Not logged in!");
       dispatch(errorOccured(true));
       return;
     }
 
-    fetch(`${API_ROOT}/accounts/${accountId}/impulses`, {
+    fetch(`${API_ROOT}/accounts/${accountId}/data`, {
       method: 'GET',
       headers: {
         ...HEADERS,
@@ -194,17 +194,26 @@ export const getLinkedImpulses = accountId => {
       if (!res.ok) throw Error(res.statusText);
       return res.json();
     })
-    .then(impulses => {
-      dispatch(updateLinkedImpulses(impulses));
+    .then(data => {
+      const { impulses, sparks } = data
+      console.log("GET IMPS")
+      console.log(impulses);
 
       let inspirationThreads = [];
       // note that threads will contain information about their parents
-      // this allows us to distinguish between impulse threads and 
+      // this allows us to distinguish between impulse threads and
       // inspiration threads later on
       impulses.forEach(impulse => {
+        console.log(impulse.message_threads);
         inspirationThreads.push(...impulse.message_threads);
+
+        // we don't store thread data in the impulse list
+        delete impulse.message_threads;
       });
+
       dispatch(updateThreads(inspirationThreads));
+      dispatch(updateImpulses(impulses));
+      dispatch(updateSparks(sparks));
     })
     .catch((e) => {
       console.log(e);
@@ -222,7 +231,7 @@ export const getSession = () => {
       return;
     }
 
-    // token is not sent as a parameter in the url because it won't be 
+    // token is not sent as a parameter in the url because it won't be
     // encrypted
     fetch(`${API_ROOT}/session`, {
       method: 'POST',
@@ -236,13 +245,19 @@ export const getSession = () => {
       if (!res.ok) throw Error(res.statusText);
       return res.json();
     })
-    .then(session => {
-      dispatch(updateSessionImpulses(session.impulses));
-      dispatch(updateSessionSparks(session.sparks));
+    .then(data => {
+      const { impulses, sparks } = data;
+      console.log("SESS");
+      console.log(data);
+      dispatch(updateImpulses(impulses));
+      dispatch(updateSparks(sparks));
+      dispatch(updateSessionImpulseIds(
+        impulses.map(impulse => impulse.id)));
+      dispatch(updateSessionSparkIds(data.session_spark_ids));
 
       // update with session threads as well
       let inspirationThreads = [];
-      session.impulses.forEach(impulse => {
+      impulses.forEach(impulse => {
         inspirationThreads.push(...impulse.message_threads);
       });
       dispatch(updateThreads(inspirationThreads));
@@ -276,7 +291,7 @@ export const getLinkedSparks = accountId => {
       return res.json();
     })
     .then(sparks => {
-      dispatch(updateLinkedSparks(sparks));
+      dispatch(updateSparks(sparks));
     })
     .catch((e) => {
       console.log(e);
@@ -292,10 +307,15 @@ export const getThreadMessages = threadId => {
     const sessionToken = getState().session.sessionToken;
     let offset = getState().threads.threadOffsets[threadId];
 
+    console.log("GETTING");
+
     // use current date to grab the most recent messages for the thread
     if (!exists(offset)) {
       let date = new Date();
-      offset = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      offset = dateToString(date);
+      console.log(date.getUTCHours());
+      console.log("OFFSET STRING");
+      console.log(offset);
     }
 
     fetch(`${API_ROOT}${PATH_THREADS}/${threadId}/messages?offset=${offset}`, {
@@ -311,9 +331,21 @@ export const getThreadMessages = threadId => {
       return res.json();
     })
     .then(messagesNew => {
+      console.log("NEW MESSAGES ARE BEING RETURNED");
+      console.log(messagesNew);
+      if (messagesNew.length <= 0) return;
+      let sparksNew = [];
+      messagesNew.forEach(message => {
+        sparksNew.push(message.spark);
+
+        // no longer need this
+        delete message.spark;
+      });
+
+      dispatch(updateSparks(sparksNew));
       dispatch(appendThreadMessages(threadId, messagesNew.reverse()));
       dispatch(updateThreadOffset(threadId,
-        new Date(messagesNew[messagesNew.length - 1].created_at)));
+        dateToString(new Date(messagesNew[0].created_at))));
     })
     .catch((e) => {
       console.log(e);
@@ -364,7 +396,8 @@ export const createImpulse = (name, description) => {
     .then(newImpulse => {
       // add the new impulse and set the active impulse to allow the user
       // to create a new spark
-      dispatch(updateSessionImpulses([newImpulse]));
+      dispatch(updateImpulses([newImpulse]));
+      dispatch(updateSessionImpulseIds([newImpulse.id]));
       dispatch(updateThreads([newImpulse.message_thread]));
       dispatch(switchImpulse(newImpulse, null));
     })
@@ -410,12 +443,12 @@ export const createSpark = (name, impulseId, accountId) => {
     .then(newSpark => {
       // get the set the active impulse to be the impulse the spark was
       // made for
-      const activeImpulse = {...getState().data.linkedImpulses,
-        ...getState().data.sessionImpulses}[impulseId];
+      const activeImpulse = getState().data.impulses[impulseId];
 
       // add the new spark to the list of session sparks
       // update the active impulse information to include this new spark
-      dispatch(updateSessionSparks([newSpark]));
+      dispatch(updateSparks([newSpark]));
+      dispatch(updateSessionSparkIds([newSpark.id]));
       dispatch(switchImpulse(activeImpulse, newSpark));
     })
     .catch((e) => {
@@ -436,23 +469,25 @@ export const joinImpulse = (impulseHash) => {
       if (!res.ok) throw Error(res.statusText);
       return res.json();
     })
-    .then(newImpulse => {
-      let existingImpulse = {...getState().data.linkedImpulses,
-        ...getState().data.sessionImpulses}[newImpulse.id];
+    .then(data => {
+      const { impulse, sparks } = data;
+      console.log("JOINING");
+      console.log(data);
+
+      let existingImpulse = getState().data.impulses[impulse.id];
       let existingSpark = null;
 
       // add the new impulse to the list of session impulses
       if (!exists(existingImpulse)) {
-        dispatch(updateSessionImpulses([newImpulse]));
-        dispatch(updateThreads([newImpulse.message_thread]));
-        existingImpulse = newImpulse;
+        dispatch(updateImpulses([impulse]));
+        dispatch(updateSparks(sparks));
+        dispatch(updateSessionImpulseIds([impulse.id]));
+        dispatch(updateThreads([impulse.message_thread]));
+        existingImpulse = impulse;
       }
       else {
-        // iterate through the values in the spark dicts and find the
-        // impulses' corresponding spark
-        const sparks =
-          {...getState().data.linkedSparks, ...getState().data.sessionSparks};
-        for (const [sparkId, spark] of Object.entries(sparks)) {
+        // find the impulses' corresponding spark
+        for (const [sparkId, spark] of Object.entries(getState().data.sparks)) {
           if (spark.impulse_id === existingImpulse.id) existingSpark = spark;
         }
       }
@@ -519,8 +554,6 @@ export const registerSession = () => {
       sessionStorage.setItem('sessionToken', token);
 
       dispatch(setSession(token));
-
-      this.loadSessionImpulses();
     })
     .catch((e) => {
       // set invalid hash error flag
@@ -538,7 +571,8 @@ export const switchImpulse = (activeImpulse, activeSpark) => {
 
     let activeThreadId = getState().threads.cachedThreadIds[activeImpulse.id];
     if (!exists(activeThreadId)) {
-      activeThreadId = getState().threads.threads[activeImpulse.message_thread.id].id;
+      activeThreadId = getState().threads
+        .threads[activeImpulse.message_thread.id].id;
       dispatch(updateCachedThreadId(activeImpulse.id, activeThreadId));
     }
 
@@ -551,8 +585,24 @@ export const receiveUpdate = (update) => {
   return (dispatch, getState) => {
     const message = update.message;
     const thread = update.message_thread;
+    const thread_id = message.parent_thread_id;
 
-    dispatch(receiveMessage(message.parent_thread_id, message));
+    // save the spark that posted the message
+    dispatch(updateSparks([message.spark]));
+    delete message.spark;
+
+    // get the initial thread messages if they haven't been
+    // loaded yet
+    console.log("TEVBING");
+    console.log(message);
+    console.log(!exists(getState().threads.threads[thread_id]));
+    console.log(getState().threads);
+    if (!exists(getState().threads.threads[thread_id].messages))
+      dispatch(getThreadMessages(thread_id));
+
+    // add the recieved message
+    dispatch(receiveMessage(thread_id, message));
+
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));
   }
@@ -570,10 +620,7 @@ export const createInvite = (impulseId) => {
       return res.json();
     })
     .then(impulse => {
-      if (exists(getState().data.linkedImpulses[impulse.id]))
-        dispatch(updateLinkedImpulses([impulse]));
-      else
-        dispatch(updateSessionImpulses([impulse]));
+      dispatch(updateImpulses([impulse]));
     })
     .catch((e) => {
       console.log(e);
@@ -586,7 +633,7 @@ export const linkAccount = (sparkId, accountId) => {
   return (dispatch, getState) => {
     const accountToken = getState().session.accountToken;
     if (!exists(accountToken) || !exists(accountId)) {
-      console.log("getLinkedImpulses(): Not logged in!");
+      console.log("linkAccount(): Not logged in!");
       dispatch(errorOccured(true));
       return;
     }
@@ -604,20 +651,19 @@ export const linkAccount = (sparkId, accountId) => {
       return res.json();
     })
     .then(spark => {
-      const linkedImpulse = {...getState().data.linkedImpulses,
-        ...getState().data.sessionImpulses}[spark.impulse_id];
+      const linkedImpulse = getState().data.impulses[spark.impulse_id];
 
       // remove the linked spark and its impulse from the session lists
-      dispatch(updateSessionSparks([], true, [spark.id]));
-      dispatch(updateSessionImpulses([], true, [spark.impulse_id]));
-
-      // add the linked spark and its impulse to the linked lists
-      dispatch(updateLinkedSparks([spark]));
-      dispatch(updateLinkedImpulses([linkedImpulse]));
+      dispatch(updateSessionSparkIds([], true, [spark.id]));
+      dispatch(updateSessionImpulseIds([], true, [spark.impulse_id]));
     })
     .catch((e) => {
       console.log(e);
       dispatch(errorOccured(true));
     });
   }
+}
+
+const dateToString = (date) => {
+  return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()}.${date.getUTCMilliseconds()}`
 }

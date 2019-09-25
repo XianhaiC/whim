@@ -18,7 +18,7 @@ class AccountsController < ApplicationController
   def update
   end
 
-  def impulses
+  def data
     if params[:id].to_i != @current_account.id
       puts "CURRENT ID: #{@current_account.id}, REQ ID: #{params[:id]}"
       return render json: { errors: ["Unauthorized for action: logged in account doesn't match requested account"] }, status: :unauthorized
@@ -26,23 +26,30 @@ class AccountsController < ApplicationController
 
     account = Account.find(params[:id])
     if !account.nil?
-      render json: account.impulses
-    else
-      render json: { errors: ["Account not found"] }, status => 400
-    end
-  end
+      sparks = account.sparks.to_a;
+      puts sparks
 
-  def sparks
-    account = Account.find(params[:id])
-    if !account.nil?
-      render json: account.sparks
+      # get sparks for each impulses' inspiration messages
+      account.impulses.each {|impulse|
+        impulse.message_threads.each {|thread|
+          sparks << thread.parent.spark if thread.parent_type === "Message"
+        }
+      }
+      sparks = sparks.uniq
+
+      render json: {
+        impulses: ActiveModel::Serializer::CollectionSerializer.new(
+          account.impulses, each_serializer: ImpulseSerializer),
+        sparks: ActiveModel::Serializer::CollectionSerializer.new(
+          sparks, each_serializer: SparkSerializer)
+      }
     else
       render json: { errors: ["Account not found"] }, status => 400
     end
   end
 
   private
-    def account_params
-      params.require(:account).permit(:name, :email, :password, :password_confirmation)
-    end
+  def account_params
+    params.require(:account).permit(:name, :email, :password, :password_confirmation)
+  end
 end

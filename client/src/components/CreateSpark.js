@@ -29,17 +29,23 @@ class CreateSpark extends React.Component {
 
   render() {
     return (
-      <div className="create-spark">
-        <form onSubmit={this.handleSubmit}>
-          <label>Enter a name!</label>
-            <br />
+      <div className="new-impulse">
+        <div className="new-impulse-header">
+          <h3 className="new-impulse-title">Create a spark</h3>
+        </div>
+        <form>
+          <div className="new-impulse-fill">
+            <label>Create a name for your spark!</label>
             <input
+              className="new-impulse-text"
               type="text"
               value={this.state.name}
               onChange={this.handleChange}
-            />
-            <input type="submit" />
-          </form>
+              placeholder="Enter a name..." />
+          </div>
+          <button className="new-impulse-submit"
+            onClick={this.handleSubmit}>Start brainstorming!</button>
+        </form>
       </div>
     );
   }
