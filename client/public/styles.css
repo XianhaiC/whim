@@ -226,7 +226,7 @@ hr {
 }
 
 .impulse-header-button {
-  padding: 18px 10px 0px 10px; 
+  padding: 18px 10px 0px 10px;
   color: #654d4f;
 }
 
@@ -238,6 +238,11 @@ hr {
   flex-direction: column;
   justify-content: flex-end;
   align-items: stretch;
+}
+
+.active-thread-wrapper {
+  overflow-y: scroll;
+  flex: 1 1 0;
 }
 
 /* Message */

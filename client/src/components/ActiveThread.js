@@ -7,7 +7,6 @@ import { setFetchMessages } from  '../actions/index';
 
 // is in charge of loading messages given an impulse id
 class ActiveThread extends React.Component {
-  
   onScroll = () => {
     const { refs } = this;
     const { setFetchMessages, fetchMessages } = this.props;
@@ -42,9 +41,9 @@ class ActiveThread extends React.Component {
     }
 
     return (
-      <div ref='scrollbar' onScroll={ this.onScroll } className="active-thread-wrapper" 
-           style={{ height: 800, overflowY: 'scroll' }}>
-        <div className="active-thread">
+      <div className="active-thread">
+        <div className="active-thread-wrapper" ref='scrollbar' 
+          onScroll={ this.onScroll }>
           <ul>{messagesList}</ul>
         </div>
       </div>

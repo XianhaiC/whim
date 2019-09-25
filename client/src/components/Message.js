@@ -12,7 +12,6 @@ class Message extends React.Component {
 
     return (
       <div className="message">
-        <hr/>
         <div className="message-container">
           <div className="message-spark-pic"></div>
           <div className="message-body">
@@ -23,6 +22,7 @@ class Message extends React.Component {
             <p className="message-text">{message.body}</p>
           </div>
         </div>
+        <hr/>
       </div>
     );
   };
