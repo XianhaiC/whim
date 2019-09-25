@@ -44,7 +44,7 @@ class CreateMessage extends React.Component {
   }
 
   submitMessage(isInspiration) {
-    if (this.state.body === '') return;
+    if (this.state.body.trim() === '') return;
 
     const {activeImpulseId, activeSparkId, activeThreadId,
       impulses, sparks, threads} = this.props;

@@ -31,7 +31,7 @@ class Message extends React.Component {
       <p className="message-text">{message.body}</p>;
     const messageMore = message.is_inspiration ? (
       <div className="message-more" onClick={this.handleMoreClick}>
-        <i class="fas fa-chevron-down"></i>  Expand thread
+        <i className="fas fa-chevron-down"></i>  Expand thread
       </div>
       ) : null;
 

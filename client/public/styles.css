@@ -6,6 +6,7 @@
   --main-text: #2f0508;
   --main-sep: #d8c5c6;
   --main-sub: #e7e0d9;
+  --main-sub-focus: #d2c4b6;
 }
 
 * {
@@ -329,6 +330,10 @@ hr {
   font-size: 10px;
   color: var(--main-dim);
   padding: 5px 0px 5px 0px;
+  background-color: var(--main-light);
+}
+
+.message-more:hover {
   background-color: var(--main-sub);
 }
 
@@ -358,7 +363,7 @@ hr {
 }
 
 .create-message-text:focus {
-  background-color: #d2c4b6;
+  background-color: var(--main-sub-focus);
 }
 
 .create-message-submit {
@@ -379,7 +384,11 @@ hr {
 }
 
 .inspiration-list {
+  height: 100%;
   width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   /*background-color: #fdfbfa;
    */
 }
@@ -397,6 +406,11 @@ hr {
 
 .inspiration-list-info p {
   color: var(--inspo-dim);
+}
+
+.inspiration-list-wrapper {
+  flex: 1 1 0;
+  overflow-y: scroll;
 }
 
 .inspiration-list-container {

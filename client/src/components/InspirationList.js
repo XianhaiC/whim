@@ -33,13 +33,15 @@ class InspirationList extends React.Component {
           <div className="inspiration-list-info top-info">
             <h3 className="inspiration-list-title">Inspirations</h3>
             <div className="inspiration-list-sub top-info-sub">
-              <p>X Ideas brewing</p>
+              <p>X Ideas brewing...</p>
             </div>
           </div>
         </div>
-        <ul className="inspiration-list-container">
-          {cardsList}
-        </ul>
+        <div className="inspiration-list-wrapper">
+          <ul className="inspiration-list-container">
+            {cardsList}
+          </ul>
+        </div>
       </div>
     );
   }

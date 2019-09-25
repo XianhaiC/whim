@@ -46,7 +46,7 @@ class ActiveThread extends React.Component {
     return (
       <div className="active-thread">
         <div className="active-thread-wrapper" ref='scrollbar' 
-          onScroll={ this.onScroll }>
+          onScroll={this.onScroll}>
           <ul>{messagesList}</ul>
         </div>
       </div>
