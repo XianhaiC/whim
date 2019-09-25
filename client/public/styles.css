@@ -1,3 +1,13 @@
+:root {
+  --inspo-dark: #735a55;
+  --inspo-dim: #f0e1d3;
+  --main-light: #f5efe9;
+  --main-dim: #654d4f;
+  --main-text: #2f0508;
+  --main-sep: #d8c5c6;
+  --main-sub: #e7e0d9;
+}
+
 * {
   padding: 0px;
   margin: 0px;
@@ -145,7 +155,7 @@ hr {
 .center {
   height: 100%;
   flex-grow: 1;
-  background-color: #f5efe9;
+  background-color: var(--main-light);
 }
 
 /* ActiveImpulse */
@@ -178,7 +188,7 @@ hr {
   border-width: 0px 0px 0px 1px;
   border-style: solid;
   border-color: #d8c5c6;
-  background-color: #735a55;
+  background-color: var(--inspo-dark);
 }
 
 /* ImpulseHeader */
@@ -193,7 +203,7 @@ hr {
 }
 
 .top-info h3 {
-  color: #2f0508;
+  color: var(--main-text);
 }
 
 .top-info {
@@ -289,7 +299,7 @@ hr {
 
 .message-header > * {
   margin: 0px 10px 0px 0px;
-  color: #2f0508;
+  color: var(--main-text);
 }
 
 .message-header h4 {
@@ -300,9 +310,27 @@ hr {
 }
 
 .message-text {
-  color: #2f0508;
+  color: var(--main-text);
 }
 
+.message-inspiration {
+  color: #f5efe9;
+  background-color: var(--inspo-dark);
+  border-radius: 5px;
+  padding: 20px 10px 10px 20px;
+  margin-top: 5px;
+}
+
+.message-more {
+  text-align: center;
+  border-width: 1px 0px 0px 0px;
+  border-style: solid;
+  border-color: var(--main-sep);
+  font-size: 10px;
+  color: var(--main-dim);
+  padding: 5px 0px 5px 0px;
+  background-color: var(--main-sub);
+}
 
 /* CreateMessage */
 
@@ -313,7 +341,7 @@ hr {
 
 .create-message form > * {
   color: #2f0508;
-  background-color: #e7e0d9;
+  background-color: var(--main-sub);
 }
 
 .create-message-text {
@@ -342,11 +370,7 @@ hr {
 .active-impulse-right h4,
 .active-impulse-right h3,
 .active-impulse-right p {
-  color: #2f0508;
-}
-
-.active-impulse-right hr {
-  background-color: #aa978c;
+  color: var(--main-text);
 }
 
 .inspiration-list {
@@ -354,7 +378,6 @@ hr {
   /*background-color: #fdfbfa;
    */
 }
-
 
 .inspiration-list-header {
   border-width: 0px 0px 1px 0px;
@@ -364,11 +387,11 @@ hr {
 }
 
 .inspiration-list-info > h3 {
-  color: #f5efe9;
+  color: var(--main-light);
 }
 
 .inspiration-list-info p {
-  color: #f0e1d3;
+  color: var(--inspo-dim);
 }
 
 .inspiration-list-container {
@@ -379,7 +402,7 @@ hr {
 }
 
 .inspiration-card {
-  background-color: #f5efe9;
+  background-color: var(--main-light);
   border-radius: 5px;
   margin: 10px 20px 0px 20px;
 }
@@ -387,9 +410,12 @@ hr {
 .inspiration-card-footer {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  padding: 5px 10px 10px 20px;
+  padding: 10px 20px 10px 20px;
+  border-width: 1px 0px 0px 0px;
+  border-style: solid;
+  border-color: var(--main-sep);
 }
 
 .inspiration-card-footer > p {
@@ -397,7 +423,7 @@ hr {
 }
 
 .inspiration-card-text {
-  padding: 20px 10px 0px 20px;
+  padding: 20px 10px 10px 20px;
 }
 
 /* CreateImpulse, JoinImpulse, and CreateSpark */
@@ -458,7 +484,7 @@ hr {
 .new-impulse-text,
 .new-impulse-textarea,
 .new-impulse-submit {
-  background-color: #e7e0d9;
+  background-color: var(--main-sub);
 }
 
 .new-impulse-text {

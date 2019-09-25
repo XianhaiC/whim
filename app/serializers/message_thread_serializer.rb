@@ -1,7 +1,7 @@
 class MessageThreadSerializer < ActiveModel::Serializer
   #belongs_to :parent, polymorphic: true
 
-  attributes :id, :impulse_id, :parent_type
+  attributes :id, :impulse_id, :parent_type, :parent_id
   attribute :parent, polymorphic: true
 end
 

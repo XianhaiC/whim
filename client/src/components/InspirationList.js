@@ -57,8 +57,9 @@ export default connect(mapStateToProps)(InspirationList);
 
 // helpers
 
+// sorts in descending order
 const sortedThreads = threads => {
   return threads.sort(
-    (a, b) => new Date(a.parent.updated_at) - new Date(b.parent.updated_at)
+    (a, b) => new Date(b.parent.updated_at) - new Date(a.parent.updated_at)
   );
 };
