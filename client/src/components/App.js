@@ -25,6 +25,7 @@ class App extends Component {
     this.parseInvite = this.parseInvite.bind(this);
     this.handleImpulseJoined = this.handleImpulseJoined.bind(this);
     this.renderBoard = this.renderBoard.bind(this);
+    this.renderLogin = this.renderLogin.bind(this);
     this.renderLanding = this.renderLanding.bind(this);
   }
 
@@ -55,6 +56,13 @@ class App extends Component {
   handleImpulseJoined(impulse) {
     console.log(impulse);
     this.setState({ invited_impulse: impulse });
+  }
+
+  renderLogin() {
+    console.log("LOGIN RENDERING");
+    return (
+      <Login />
+    );
   }
 
   // TODO: figure out what to do with these passed in props
@@ -90,7 +98,7 @@ class App extends Component {
           <Route exact path={PATH_BOARD} render={this.renderBoard} />
           <Route path={PATH_INVITE} render={this.parseInvite} />
           <Route exact path={PATH_INVALID_INVITE} component={InvalidInvite} />
-          <Route exact path={PATH_LOGIN} render={() => {return <Login />}} />
+          <Route exact path={PATH_LOGIN} render={this.renderLogin} />
         </Switch>
       </div>
     );

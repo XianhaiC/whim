@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, Link, withRouter } from 'react-router-dom';
+import { Route, Redirect, withRouter } from 'react-router-dom';
 
 import { PATH_LOGIN } from '../constants';
 import { CenterComponent } from '../helpers';
@@ -13,8 +13,14 @@ class Sidebar extends React.Component {
   constructor() {
     super();
 
+    this.state = {
+      shouldRedirect: false
+    }
+
     this.handleCreateImpulse = this.handleCreateImpulse.bind(this);
     this.handleJoinImpulse = this.handleJoinImpulse.bind(this);
+    this.setRedirect = this.setRedirect.bind(this);
+    this.renderRedirect = this.renderRedirect.bind(this);
   }
 
   handleCreateImpulse() {
@@ -23,6 +29,16 @@ class Sidebar extends React.Component {
 
   handleJoinImpulse() {
     this.props.setCenterComponent(CenterComponent.JOIN);
+  }
+
+  setRedirect = () => {
+    this.setState( {shouldRedirect: true });
+  }
+
+  renderRedirect = () => {
+    if (this.state.shouldRedirect) {
+      return <Redirect to ={PATH_LOGIN} />
+    }
   }
 
   render() {
@@ -41,11 +57,13 @@ class Sidebar extends React.Component {
     // call .values() on each dict so we retrieve a list of their values
     // that can be used by ImpulseList
     return (
+
       <div className="sidebar">
-        <div className="login-button">
-          <Link to={PATH_LOGIN}>Click to Log In</Link>
-        </div>
         <div className="sidebar-lists">
+          <div className="login-button">
+            {this.renderRedirect()}
+            { this.props.loggedIn ? null : <button onClick={this.setRedirect} type="button">Login</button>}
+          </div>
           <ImpulseList listName="Impulses"
             impulses={linkedImpulses} />
           <ImpulseList listName="Un-linked"
@@ -70,6 +88,7 @@ const mapStateToProps = state => {
     sparks: state.data.sparks,
     sessionImpulseIds: state.session.sessionImpulseIds,
     sessionSparkIds: state.session.sessionSparkIds,
+    loggedIn: state.session.loggedIn
   };
 };
 

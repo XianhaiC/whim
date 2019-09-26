@@ -1,20 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect, withRouter } from 'react-router-dom';
 
 import { API_ROOT, HEADERS } from '../constants';
 import { loginAccount } from '../actions/index';
+import { PATH_BOARD } from '../constants';
 
 class Login extends React.Component {
   constructor() {
     super();
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      shouldRender: false
     }
 
     this.handleChangePassword = this.handleChangePassword.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.renderRedirect = this.renderRedirect.bind(this);
   }
 
   handleChangePassword(e) {
@@ -28,13 +32,23 @@ class Login extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.loginAccount(this.state.email, this.state.password);
+    this.setState({shouldRender: true});
+  }
+
+  renderRedirect= () => {
+    if (this.state.shouldRender) {
+      return <Redirect to={PATH_BOARD}/>
+    }
   }
 
   render() {
+    console.log("LOGIN :)");
+    console.log(this.props.loggedIn);
     if (this.props.loggedIn) return null;
 
     return (
       <div className="login">
+        {this.renderRedirect()}
         <h1>Login</h1>
         <form onSubmit={this.handleSubmit}>
           <label>Email</label>
@@ -63,6 +77,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {
+export default withRouter(connect(mapStateToProps, {
   loginAccount
-})(Login);
+})(Login));

@@ -43,12 +43,6 @@ class ImpulseOptions extends Component {
     return (
       <div className="impulse-options">
         <ul className="options-list">
-<<<<<<< HEAD:client/src/components/RightImpulseOptions.js
-          <button className="option-item" onClick={this.handleInviteCreate}>Create Invite Link </button>
-          <button className="option-item" key="1">Impulse Settings</button>
-          <button className="option-item" key="2">Account Settings</button>
-          <button className="option-item" key="3" onClick={this.handleAccountLink}>Link Account</button>
-=======
           <button className="option-item" key="0" onClick={this.handleCreateInvite}> {optionItems[0].title} </button>
           <button className="option-item" key="1"> {optionItems[1].title} </button>
           <button className="option-item" key="2"> {optionItems[2].title} </button>
@@ -64,7 +58,6 @@ class ImpulseOptions extends Component {
           <button className="option-item" key="1"> {optionItems[1].title} </button>
           <button className="option-item" key="2"> {option[2].title} </button>
           <button className="option-item" key="3" onClick={this.handleAccountLink}> {optionItem[3].title} </button>
->>>>>>> b667fc69e75259292308f46a6b80a53845994892:client/src/components/ImpulseOptions.js
         </ul>
 
         <div className="OptionsListHeader dropdown-header row " onClick={() => this.toggleList()}>
@@ -76,7 +69,7 @@ class ImpulseOptions extends Component {
         </div>
       </div>
     )
-    
+   */ 
   }
 }
 
