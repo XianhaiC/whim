@@ -9,6 +9,7 @@ class AccountsController < ApplicationController
   def create
     account = Account.new(account_params)
     if account.save
+      ActivationMailer.activation_email(account).deliver
       render json: account
     else
       render json: { errors: account.errors }, status => 400

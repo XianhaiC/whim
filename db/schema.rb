@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190920130558) do
+ActiveRecord::Schema.define(version: 20190930200319) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "accounts", force: :cascade do |t|
     t.string "handle"
@@ -18,6 +22,7 @@ ActiveRecord::Schema.define(version: 20190920130558) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "uuid", default: -> { "uuid_generate_v4()" }, null: false
     t.index ["email"], name: "index_accounts_on_email", unique: true
     t.index ["handle"], name: "index_accounts_on_handle", unique: true
   end
@@ -35,7 +40,7 @@ ActiveRecord::Schema.define(version: 20190920130558) do
     t.datetime "updated_at", null: false
     t.integer "impulse_id"
     t.string "parent_type"
-    t.integer "parent_id"
+    t.bigint "parent_id"
     t.index ["parent_type", "parent_id"], name: "index_message_threads_on_parent_type_and_parent_id"
   end
 
