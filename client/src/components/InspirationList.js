@@ -16,6 +16,7 @@ class InspirationList extends React.Component {
         thread.impulse_id === activeImpulseId
         && thread.parent_type === "Message"
     ));
+    const activeImpulse = this.props.impulses[activeImpulseId];
 
     // map threads to card components
     const cardsList = inspirationThreads.map(thread => {
@@ -33,7 +34,7 @@ class InspirationList extends React.Component {
           <div className="inspiration-list-info top-info">
             <h3 className="inspiration-list-title">Inspirations</h3>
             <div className="inspiration-list-sub top-info-sub">
-              <p>X Ideas brewing...</p>
+              <p>{activeImpulse.inspirations_created} Idea{activeImpulse.inspirations_created != 1 ? "s" : ""} brewing...</p>
             </div>
           </div>
         </div>
@@ -51,6 +52,7 @@ const mapStateToProps = state => {
   return {
     activeImpulseId: state.control.activeImpulseId,
     activeThreadId: state.control.activeThreadId,
+    impulses: state.data.impulses,
     threads: state.threads.threads
   };
 };

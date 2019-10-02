@@ -14,3 +14,6 @@ export const PATH_INVALID_INVITE = "/invalid";
 export const PATH_THREADS = "/threads";
 export const PATH_SESSION = "/session";
 export const PATH_LOGIN = "/loginpage";
+
+// etc
+export const MAX_INSPO_CARD_LENGTH = 80;

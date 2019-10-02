@@ -2,6 +2,7 @@ import {
   SET_ACTIVE_ITEMS,
   SET_ACTIVE_THREAD_ID,
   SET_CENTER_COMPONENT,
+  SET_RIGHTBAR_COMPONENT,
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
   SET_FETCH_MESSAGES
@@ -13,7 +14,9 @@ const INITIAL_STATE = {
   activeThreadId: null,
   errorOccured: false,
   invalidHashError: false,
-  fetchMessages: false
+  fetchMessages: false,
+  centerComponent: null,
+  rightbarComponent: null
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -30,6 +33,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case SET_CENTER_COMPONENT:
       return {...state, centerComponent: action.payload.centerComponent};
+
+    case SET_RIGHTBAR_COMPONENT:
+      return {...state, rightbarComponent: action.payload.rightbarComponent};
 
     case ERROR_OCCURED:
       return {...state, errorOccured: action.payload.occured};

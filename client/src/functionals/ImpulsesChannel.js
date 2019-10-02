@@ -4,9 +4,9 @@ import ActionCable from 'actioncable';
 
 import { API_WS_ROOT } from '../constants';
 import { exists } from '../helpers';
-import { receiveUpdate } from '../actions/index';
+import { receiveImpulse } from '../actions/index';
 
-class MessageThreadsChannel extends React.Component {
+class ImpulsesChannel extends React.Component {
   constructor() {
     super();
     this.state = { subscriptions: {} }
@@ -17,12 +17,12 @@ class MessageThreadsChannel extends React.Component {
     const { subscriptions } = this.state;
     let newState = null;
 
-    Object.values(this.props.threads).forEach(thread => {
-      if (!exists(this.state.subscriptions[thread.id])) {
+    Object.values(this.props.impulses).forEach(impulse => {
+      if (!exists(this.state.subscriptions[impulse.id])) {
         if (!exists(newState)) newState = {subscriptions: {...subscriptions}};
-        newState.subscriptions[thread.id] = this.cable.subscriptions.create(
-          {channel: 'MessageThreadsChannel', thread: thread.id},
-          {received: (response) => {this.props.receiveUpdate(response)}}
+        newState.subscriptions[impulse.id] = this.cable.subscriptions.create(
+          {channel: 'ImpulsesChannel', impulse: impulse.id},
+          {received: (response) => {this.props.receiveImpulse(response)}}
         )
       }
     });
@@ -34,7 +34,6 @@ class MessageThreadsChannel extends React.Component {
   }
 
   componentDidUpdate() {
-    // should only create subscriptions for new threads
     this.createSubscriptions();
   }
 
@@ -45,10 +44,10 @@ class MessageThreadsChannel extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    threads: state.threads.threads
+    impulses: state.data.impulses
   };
 };
 
 export default connect(mapStateToProps, {
-  receiveUpdate
-})(MessageThreadsChannel);
+  receiveImpulse
+})(ImpulsesChannel);

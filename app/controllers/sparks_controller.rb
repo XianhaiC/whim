@@ -11,6 +11,10 @@ class SparksController < ApplicationController
     # account_id is null upon creation, will be set with PUT request during account linking
     spark = Spark.new(spark_params)
     if spark.save
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+        ImpulseSerializer.new(spark.impulse)).serializable_hash
+
+      ImpulsesChannel.broadcast_to spark.impulse, serialized_data
       render json: spark
     else
       render json: { errors: spark.errors }, status => 400
