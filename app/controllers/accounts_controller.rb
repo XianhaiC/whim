@@ -1,9 +1,10 @@
 class AccountsController < ApplicationController
-  before_action :authenticate_login, except: [:create]
+  before_action :authenticate_login, except: [:create, :confirmation]
 
   def show
     account = Account.find(params[:id])
-    render json: account
+    return render json: account if !account.nil?
+    return render json: { errors: ["Account not found"] }, status: 400
   end
 
   def create
@@ -12,7 +13,7 @@ class AccountsController < ApplicationController
       ActivationMailer.activation_email(account).deliver
       render json: account
     else
-      render json: { errors: account.errors }, status => 400
+      render json: { errors: account.errors }, status: 400
     end
   end
 
@@ -22,7 +23,9 @@ class AccountsController < ApplicationController
   def data
     if params[:id].to_i != @current_account.id
       puts "CURRENT ID: #{@current_account.id}, REQ ID: #{params[:id]}"
-      return render json: { errors: ["Unauthorized for action: logged in account doesn't match requested account"] }, status: :unauthorized
+      return render json: {
+        errors: ["Unauthorized for action: logged in account doesn't match requested account"] },
+      status: :unauthorized
     end
 
     account = Account.find(params[:id])
@@ -45,12 +48,25 @@ class AccountsController < ApplicationController
           sparks, each_serializer: SparkSerializer)
       }
     else
-      render json: { errors: ["Account not found"] }, status => 400
+      render json: { errors: ["Account not found"] }, status: 400
     end
+  end
+
+  # confirm the account once the user has clicked the activation link
+  def confirmation
+    account = Account.find_by(uuid: params[:uuid]);
+
+    if !account.nil?
+      Account.second.update_attribute(:activated, true)
+      return render json: account
+    end
+
+    render json: { errors: ["Account not found"] }, status: 400
   end
 
   private
   def account_params
-    params.require(:account).permit(:name, :email, :password, :password_confirmation)
+    params.require(:account)
+      .permit(:name, :email, :password, :password_confirmation)
   end
 end

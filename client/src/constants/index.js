@@ -14,3 +14,4 @@ export const PATH_INVALID_INVITE = "/invalid";
 export const PATH_THREADS = "/threads";
 export const PATH_SESSION = "/session";
 export const PATH_LOGIN = "/loginpage";
+export const PATH_CONFIRMATION = "/confirmation/:uuid";

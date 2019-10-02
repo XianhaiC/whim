@@ -8,6 +8,7 @@ import {
 const INITIAL_STATE = {
   loggedIn: false,
   accountId: null,
+  accountActivated: false,
   accountToken: null,
   sessionToken: null,
   sessionImpulseIds: {},
@@ -52,6 +53,7 @@ export default (state = INITIAL_STATE, action) => {
       return {...state,
         loggedIn: true,
         accountId: action.payload.accountId,
+        accountActivated: action.payload.accountActivated,
         accountToken: action.payload.accountToken
       };
     

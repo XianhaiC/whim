@@ -9,19 +9,19 @@ class ImpulsesController < ApplicationController
       ).serializable_hash
       render json: serialized_data
     else
-      render json: { errors: ['Impulse not found'] }, status => 400
+      render json: { errors: ['Impulse not found'] }, status: 400
     end
   end
 
   def create
     impulse = Impulse.new(impulse_params)
     if !impulse.save
-      return render json: { errors: impulse.errors }, status => 400
+      return render json: { errors: impulse.errors }, status: 400
     end
 
     thread = MessageThread.new(impulse: impulse, parent: impulse)
     if !thread.save
-      return render json: { errors: thread.errors }, status => 400
+      return render json: { errors: thread.errors }, status: 400
     end
 
     # note that the impulses' thread is embeded into the JSON by the serializer
@@ -62,7 +62,7 @@ class ImpulsesController < ApplicationController
           sparks, each_serializer: SparkSerializer)
       })
     else
-      render json: { errors: ['Impulse not found'] }, status => 400
+      render json: { errors: ['Impulse not found'] }, status: 400
     end
   end
 
@@ -73,7 +73,7 @@ class ImpulsesController < ApplicationController
       impulse.update(invite_hash: invite_hash)
       render json: impulse
     else
-      render json: { errors: ['Impulse not found'] }, status => 400
+      render json: { errors: ['Impulse not found'] }, status: 400
     end
   end
 

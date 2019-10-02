@@ -8,24 +8,32 @@ class SparksController < ApplicationController
   end
 
   def create
-    # account_id is null upon creation, will be set with PUT request during account linking
+    # account_id is null upon creation, will be set with PUT request during
+    # account linking
     spark = Spark.new(spark_params)
     if spark.save
       render json: spark
     else
-      render json: { errors: spark.errors }, status => 400
+      render json: { errors: spark.errors }, status: 400
     end
   end
 
   def update
     spark = Spark.find(params[:id])
-    spark.account_id = params[:account_id]
+    account = Account.find(params[:account_id])
     spark.session_token = nil
 
+    if !account || !account.activated
+      render json: {
+        errors:["Account does not exist or has not been activated"] },
+      status: 400
+
+    # update the spark with the account id
+    spark.account_id = account.id
     if spark.save
       render json: spark
     else
-      render json: { errors: spark.errors }, status => 400
+      render json: { errors: spark.errors }, status: 400
     end
   end
 
@@ -37,7 +45,8 @@ class SparksController < ApplicationController
 
   private
     def spark_params
-      params.require(:spark).permit(:name, :account_id, :impulse_id, :session_token)
+      params.require(:spark).permit(
+        :name, :account_id, :impulse_id, :session_token)
     end
 
     def auth_token_spark(spark)
@@ -47,5 +56,4 @@ class SparksController < ApplicationController
         spark: { id: spark.id }
       }
     end
-
 end

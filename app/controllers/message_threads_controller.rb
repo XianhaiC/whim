@@ -11,7 +11,7 @@ class MessageThreadsController < ApplicationController
     if (message_thread.save)
       render json: message_thread
     else
-      render json: { errors: message_thread.errors }, status => 400
+      render json: { errors: message_thread.errors }, status: 400
     end
   end
 

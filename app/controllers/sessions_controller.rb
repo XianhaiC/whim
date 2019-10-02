@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
   def create
     account = Account.find_by(email: params[:email].downcase)
     if !account.nil? && account.authenticate(params[:password])
-      render json: auth_token(account)
+      render json: { auth: auth_token(account), activated: account.activated }
     else
     end
   end

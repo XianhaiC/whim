@@ -26,6 +26,9 @@ Rails.application.routes.draw do
     get '/impulses/:id/invite/new', to: 'impulses#invite_new'
     get '/impulses/invite/:invite_hash', to: 'impulses#invite'
 
+    # account confirmation
+    get '/confirmation/:uuid', to: 'accounts#confirmation'
+
     mount ActionCable.server => '/cable'
   end
 end

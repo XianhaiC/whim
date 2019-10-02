@@ -102,10 +102,10 @@ export const setCenterComponent = (centerComponent) => {
   }
 }
 
-export const login = (accountId, accountToken) => {
+export const login = (accountId, accountActivated, accountToken) => {
   return {
     type: LOGIN,
-    payload: { accountId, accountToken }
+    payload: { accountId, accountActivated, accountToken }
   };
 }
 
@@ -214,6 +214,36 @@ export const getAccountData = accountId => {
       dispatch(updateThreads(inspirationThreads));
       dispatch(updateImpulses(impulses));
       dispatch(updateSparks(sparks));
+    })
+    .catch((e) => {
+      console.log(e);
+      dispatch(errorOccured(true));
+    });
+  }
+}
+
+export const getAccount = (accountId) => {
+  return (dispatch, getState) => {
+    const accountToken = getState().session.accountToken;
+    if (!exists(accountToken)) {
+      console.log("getAccountData(): Not logged in!");
+      dispatch(errorOccured(true));
+      return;
+    }
+
+    fetch(`${API_ROOT}/accounts/${accountId}`, {
+      method: 'GET',
+      headers: {
+        ...HEADERS,
+        AuthorizationLogin: `Bearer ${accountToken}`
+      }
+    })
+    .then(res => {
+      if (!res.ok) throw Error(res.statusText);
+      return res.json();
+    })
+    .then(account => {
+      dispatch(login(account.id, account.activated, accountToken));
     })
     .catch((e) => {
       console.log(e);
@@ -521,13 +551,14 @@ export const loginAccount = (email, password) => {
     })
     .then(authPayload => {
       // persist the login for the session
-      const token = authPayload.auth_token;
-      const accountId = authPayload.account.id;
+      const token = authPayload.auth.auth_token;
+      const accountId = authPayload.auth.account.id;
+      const activated = authPayload.activated;
 
       sessionStorage.setItem('accountId', accountId);
       sessionStorage.setItem('accountToken', token);
 
-      dispatch(login(accountId, token));
+      dispatch(login(accountId, activated, token));
     })
     .catch((e) => {
       // set invalid hash error flag

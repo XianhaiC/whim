@@ -10,7 +10,7 @@ class MessagesController < ApplicationController
     parent_thread = MessageThread.find(params[:parent_thread_id])
 
     if !message.save
-      return render json: { errors: message.errors }, status => 400
+      return render json: { errors: message.errors }, status: 400
     end
 
     serialized_data = ActiveModelSerializers::Adapter::Json.new(
@@ -22,7 +22,7 @@ class MessagesController < ApplicationController
       thread = MessageThread.new(impulse_id: params[:impulse_id],
                                  parent: message)
       if !thread.save
-        return render json: { errors: thread.errors }, status => 400
+        return render json: { errors: thread.errors }, status: 400
       end
 
       thread_data = ActiveModelSerializers::Adapter::Json.new(

@@ -2,10 +2,12 @@ import React, {Component} from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { API_ROOT, HEADERS, PATH_ROOT, PATH_INVITE,
-  PATH_INVALID_INVITE, PATH_BOARD, PATH_LOGIN } from '../constants';
+  PATH_INVALID_INVITE, PATH_BOARD, PATH_LOGIN,
+  PATH_CONFIRMATION } from '../constants';
 import { exists } from '../helpers';
 import Board from './Board';
 import Login from './Login';
+import Confirmation from './Confirmation';
 //import Landing from './Landing'
 import InvalidInvite from './InvalidInvite';
 
@@ -52,7 +54,6 @@ class App extends Component {
     */
   }
 
-
   handleImpulseJoined(impulse) {
     console.log(impulse);
     this.setState({ invited_impulse: impulse });
@@ -80,6 +81,10 @@ class App extends Component {
     return null;
   }
 
+  renderConfirmation(props) {
+    return <Confirmation uuid={props.match.params.uuid} />;
+  }
+
   renderRedirect() {
     /*
     if (this.state.invalid_hash) return <Redirect to={PATH_INVALID_INVITE} />
@@ -96,9 +101,10 @@ class App extends Component {
         <Switch>
           <Route exact path={PATH_ROOT} render={this.renderBoard} />
           <Route exact path={PATH_BOARD} render={this.renderBoard} />
-          <Route path={PATH_INVITE} render={this.parseInvite} />
           <Route exact path={PATH_INVALID_INVITE} component={InvalidInvite} />
           <Route exact path={PATH_LOGIN} render={this.renderLogin} />
+          <Route path={PATH_INVITE} render={this.parseInvite} />
+          <Route path={PATH_CONFIRMATION} render={this.renderConfirmation} />
         </Switch>
       </div>
     );
