@@ -4,7 +4,7 @@ import ImpulseHeader from './ImpulseHeader';
 import ImpulseOptions from './ImpulseOptions';
 import ActiveThread from './ActiveThread';
 import CreateMessage from './CreateMessage';
-import InspirationBar from './InspirationBar';
+import Rightbar from './Rightbar';
 
 class ActiveImpulse extends React.Component {
   render() {
@@ -16,7 +16,7 @@ class ActiveImpulse extends React.Component {
           <CreateMessage />
         </div>
         <div className="active-impulse-right">
-          <InspirationBar />
+          <Rightbar />
         </div>
       </div>
     );

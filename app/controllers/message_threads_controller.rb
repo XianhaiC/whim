@@ -9,6 +9,13 @@ class MessageThreadsController < ApplicationController
   def create
     message_thread = MessageThread.new(message_thread_params)
     if (message_thread.save)
+      # broadcast the updated impulse if we're creating an inspiration thread
+      if message_thread.parent_type == "Message"
+        serialized_data = ActiveModelSerializers::Adapter::Json.new(
+          ImpulseSerializer.new(spark.impulse)).serializable_hash
+        ImpulsesChannel.broadcast_to spark.impulse, serialized_data
+      end
+
       render json: message_thread
     else
       render json: { errors: message_thread.errors }, status: 400

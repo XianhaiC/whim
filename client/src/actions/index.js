@@ -1,5 +1,5 @@
 import { API_ROOT, HEADERS, PATH_THREADS } from '../constants';
-import { CenterComponent, exists } from '../helpers';
+import { CenterComponent, RightbarComponent, exists } from '../helpers';
 import {
   UPDATE_THREADS,
   APPEND_THREAD_MESSAGES,
@@ -12,6 +12,7 @@ import {
   UPDATE_SESSION_SPARK_IDS,
   SET_ACTIVE_THREAD_ID,
   SET_CENTER_COMPONENT,
+  SET_RIGHTBAR_COMPONENT,
   LOGIN,
   SET_SESSION,
   SET_ACTIVE_ITEMS,
@@ -99,6 +100,13 @@ export const setCenterComponent = (centerComponent) => {
   return {
     type: SET_CENTER_COMPONENT,
     payload: { centerComponent }
+  }
+}
+
+export const setRightbarComponent = (rightbarComponent) => {
+  return {
+    type: SET_RIGHTBAR_COMPONENT,
+    payload: { rightbarComponent }
   }
 }
 
@@ -609,6 +617,7 @@ export const switchImpulse = (activeImpulse, activeSpark) => {
 
     dispatch(setActiveItems(activeImpulse.id, activeSparkId, activeThreadId));
     dispatch(setCenterComponent(centerComponent));
+    dispatch(setRightbarComponent(RightbarComponent.LIST));
   }
 }
 
@@ -636,6 +645,13 @@ export const receiveUpdate = (update) => {
 
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));
+  }
+}
+
+export const receiveImpulse = (update) => {
+  return (dispatch) => {
+    // update the received impulse
+    dispatch(updateImpulses([update.impulse]));
   }
 }
 

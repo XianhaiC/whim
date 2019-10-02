@@ -3,7 +3,7 @@ export const API_ROOT = 'http://localhost:3000/api/v1';
 export const API_WS_ROOT = 'ws://localhost:3000/api/v1/cable';
 export const HEADERS = {
   'Content-Type': 'application/json',
-  Accept: 'application/json', 
+  Accept: 'application/json',
 };
 
 // routes
@@ -15,3 +15,6 @@ export const PATH_THREADS = "/threads";
 export const PATH_SESSION = "/session";
 export const PATH_LOGIN = "/loginpage";
 export const PATH_CONFIRMATION = "/confirmation/:uuid";
+
+// etc
+export const MAX_INSPO_CARD_LENGTH = 80;

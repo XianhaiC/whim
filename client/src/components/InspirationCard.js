@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { MAX_INSPO_CARD_LENGTH } from '../constants';
 import { setActiveThreadId } from '../actions/index';
+import { getTimeAMPM, clipMessage } from '../helpers';
 
 class InspirationCard extends React.Component {
   constructor(props) {
@@ -21,7 +23,7 @@ class InspirationCard extends React.Component {
 
     return (
       <div className="inspiration-card" onClick={this.handleClick}>
-        <p className="inspiration-card-text">{message.body}</p>
+        <p className="inspiration-card-text">{clipMessage(message.body)}</p>
         <div className="inspiration-card-footer">
           <p className="inspiration-card-spark-name">{spark.name}</p>
           <p className="inspiration-card-created-at">Last updated at {getTimeAMPM(updateDate)}</p>
@@ -40,10 +42,3 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   setActiveThreadId
 })(InspirationCard);
-
-// helpers
-
-function getTimeAMPM(time) {
-  let isPM = time.getHours() / 12 === 1;
-  return `${time.getHours() % 12}:${time.getMinutes()} ${isPM ? "PM" : "AM"}`;
-}

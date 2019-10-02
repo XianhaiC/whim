@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { getTimeAMPM, clipMessage } from '../helpers';
+
 class InspirationDetails extends React.Component {
   render() {
     const {activeThreadId,
@@ -12,6 +14,8 @@ class InspirationDetails extends React.Component {
       message.id == activeThread.parent_id);
 
     const updateDate = new Date(message.updated_at);
+    console.log("DATE");
+    console.log(updateDate);
     const spark = sparks[message.spark_id];
 
     return (
@@ -42,10 +46,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(InspirationDetails);
-
-// helpers
-
-function getTimeAMPM(time) {
-  let isPM = time.getHours() / 12 === 1;
-  return `${time.getHours() % 12}:${time.getMinutes()} ${isPM ? "PM" : "AM"}`;
-}

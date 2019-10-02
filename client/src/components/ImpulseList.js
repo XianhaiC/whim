@@ -14,32 +14,12 @@ class ImpulseList extends React.Component {
     // find the impulses' corresponding spark
     const { sessionToken, accountId } = this.props;
 
-    console.log("FINDING");
-    console.log(this.props.sparks);
-    console.log(sessionToken);
-    console.log(accountId);
-
-    /*
     let found = null;
-    found  = Object.values(this.props.sparks).find(spark =>
+    found = Object.values(this.props.sparks).find(spark =>
       spark.impulse_id == impulse.id
       && (spark.account_id == accountId
         || spark.session_token === sessionToken)
     );
-    */
-    let found = null;
-    Object.values(this.props.sparks).forEach(spark => {
-      let imp = spark.impulse_id == impulse.id;
-      let sec = spark.account_id == accountId;
-      let sess = spark.session_token === sessionToken;
-      console.log("PER");
-      console.log(spark.accountId);
-      console.log(spark.session_token);
-      console.log(imp);
-      console.log(sec);
-      console.log(sess);
-      if (imp && (sec || sess)) found = spark
-    });
 
     // update the state with the new impulse
     // this sets the active spark and thread as well
@@ -89,7 +69,7 @@ const createImpulseCards = (impulses, handleClick) => {
         <div className="impulse-card-pic"></div>
         <div className="impulse-card-info">
           <p className="impulse-card-name">{impulse.name}</p>
-          <p className="impulse-card-sparks">X Sparks joined</p>
+          <p className="impulse-card-sparks">{impulse.sparks_joined} Spark{impulse.sparks_joined != 1 ? "s" : ""} joined</p>
         </div>
       </li>
     ));

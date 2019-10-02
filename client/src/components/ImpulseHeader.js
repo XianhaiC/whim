@@ -28,7 +28,7 @@ class ImpulseHeader extends React.Component {
         <div className="impulse-header-info top-info">
           <h3>{activeImpulse.name}</h3>
           <div className="impulse-header-sub top-info-sub">
-            <p>X Sparks joined</p>
+            <p>{activeImpulse.sparks_joined} Spark{activeImpulse.sparks_joined != 1 ? "s" : ""} joined</p>
             {activeImpulse.invite_hash 
                 && <p>Invite hash: {activeImpulse.invite_hash}</p>}
           </div>
