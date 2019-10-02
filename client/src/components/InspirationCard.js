@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { MAX_INSPO_CARD_LENGTH } from '../constants';
-import { setActiveThreadId } from '../actions/index';
-import { getTimeAMPM, clipMessage } from '../helpers';
+import { setActiveThreadId, setRightbarComponent } from '../actions/index';
+import { RightbarComponent, getTimeAMPM, clipMessage } from '../helpers';
 
 class InspirationCard extends React.Component {
   constructor(props) {
@@ -14,6 +14,7 @@ class InspirationCard extends React.Component {
 
   handleClick() {
     this.props.setActiveThreadId(this.props.threadId);
+    this.props.setRightbarComponent(RightbarComponent.DETAILS);
   }
 
   render() {
@@ -40,5 +41,6 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  setActiveThreadId
+  setActiveThreadId,
+  setRightbarComponent
 })(InspirationCard);

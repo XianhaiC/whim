@@ -17,4 +17,4 @@ export const PATH_LOGIN = "/loginpage";
 export const PATH_CONFIRMATION = "/confirmation/:uuid";
 
 // etc
-export const MAX_INSPO_CARD_LENGTH = 80;
+export const MAX_INSPO_CARD_LENGTH = 120;

@@ -375,6 +375,12 @@ hr {
   background-color: #d2c4b6;
 }
 
+/* Rightbar */
+
+.rightbar {
+  height: 100%;
+}
+
 /* InspirationList */
 
 .active-impulse-right h4,

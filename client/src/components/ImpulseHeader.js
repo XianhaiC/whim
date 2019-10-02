@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { createInvite, linkAccount } from '../actions/index';
+import { RightbarComponent } from '../helpers';
+import { createInvite, linkAccount, setRightbarComponent } from '../actions/index';
 
 class ImpulseHeader extends React.Component {
   constructor() {
@@ -9,6 +10,8 @@ class ImpulseHeader extends React.Component {
 
     this.handleLinkAccount = this.handleLinkAccount.bind(this);
     this.handleCreateInvite = this.handleCreateInvite.bind(this);
+    this.handleInfo = this.handleInfo.bind(this);
+    this.handleList = this.handleList.bind(this);
   }
 
   handleLinkAccount() {
@@ -17,6 +20,14 @@ class ImpulseHeader extends React.Component {
 
   handleCreateInvite() {
     this.props.createInvite(this.props.activeImpulseId);
+  }
+
+  handleInfo() {
+    this.props.setRightbarComponent(RightbarComponent.INFO);
+  }
+
+  handleList() {
+    this.props.setRightbarComponent(RightbarComponent.LIST);
   }
 
   render() {
@@ -29,7 +40,7 @@ class ImpulseHeader extends React.Component {
           <h3>{activeImpulse.name}</h3>
           <div className="impulse-header-sub top-info-sub">
             <p>{activeImpulse.sparks_joined} Spark{activeImpulse.sparks_joined != 1 ? "s" : ""} joined</p>
-            {activeImpulse.invite_hash 
+            {activeImpulse.invite_hash
                 && <p>Invite hash: {activeImpulse.invite_hash}</p>}
           </div>
         </div>
@@ -40,8 +51,11 @@ class ImpulseHeader extends React.Component {
           <div className="impulse-header-button" onClick={this.handleCreateInvite}>
             <i className="fas fa-share-alt"></i>  Invite
           </div>
-          <div className="impulse-header-button">
+          <div className="impulse-header-button" onClick={this.handleInfo}>
             <i className="fas fa-info"></i>
+          </div>
+          <div className="impulse-header-button" onClick={this.handleList}>
+            <i className="fas fa-lightbulb"></i>
           </div>
           <div className="impulse-header-button">
             <i className="fas fa-cog"></i>
@@ -63,5 +77,6 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {
   createInvite,
-  linkAccount
+  linkAccount,
+  setRightbarComponent
 })(ImpulseHeader);
