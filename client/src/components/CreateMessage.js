@@ -73,8 +73,7 @@ class CreateMessage extends React.Component {
 
     return (
       <div className="create-message">
-        <form ref={element => this.form = element}
-          onSubmit={this.handleMessageSubmit}>
+        <form onSubmit={this.handleMessageSubmit}>
           <textarea className="create-message-text"
             type="textarea"
             rows="1"

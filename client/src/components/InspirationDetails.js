@@ -1,22 +1,112 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import autosize from 'autosize';
 
+import { MAX_MSG_LENGTH } from '../constants';
 import { getTimeAMPM, clipMessage } from '../helpers';
 
 class InspirationDetails extends React.Component {
-  render() {
+  constructor() {
+    super();
+
+    this.state = {
+      edit: false,
+      body: ''
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.getMessage = this.getMessage.bind(this);
+  }
+
+  componentDidMount() {
+    autosize(this.textarea);
+  }
+
+  handleChange(e) {
+    this.setState({ body: e.target.value });
+  }
+
+  handleSubmit() {
+    const body = this.state.body.trim();
+    if (!this.validate(body)) return;
+
+    const message = this.getMessage();
+    this.props.updateInspiration(message.id, body)
+    this.setState({ edit: false });
+  }
+
+  handleCancel() {
+    this.setState({ edit: false });
+  }
+
+  handleEdit() {
+    const message = this.getMessage();
+
+    this.setState({ edit: true, body: message.body });
+  }
+
+  validate(body) {
+    if (body.length > MAX_MSG_LENGTH
+      || body === '') return false;
+    return true;
+  }
+
+  Body(props) {
+    const message = this.getMessage();
+  }
+
+  getMessage() {
     const {activeThreadId,
-      impulses, sparks, threads } = this.props;
+      impulses, threads } = this.props;
     const activeThread = threads[activeThreadId];
     const impulseThread =
       threads[impulses[activeThread.impulse_id].message_thread.id];;
     const message = impulseThread.messages.find(message =>
       message.id == activeThread.parent_id);
+    return message;
+  }
+
+  render() {
+    const message = this.getMessage();
 
     const updateDate = new Date(message.updated_at);
-    console.log("DATE");
-    console.log(updateDate);
-    const spark = sparks[message.spark_id];
+    const spark = this.props.sparks[message.spark_id];
+
+    let body = null;
+
+    if (this.state.edit) {
+      body = (
+        <form>
+          <textarea className="edit-text"
+            type="textarea"
+            rows="1"
+            value={this.state.body}
+            onChange={this.handleChange}
+            placeholder="Idea goes here..."
+            ref={el => this.textarea = el}/>
+          <div className="edit-buttons">
+            <button className="bar-button edit-button"
+              onClick={this.handleSubmit}>
+              <i className="fas fa-paper-plane"></i>  Update
+            </button>
+            <button className="bar-button edit-button"
+              onClick={this.handleCancel}>
+              <i className="fas fa-lightbulb"></i>  Cancel
+            </button>
+          </div>
+        </form>
+      );
+    }
+    else {
+      body = (
+        <div className="inspiration-card inspiration-card-details">
+          <p className="inspiration-card-text">{message.body}</p>
+        </div>
+      );
+    }
 
     return (
       <div className="inspiration-details">
@@ -27,10 +117,16 @@ class InspirationDetails extends React.Component {
               <p>Last updated at {getTimeAMPM(updateDate)}</p>
             </div>
           </div>
+          <div className="header-buttons">
+            <div className="header-button" onClick={this.handleEdit}>
+              <i className="fas fa-link"></i>
+            </div>
+            <div className="header-button">
+              <i className="fas fa-share-alt"></i>
+            </div>
+          </div>
         </div>
-        <div className="inspiration-card inspiration-card-details">
-          <p className="inspiration-card-text">{message.body}</p>
-        </div>
+        {body}
       </div>
     );
   }
@@ -46,3 +142,4 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(InspirationDetails);
+
