@@ -238,15 +238,8 @@ export const getAccountData = accountId => {
   }
 }
 
-export const getAccount = (accountId) => {
+export const getAccount = (accountId, accountToken) => {
   return (dispatch, getState) => {
-    const accountToken = getState().session.accountToken;
-    if (!exists(accountToken)) {
-      console.log("getAccountData(): Not logged in!");
-      dispatch(errorOccured(true));
-      return;
-    }
-
     fetch(`${API_ROOT}/accounts/${accountId}`, {
       method: 'GET',
       headers: {

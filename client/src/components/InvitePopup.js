@@ -18,7 +18,8 @@ class InvitePopup extends React.Component {
   render() {
     const popup = this.props.invitePopupOpen ? (
       <div className="invite-popup" ref={el => this.popup = el}>
-          INVITE POPUP
+        <div>
+        </div>
       </div>
     ) : null;
 
