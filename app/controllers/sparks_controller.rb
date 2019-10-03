@@ -28,7 +28,7 @@ class SparksController < ApplicationController
     spark.session_token = nil
 
     if !account || !account.activated
-      render json: {
+      return render json: {
         errors:["Account does not exist or has not been activated"] },
       status: 400
     end
