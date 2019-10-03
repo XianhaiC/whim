@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect, withRouter } from 'react-router-dom';
 
-import { PATH_LOGIN } from '../constants';
+import { PATH_LOGIN, PATH_SIGNUP } from '../constants';
 import { CenterComponent } from '../helpers';
 import { setCenterComponent } from '../actions/index';
 
@@ -14,13 +14,16 @@ class Sidebar extends React.Component {
     super();
 
     this.state = {
-      shouldRedirect: false
+      shouldRedirectLogin: false,
+      shouldRenderSignup: false
     }
 
     this.handleCreateImpulse = this.handleCreateImpulse.bind(this);
     this.handleJoinImpulse = this.handleJoinImpulse.bind(this);
-    this.setRedirect = this.setRedirect.bind(this);
-    this.renderRedirect = this.renderRedirect.bind(this);
+    this.setRedirectLogin = this.setRedirectLogin.bind(this);
+    this.setRedirectSignup = this.setRedirectSignup.bind(this);
+    this.renderRedirectLogin = this.renderRedirectLogin.bind(this);
+    this.renderRedirectSignup = this.renderRedirectSignup.bind(this);
   }
 
   handleCreateImpulse() {
@@ -31,13 +34,23 @@ class Sidebar extends React.Component {
     this.props.setCenterComponent(CenterComponent.JOIN);
   }
 
-  setRedirect = () => {
-    this.setState( {shouldRedirect: true });
+  setRedirectLogin = () => {
+    this.setState( {shouldRedirectLogin: true });
   }
 
-  renderRedirect = () => {
-    if (this.state.shouldRedirect) {
-      return <Redirect to ={PATH_LOGIN} />
+  setRedirectSignup = () => {
+    this.setState( {shouldRedirectSignup: true });
+  }
+
+  renderRedirectLogin = () => {
+    if (this.state.shouldRedirectLogin) {
+      return <Redirect to={PATH_LOGIN} />
+    }
+  }
+
+  renderRedirectSignup = () => {
+    if (this.state.shouldRedirectSignup) {
+      return <Redirect to={PATH_SIGNUP} />
     }
   }
 
@@ -61,8 +74,10 @@ class Sidebar extends React.Component {
       <div className="sidebar">
         <div className="sidebar-lists">
           <div className="login-button">
-            {this.renderRedirect()}
-            { this.props.loggedIn ? null : <button onClick={this.setRedirect} type="button">Login</button>}
+            {this.renderRedirectLogin()}
+            {this.renderRedirectSignup()}
+            { this.props.loggedIn ? null : <button onClick={this.setRedirectLogin} type="button">Login</button>}
+            { this.props.loggedIn ? null : <button onClick={this.setRedirectSignup} type="button">Signup</button>}
           </div>
           <ImpulseList listName="Impulses"
             impulses={linkedImpulses} />
@@ -71,7 +86,7 @@ class Sidebar extends React.Component {
         </div>
         <div className="sidebar-buttons">
           <div className="sidebar-button" onClick={this.handleCreateImpulse}>
-            <i class="fas fa-plus"></i>  Create
+            <i className="fas fa-plus"></i>  Create
           </div>
           <div className="sidebar-button" onClick={this.handleJoinImpulse}>
             <i class="fas fa-users"></i>  Join

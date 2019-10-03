@@ -9,6 +9,7 @@ class AccountsController < ApplicationController
   def create
     account = Account.new(account_params)
     if account.save
+      puts "Account saved successfully"
       render json: account
     else
       render json: { errors: account.errors }, status => 400
@@ -50,6 +51,6 @@ class AccountsController < ApplicationController
 
   private
   def account_params
-    params.require(:account).permit(:name, :email, :password, :password_confirmation)
+    params.require(:account).permit(:handle, :email, :password, :password_confirmation)
   end
 end

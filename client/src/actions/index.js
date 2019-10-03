@@ -504,6 +504,30 @@ export const joinImpulse = (impulseHash) => {
   }
 }
 
+export const signupAccount = (handle, email, password, password_confirmation) => {
+  console.log("INSIDE SIGNUPACCOUNT ACTION METHOD");
+  console.log(password);
+  console.log(password_confirmation);
+  return (dispatch, getState) => {
+    fetch(`${API_ROOT}/accounts`, {
+      method: 'POST', 
+      headers: HEADERS, 
+      body: JSON.stringify({
+        account: 
+          { handle: handle, 
+            email: email,
+            password: password,
+            password_confirmation: password_confirmation
+          }
+      })
+    })
+    .catch((e) => {
+        console.log(e);
+        dispatch(errorOccured(true))
+    });
+  }
+}
+
 export const loginAccount = (email, password) => {
   return (dispatch, getState) => {
 
