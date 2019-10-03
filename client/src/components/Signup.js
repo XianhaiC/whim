@@ -48,10 +48,6 @@ class Signup extends React.Component {
     e.preventDefault();
     this.props.signupAccount(this.state.handle, this.state.email, this.state.password, this.state.password_confirm);
     this.setState({shouldRender: true});
-    console.log("PASSWORD: ");
-    console.log(this.state.password);
-    console.log("PASSWORDCONFIRM: ");
-    console.log(this.state.password_confirm);
   }
 
   handleChangeUsername(e) {

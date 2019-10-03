@@ -17,6 +17,8 @@ import {
   SET_ACTIVE_ITEMS,
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
+  SET_USERNAME_TAKEN_ERROR,
+  SET_EMAIL_TAKEN_ERROR,
   SET_FETCH_MESSAGES
 } from '../actions/types';
 
@@ -133,6 +135,20 @@ export const errorOccured = (occured) => {
 export const setInvalidHashError = (occured) => {
   return {
     type: SET_INVALID_HASH_ERROR,
+    payload: { occured }
+  };
+}
+
+export const setUsernameTakenError = (occured) => {
+  return {
+    type: SET_USERNAME_TAKEN_ERROR, 
+    payload: { occured }
+  };
+}
+
+export const setEmailTakenError = (occured) => {
+  return {
+    type: SET_EMAIL_TAKEN_ERROR, 
     payload: { occured }
   };
 }
@@ -505,9 +521,6 @@ export const joinImpulse = (impulseHash) => {
 }
 
 export const signupAccount = (handle, email, password, password_confirmation) => {
-  console.log("INSIDE SIGNUPACCOUNT ACTION METHOD");
-  console.log(password);
-  console.log(password_confirmation);
   return (dispatch, getState) => {
     fetch(`${API_ROOT}/accounts`, {
       method: 'POST', 
@@ -521,9 +534,18 @@ export const signupAccount = (handle, email, password, password_confirmation) =>
           }
       })
     })
+    .then(res => {
+      console.log("error checking");
+      console.log(res.ok);
+      if (!res.ok) throw Error(res.statusText);
+      return res.json;
+    })
+    .then( data => {
+      console.log(data);
+    })
     .catch((e) => {
         console.log(e);
-        dispatch(errorOccured(true))
+        dispatch(setUsernameTakenError(true));
     });
   }
 }

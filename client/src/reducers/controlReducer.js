@@ -4,7 +4,9 @@ import {
   SET_CENTER_COMPONENT,
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
-  SET_FETCH_MESSAGES
+  SET_FETCH_MESSAGES,
+  SET_USERNAME_TAKEN_ERROR,
+  SET_EMAIL_TAKEN_ERROR,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -13,7 +15,9 @@ const INITIAL_STATE = {
   activeThreadId: null,
   errorOccured: false,
   invalidHashError: false,
-  fetchMessages: false
+  fetchMessages: false, 
+  usernameTakenError: false, 
+  emailTakenError: false,
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -41,6 +45,12 @@ export default (state = INITIAL_STATE, action) => {
 
     case SET_FETCH_MESSAGES:
       return {...state, fetchMessages: action.payload.fetchMessages};
+
+    case SET_USERNAME_TAKEN_ERROR: 
+      return {...state, usernameTakenError: action.payload.occured};
+    
+    case SET_EMAIL_TAKEN_ERROR: 
+      return {...state, emailTakenError: action.payload.occured};
 
     default:
       return state;
