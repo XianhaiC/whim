@@ -20,7 +20,7 @@ const INITIAL_STATE = {
   fetchMessages: false,
   centerComponent: null,
   rightbarComponent: null,
-  invitePopupOpen: false
+  invitePopupOpen: false,
   usernameTakenError: false, 
   emailTakenError: false,
 }

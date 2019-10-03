@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { API_ROOT, HEADERS, PATH_ROOT, PATH_INVITE,
-import Confirmation from './Confirmation';
-=======
-  PATH_INVALID_INVITE, PATH_BOARD, PATH_LOGIN, PATH_SIGNUP } from '../constants';
+         PATH_INVALID_INVITE, PATH_BOARD, PATH_LOGIN, PATH_SIGNUP } from '../constants';
 import { exists } from '../helpers';
 import Board from './Board';
 import Login from './Login';
