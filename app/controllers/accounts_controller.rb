@@ -10,6 +10,10 @@ class AccountsController < ApplicationController
   def create
     account = Account.new(account_params)
     if account.save
+      puts "ID: "
+      puts account.id
+      puts "UUID: "
+      puts account.uuid
       ActivationMailer.activation_email(account).deliver
       render json: account
     else
@@ -57,7 +61,7 @@ class AccountsController < ApplicationController
     account = Account.find_by(uuid: params[:uuid]);
 
     if !account.nil?
-      Account.second.update_attribute(:activated, true)
+      account.update_attribute(:activated, true)
       return render json: account
     end
 
@@ -68,4 +72,5 @@ class AccountsController < ApplicationController
   def account_params
     params.require(:account).permit(:handle, :email, :password, :password_confirmation)
   end
+
 end

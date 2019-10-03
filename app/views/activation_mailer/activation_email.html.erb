@@ -6,7 +6,7 @@
   <body>
     <h1>Hi <%= @account.handle %>,</h1>
     <p>Click the following link to activate your account:</p>
-    <% link = "https://localhost:3000/confirmation/#{@account.uuid}" %>
+    <% link = "http://localhost:3006/confirmation/#{@account.uuid}" %>
     <a href=<%= link %> target="_blank"><%= link %></a>
   </body>
 </html>
