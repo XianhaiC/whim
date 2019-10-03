@@ -3,6 +3,7 @@ import {
   SET_ACTIVE_THREAD_ID,
   SET_CENTER_COMPONENT,
   SET_RIGHTBAR_COMPONENT,
+  SET_INVITE_POPUP_OPEN,
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
   SET_FETCH_MESSAGES
@@ -16,7 +17,8 @@ const INITIAL_STATE = {
   invalidHashError: false,
   fetchMessages: false,
   centerComponent: null,
-  rightbarComponent: null
+  rightbarComponent: null,
+  invitePopupOpen: false
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -36,6 +38,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case SET_RIGHTBAR_COMPONENT:
       return {...state, rightbarComponent: action.payload.rightbarComponent};
+
+    case SET_INVITE_POPUP_OPEN:
+      return {...state, invitePopupOpen: action.payload.invitePopupOpen};
 
     case ERROR_OCCURED:
       return {...state, errorOccured: action.payload.occured};

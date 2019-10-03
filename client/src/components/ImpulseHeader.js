@@ -2,14 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { RightbarComponent } from '../helpers';
-import { createInvite, linkAccount, setRightbarComponent } from '../actions/index';
+import { createInvite, linkAccount, setRightbarComponent,
+  setInvitePopupOpen } from '../actions/index';
 
 class ImpulseHeader extends React.Component {
   constructor() {
     super();
 
     this.handleLinkAccount = this.handleLinkAccount.bind(this);
-    this.handleCreateInvite = this.handleCreateInvite.bind(this);
+    this.handleInvite = this.handleInvite.bind(this);
     this.handleInfo = this.handleInfo.bind(this);
     this.handleList = this.handleList.bind(this);
   }
@@ -18,8 +19,9 @@ class ImpulseHeader extends React.Component {
     this.props.linkAccount(this.props.activeSparkId, this.props.accountId);
   }
 
-  handleCreateInvite() {
-    this.props.createInvite(this.props.activeImpulseId);
+  handleInvite() {
+    //this.props.createInvite(this.props.activeImpulseId);
+    this.props.setInvitePopupOpen(true);
   }
 
   handleInfo() {
@@ -48,7 +50,7 @@ class ImpulseHeader extends React.Component {
           <div className="impulse-header-button" onClick={this.handleLinkAccount}>
             <i className="fas fa-link"></i>  Link
           </div>
-          <div className="impulse-header-button" onClick={this.handleCreateInvite}>
+          <div className="impulse-header-button" onClick={this.handleInvite}>
             <i className="fas fa-share-alt"></i>  Invite
           </div>
           <div className="impulse-header-button" onClick={this.handleInfo}>
@@ -78,5 +80,6 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   createInvite,
   linkAccount,
-  setRightbarComponent
+  setRightbarComponent,
+  setInvitePopupOpen
 })(ImpulseHeader);

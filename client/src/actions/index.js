@@ -13,6 +13,7 @@ import {
   SET_ACTIVE_THREAD_ID,
   SET_CENTER_COMPONENT,
   SET_RIGHTBAR_COMPONENT,
+  SET_INVITE_POPUP_OPEN,
   LOGIN,
   SET_SESSION,
   SET_ACTIVE_ITEMS,
@@ -114,6 +115,13 @@ export const login = (accountId, accountActivated, accountToken) => {
   return {
     type: LOGIN,
     payload: { accountId, accountActivated, accountToken }
+  };
+}
+
+export const setInvitePopupOpen = (invitePopupOpen) => {
+  return {
+    type: SET_INVITE_POPUP_OPEN,
+    payload: { invitePopupOpen }
   };
 }
 

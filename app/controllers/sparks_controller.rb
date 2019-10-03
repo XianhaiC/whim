@@ -31,6 +31,7 @@ class SparksController < ApplicationController
       render json: {
         errors:["Account does not exist or has not been activated"] },
       status: 400
+    end
 
     # update the spark with the account id
     spark.account_id = account.id
@@ -48,16 +49,16 @@ class SparksController < ApplicationController
   end
 
   private
-    def spark_params
-      params.require(:spark).permit(
-        :name, :account_id, :impulse_id, :session_token)
-    end
+  def spark_params
+    params.require(:spark).permit(
+      :name, :account_id, :impulse_id, :session_token)
+  end
 
-    def auth_token_spark(spark)
-      return nil unless spark and spark.id
-      {
-        auth_token: JsonWebToken.encode({ spark_id: spark.id }),
-        spark: { id: spark.id }
-      }
-    end
+  def auth_token_spark(spark)
+    return nil unless spark and spark.id
+    {
+      auth_token: JsonWebToken.encode({ spark_id: spark.id }),
+      spark: { id: spark.id }
+    }
+  end
 end
