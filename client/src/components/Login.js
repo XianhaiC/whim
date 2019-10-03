@@ -56,14 +56,17 @@ class Login extends React.Component {
           <input
             type="text"
             value={this.state.email}
-            onChange={this.handleChangeEmail}/>
+            onChange={this.handleChangeEmail}
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
           <br />
           <label>Password</label>
           <br />
           <input
             type="password"
             value={this.state.password}
-            onChange={this.handleChangePassword}/>
+            onChange={this.handleChangePassword}
+            pattern=".{6,}"
+            title="Must contain at least 6 or more characters"/>
           <input type="submit" />
         </form>
       </div>

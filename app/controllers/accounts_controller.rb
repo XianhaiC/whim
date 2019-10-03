@@ -66,7 +66,11 @@ class AccountsController < ApplicationController
 
   private
   def account_params
+<<<<<<< HEAD
     params.require(:account)
       .permit(:name, :email, :password, :password_confirmation)
+=======
+    params.require(:account).permit(:handle, :email, :password, :password_confirmation)
+>>>>>>> dev-signup
   end
 end

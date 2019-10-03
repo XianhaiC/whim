@@ -2,12 +2,15 @@ import React, {Component} from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { API_ROOT, HEADERS, PATH_ROOT, PATH_INVITE,
-  PATH_INVALID_INVITE, PATH_BOARD, PATH_LOGIN,
-  PATH_CONFIRMATION } from '../constants';
+import Confirmation from './Confirmation';
+=======
+  PATH_INVALID_INVITE, PATH_BOARD, PATH_LOGIN, PATH_SIGNUP } from '../constants';
 import { exists } from '../helpers';
 import Board from './Board';
 import Login from './Login';
+import Signup from './Signup';
 import Confirmation from './Confirmation';
+
 //import Landing from './Landing'
 import InvalidInvite from './InvalidInvite';
 
@@ -28,6 +31,7 @@ class App extends Component {
     this.handleImpulseJoined = this.handleImpulseJoined.bind(this);
     this.renderBoard = this.renderBoard.bind(this);
     this.renderLogin = this.renderLogin.bind(this);
+    this.renderSignup = this.renderSignup.bind(this);
     this.renderLanding = this.renderLanding.bind(this);
   }
 
@@ -64,6 +68,10 @@ class App extends Component {
     return (
       <Login />
     );
+  }
+
+  renderSignup() {
+    return ( <Signup /> );
   }
 
   // TODO: figure out what to do with these passed in props
@@ -103,8 +111,12 @@ class App extends Component {
           <Route exact path={PATH_BOARD} render={this.renderBoard} />
           <Route exact path={PATH_INVALID_INVITE} component={InvalidInvite} />
           <Route exact path={PATH_LOGIN} render={this.renderLogin} />
+<<<<<<< HEAD
           <Route path={PATH_INVITE} render={this.parseInvite} />
           <Route path={PATH_CONFIRMATION} render={this.renderConfirmation} />
+=======
+          <Route exact path={PATH_SIGNUP} render={this.renderSignup} />
+>>>>>>> dev-signup
         </Switch>
       </div>
     );
