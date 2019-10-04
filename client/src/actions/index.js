@@ -421,6 +421,30 @@ export const createMessage = (impulseId, sparkId, threadId,
   }
 }
 
+export const updateMessage = (messageId, newBody) => {
+  return (dispatch, getState) => {
+    const accountToken = getState().session.accountToken;
+    const sessionToken = getState().session.sessionToken;
+
+    // no need for handling promise
+    // message is received via action cable channels
+    fetch(`${API_ROOT}/messages/${messageId}`, {
+      method: 'PATCH',
+      headers: {
+        ...HEADERS,
+        AuthorizationLogin: `Bearer ${accountToken}`,
+        AuthorizationSession: `Bearer ${sessionToken}`
+      },
+      body: JSON.stringify({
+        body: newBody,
+      })
+    })
+    .catch((e) => {
+      dispatch(errorOccured(true));
+    });
+  }
+}
+
 export const createImpulse = (name, description) => {
   return (dispatch, getState) => {
     fetch(`${API_ROOT}/impulses`, {

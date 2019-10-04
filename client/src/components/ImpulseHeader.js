@@ -46,20 +46,20 @@ class ImpulseHeader extends React.Component {
                 && <p>Invite hash: {activeImpulse.invite_hash}</p>}
           </div>
         </div>
-        <div className="impulse-header-buttons">
-          <div className="impulse-header-button" onClick={this.handleLinkAccount}>
+        <div className="impulse-header-buttons header-buttons">
+          <div className="header-button" onClick={this.handleLinkAccount}>
             <i className="fas fa-link"></i>  Link
           </div>
-          <div className="impulse-header-button" onClick={this.handleInvite}>
+          <div className="header-button" onClick={this.handleInvite}>
             <i className="fas fa-share-alt"></i>  Invite
           </div>
-          <div className="impulse-header-button" onClick={this.handleInfo}>
+          <div className="header-button" onClick={this.handleInfo}>
             <i className="fas fa-info"></i>
           </div>
-          <div className="impulse-header-button" onClick={this.handleList}>
+          <div className="header-button" onClick={this.handleList}>
             <i className="fas fa-lightbulb"></i>
           </div>
-          <div className="impulse-header-button">
+          <div className="header-button">
             <i className="fas fa-cog"></i>
           </div>
         </div>

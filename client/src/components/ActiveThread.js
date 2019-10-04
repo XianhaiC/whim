@@ -31,15 +31,28 @@ class ActiveThread extends React.Component {
   }
 
   render() {
+    const { threads, activeThreadId, threadOffsets } = this.props;
+    const activeThread = threads[activeThreadId];
+    const threadOffset = new Date(threadOffsets[activeThreadId]);
+    console.log("DATE");
+    console.log(threadOffset);
 
-    console.log('Message Thread being rendered');
-
-    const activeThread = this.props.threads[this.props.activeThreadId];
     let messagesList = null;
     if (exists(activeThread.messages)) {
+      /*
       messagesList = activeThread.messages.map(message =>
         <li key={message.id}><Message message={message} /></li>
       );
+      */
+      messagesList = activeThread.messages.reduce((filtered, message) => {
+        const ts = new Date(dateToString(new Date(message.created_at)));
+        if (ts >= threadOffset) {
+          filtered.push(
+            <li key={message.id}><Message message={message} /></li>
+          );
+        }
+        return filtered;
+      }, []);
     }
     else return <EmptyThread />
 
@@ -57,9 +70,14 @@ class ActiveThread extends React.Component {
 const mapStateToProps = state => {
   return {
     activeThreadId: state.control.activeThreadId,
+    threadOffsets: state.threads.threadOffsets,
     threads: state.threads.threads,
     fetchMessages: state.control.fetchMessages
   };
 };
 
 export default connect(mapStateToProps, {setFetchMessages})(ActiveThread);
+
+const dateToString = (date) => {
+  return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()}.${date.getUTCMilliseconds()}`
+}

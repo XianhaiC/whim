@@ -49,6 +49,20 @@ hr {
   align-items: stretch;
 }
 
+/* General */
+
+.header-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: stretch;
+  margin-right: 20px;
+}
+
+.header-button {
+  padding: 18px 10px 0px 10px;
+}
+
 /* Sidebar */
 
 .sidebar {
@@ -232,16 +246,7 @@ hr {
 }
 
 .impulse-header-buttons {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: stretch;
-  margin-right: 20px;
-}
-
-.impulse-header-button {
-  padding: 18px 10px 0px 10px;
-  color: #654d4f;
+  color: var(--main-dim);
 }
 
 /* ActiveThread */
@@ -403,6 +408,8 @@ hr {
 }
 
 .inspiration-list-header {
+  display: flex;
+  flex-direction: row;
   border-width: 0px 0px 1px 0px;
   border-style: solid;
   border-color: #aa978c;
@@ -457,7 +464,43 @@ hr {
 /* InspirationDetails */
 
 .inspiration-details {
+  height: 100%;
   width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.inspiration-details-buttons {
+  color: var(--main-light);
+}
+
+.inspiration-details > form {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.edit-text-wrapper {
+  flex: 1 1 0;
+  overflow-y: scroll;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.edit-text {
+  flex: 1 1 0;
+  background-color: var(--main-light);
+  border-radius: 5px;
+  border: 0;
+  outline: none;
+  resize: none;
+  min-height: 100px;
+  margin: 10px 20px 0px 20px;
+  padding: 20px 20px 10px 20px;
 }
 
 /* CreateImpulse, JoinImpulse, and CreateSpark */

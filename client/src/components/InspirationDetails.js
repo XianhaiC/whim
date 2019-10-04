@@ -4,6 +4,7 @@ import autosize from 'autosize';
 
 import { MAX_MSG_LENGTH } from '../constants';
 import { getTimeAMPM, clipMessage } from '../helpers';
+import { updateMessage } from '../actions/index';
 
 class InspirationDetails extends React.Component {
   constructor() {
@@ -21,7 +22,7 @@ class InspirationDetails extends React.Component {
     this.getMessage = this.getMessage.bind(this);
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     autosize(this.textarea);
   }
 
@@ -29,12 +30,13 @@ class InspirationDetails extends React.Component {
     this.setState({ body: e.target.value });
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     const body = this.state.body.trim();
     if (!this.validate(body)) return;
 
     const message = this.getMessage();
-    this.props.updateInspiration(message.id, body)
+    this.props.updateMessage(message.id, body)
     this.setState({ edit: false });
   }
 
@@ -80,13 +82,15 @@ class InspirationDetails extends React.Component {
     if (this.state.edit) {
       body = (
         <form>
-          <textarea className="edit-text"
-            type="textarea"
-            rows="1"
-            value={this.state.body}
-            onChange={this.handleChange}
-            placeholder="Idea goes here..."
-            ref={el => this.textarea = el}/>
+          <div className="edit-text-wrapper">
+            <textarea className="edit-text"
+              type="textarea"
+              rows="1"
+              value={this.state.body}
+              onChange={this.handleChange}
+              placeholder="Idea goes here..."
+              ref={el => this.textarea = el}/>
+          </div>
           <div className="edit-buttons">
             <button className="bar-button edit-button"
               onClick={this.handleSubmit}>
@@ -117,12 +121,12 @@ class InspirationDetails extends React.Component {
               <p>Last updated at {getTimeAMPM(updateDate)}</p>
             </div>
           </div>
-          <div className="header-buttons">
+          <div className="inspiration-details-buttons header-buttons">
             <div className="header-button" onClick={this.handleEdit}>
-              <i className="fas fa-link"></i>
+              <i className="fas fa-edit"></i>
             </div>
             <div className="header-button">
-              <i className="fas fa-share-alt"></i>
+              <i className="fas fa-trash"></i>
             </div>
           </div>
         </div>
@@ -141,5 +145,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(InspirationDetails);
+export default connect(mapStateToProps, {
+  updateMessage
+})(InspirationDetails);
 
