@@ -1,5 +1,7 @@
 :root {
   --inspo-dark: #735a55;
+  --inspo-darker: #624c47;
+  --inspo-darker-focus: #55413d;
   --inspo-dim: #f0e1d3;
   --main-light: #f5efe9;
   --main-dim: #654d4f;
@@ -61,6 +63,21 @@ hr {
 
 .header-button {
   padding: 18px 10px 0px 10px;
+}
+
+.bar-buttons {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  box-sizing: border-box;
+  height: 42px;
+}
+
+.bar-button {
+  flex: 1 1 0px;
+  text-align: center;
+  border-radius: 0px;
+  border: 0;
 }
 
 /* Sidebar */
@@ -479,7 +496,6 @@ hr {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
 }
 
 .edit-text-wrapper {
@@ -501,6 +517,15 @@ hr {
   min-height: 100px;
   margin: 10px 20px 0px 20px;
   padding: 20px 20px 10px 20px;
+}
+
+.edit-button {
+  background: var(--inspo-darker);
+  color: var(--main-light);
+}
+
+.edit-button:hover {
+  background: var(--inspo-darker-focus);
 }
 
 /* CreateImpulse, JoinImpulse, and CreateSpark */

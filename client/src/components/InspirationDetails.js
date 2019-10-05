@@ -91,14 +91,14 @@ class InspirationDetails extends React.Component {
               placeholder="Idea goes here..."
               ref={el => this.textarea = el}/>
           </div>
-          <div className="edit-buttons">
+          <div className="bar-buttons edit-buttons">
             <button className="bar-button edit-button"
               onClick={this.handleSubmit}>
-              <i className="fas fa-paper-plane"></i>  Update
+              Update
             </button>
             <button className="bar-button edit-button"
               onClick={this.handleCancel}>
-              <i className="fas fa-lightbulb"></i>  Cancel
+              Cancel
             </button>
           </div>
         </form>
