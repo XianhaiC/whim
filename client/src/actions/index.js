@@ -212,22 +212,26 @@ export const getAccountData = accountId => {
     })
     .then(data => {
       const { impulses, sparks } = data
-      console.log("GET IMPS")
-      console.log(impulses);
 
       let inspirationThreads = [];
       // note that threads will contain information about their parents
       // this allows us to distinguish between impulse threads and
       // inspiration threads later on
       impulses.forEach(impulse => {
-        console.log(impulse.message_threads);
         inspirationThreads.push(...impulse.message_threads);
+      });
+
+      dispatch(updateThreads(inspirationThreads));
+      impulses.forEach(impulse => {
+        const inspirations = impulse.message_threads.reduce((filtered, thread) => {
+          if (thread.parent_type === "Message") filtered.push(thread.parent);
+          return filtered;
+        }, []);
+        dispatch(appendThreadMessages(impulse.message_thread.id, inspirations));
 
         // we don't store thread data in the impulse list
         delete impulse.message_threads;
       });
-
-      dispatch(updateThreads(inspirationThreads));
       dispatch(updateImpulses(impulses));
       dispatch(updateSparks(sparks));
     })

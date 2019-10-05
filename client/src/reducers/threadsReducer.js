@@ -39,9 +39,9 @@ export default (state = INITIAL_STATE, action) => {
       else {
         thread.messages = [...thread.messages];
         action.payload.messages.forEach(message => {
-          if (thread.messages.findIndex(x => x.id == message.id) <= -1) {
-            thread.messages.push(message);
-          }
+          const index = thread.messages.findIndex(x => x.id == message.id)
+          if (index <= -1) thread.messages.push(message);
+          else thread.messages[index] = message;
         });
       }
 
@@ -58,9 +58,9 @@ export default (state = INITIAL_STATE, action) => {
       else {
         thread.messages = [...thread.messages];
         action.payload.messages.forEach(message => {
-          if (thread.messages.findIndex(x => x.id == message.id) <= -1) {
-            thread.messages.push(message);
-          }
+          const index = thread.messages.findIndex(x => x.id == message.id)
+          if (index <= -1) thread.messages.push(message);
+          else thread.messages[index] = message;
         });
       }
 

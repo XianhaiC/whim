@@ -7,17 +7,15 @@ import { getThreadMessages, setFetchMessages } from '../actions/index';
 class LoadMessages extends React.Component {
   componentDidUpdate() {
     console.log('LoadMessages component rendering');
-    const { activeThreadId, fetchMessages, threads } = this.props;
+    const { activeThreadId, fetchMessages, threads, threadOffsets } = this.props;
     const { setFetchMessages } = this.props;
     console.log(fetchMessages);
     if (fetchMessages && exists(activeThreadId)) {
       this.loadThreadMessages();
       setFetchMessages(false);
     }
-    else if (exists(activeThreadId)) {
-      const activeThread = threads[activeThreadId];
-      if (!exists(activeThread.messages))
-        this.loadThreadMessages();
+    else if (exists(activeThreadId) && !exists(threadOffsets[activeThreadId])) {
+      this.loadThreadMessages();
     }
 
   }
@@ -36,7 +34,8 @@ const mapStateToProps = state => {
   return {
     activeThreadId: state.control.activeThreadId,
     fetchMessages: state.control.fetchMessages,
-    threads: state.threads.threads
+    threads: state.threads.threads,
+    threadOffsets: state.threads.threadOffsets
   }
 };
 

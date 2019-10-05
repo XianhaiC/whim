@@ -24,7 +24,7 @@ class InspirationList extends React.Component {
       console.log(thread.parent.spark);
       return (
       <li key={thread.parent.id}>
-        <InspirationCard message={thread.parent} threadId={thread.id} />
+        <InspirationCard messageId={thread.parent_id} threadId={thread.id} parentThreadId={thread.parent.parent_thread_id} />
       </li>
     )});
 
