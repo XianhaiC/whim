@@ -17,7 +17,7 @@ class AccountsController < ApplicationController
       ActivationMailer.activation_email(account).deliver
       render json: account
     else
-      render json: { errors: account.errors }, status: 400
+      render json: { errors: account.errors.full_messages }, status: 400
     end
   end
 

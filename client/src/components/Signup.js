@@ -14,7 +14,9 @@ class Signup extends React.Component {
       email: '',
       password: '',
       password_confirm: '',
-      shouldRender: false
+      shouldRender: false, 
+      didSubmit: false,
+      //actionFinished: false,
     }
 
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -23,6 +25,7 @@ class Signup extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePasswordConfirm = this.handlePasswordConfirm.bind(this);
     this.renderRedirect = this.renderRedirect.bind(this);
+   // this.checkValidation = this.checkValidation.bind(this);
   }
 
   handleChangePassword(e) {
@@ -44,29 +47,54 @@ class Signup extends React.Component {
     }
   }
 
+ /* checkValidation = (error) => {
+    if (!error) {
+      this.setState({shouldRender: true});
+    }
+  }
+*/
+
   handleSubmit(e) {
     e.preventDefault();
+    //this.props.signupAccount(this.state.handle, this.state.email, this.state.password, this.state.password_confirm, this.checkValidation);
+   // var action = this.props.signupAccount(this.state.handle, this.state.email, this.state.password, this.state.password_confirm);
+    
     this.props.signupAccount(this.state.handle, this.state.email, this.state.password, this.state.password_confirm);
-    this.setState({shouldRender: true});
+    //this.setState({actionFinished: action});
+    console.log("Signup Account Called");
+    this.setState({didSubmit: true});
   }
 
   handleChangeUsername(e) {
     this.setState({handle: e.target.value});
   }
 
+  
   renderRedirect= () => {
     if (this.state.shouldRender) {
       return <Redirect to={PATH_LOGIN}/>
     }
   }
 
+  componentDidUpdate() {
+    //console.log("actionFinished");
+    //console.log(this.state.actionFinished);
+    if( this.props.actionFinished && this.state.didSubmit && !this.props.usernameTakenError && !this.props.emailTakenError) {
+      this.setState({shouldRender: true});
+    }
+  }
+
   render() {
-    console.log(this.props.loggedIn);
+    
+    console.log("REDIRECT SET");
+    console.log(this.state.shouldRender);
     if (this.props.loggedIn) return null;
 
     return (
       <div className="signup">
         {this.renderRedirect()}
+        {this.props.usernameTakenError ? <p>Username has been taken</p> : null }
+        {this.props.emailTakenError ? <p>Email has been taken</p> : null}
         <h1>Sign up</h1>
         <form onSubmit={this.handleSubmit}>
           <label>Username</label>
@@ -116,7 +144,10 @@ class Signup extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    loggedIn: state.session.loggedIn
+    loggedIn: state.session.loggedIn,
+    emailTakenError: state.control.emailTakenError, 
+    usernameTakenError: state.control.usernameTakenError,
+    actionFinished: state.control.actionFinished,
   };
 };
 

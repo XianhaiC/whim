@@ -19,8 +19,7 @@ import {
   SET_ACTIVE_ITEMS,
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
-  SET_USERNAME_TAKEN_ERROR,
-  SET_EMAIL_TAKEN_ERROR,
+  FORM_ERRORS_OCCURED,
   SET_FETCH_MESSAGES
 } from '../actions/types';
 
@@ -157,17 +156,10 @@ export const setInvalidHashError = (occured) => {
   };
 }
 
-export const setUsernameTakenError = (occured) => {
+export const formErrorsOccured = (user, email, actiond) => {
   return {
-    type: SET_USERNAME_TAKEN_ERROR, 
-    payload: { occured }
-  };
-}
-
-export const setEmailTakenError = (occured) => {
-  return {
-    type: SET_EMAIL_TAKEN_ERROR, 
-    payload: { occured }
+    type: FORM_ERRORS_OCCURED, 
+    payload: { user, email, actiond }
   };
 }
 
@@ -610,6 +602,9 @@ export const joinImpulse = (impulseHash) => {
 
 export const signupAccount = (handle, email, password, password_confirmation) => {
   return (dispatch, getState) => {
+    var emailError = false;
+    var usernameError = false;
+    console.log("ACTION BEING CALLED");
     fetch(`${API_ROOT}/accounts`, {
       method: 'POST', 
       headers: HEADERS, 
@@ -623,18 +618,22 @@ export const signupAccount = (handle, email, password, password_confirmation) =>
       })
     })
     .then(res => {
-      console.log("error checking");
-      console.log(res.ok);
-      if (!res.ok) throw Error(res.statusText);
-      return res.json;
+      return res.json();
     })
-    .then( data => {
-      console.log(data);
+    .then(result => {
+      console.log(result.errors);
+      if (result.errors != null ) {
+        result.errors.forEach( error => {
+          if (error === "Handle has already been taken") {
+            usernameError = true; 
+          }
+          else if (error === "Email has already been taken") {
+            emailError = true;
+          }
+        })
+      }
+      dispatch(formErrorsOccured(usernameError, emailError, true));
     })
-    .catch((e) => {
-        console.log(e);
-        dispatch(setUsernameTakenError(true));
-    });
   }
 }
 

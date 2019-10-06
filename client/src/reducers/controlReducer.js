@@ -7,8 +7,7 @@ import {
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
   SET_FETCH_MESSAGES,
-  SET_USERNAME_TAKEN_ERROR,
-  SET_EMAIL_TAKEN_ERROR,
+  FORM_ERRORS_OCCURED,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -23,6 +22,7 @@ const INITIAL_STATE = {
   invitePopupOpen: false,
   usernameTakenError: false, 
   emailTakenError: false,
+  actionFinished: false,
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -57,11 +57,11 @@ export default (state = INITIAL_STATE, action) => {
     case SET_FETCH_MESSAGES:
       return {...state, fetchMessages: action.payload.fetchMessages};
 
-    case SET_USERNAME_TAKEN_ERROR: 
-      return {...state, usernameTakenError: action.payload.occured};
+    case FORM_ERRORS_OCCURED: 
+      return {...state, usernameTakenError: action.payload.user, 
+        emailTakenError: action.payload.email,
+        actionFinished: action.payload.actiond};
     
-    case SET_EMAIL_TAKEN_ERROR: 
-      return {...state, emailTakenError: action.payload.occured};
 
     default:
       return state;
