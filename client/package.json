@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "autosize": "^4.0.2",
+    "md5": "^2.2.1",
     "react": "^16.9.0",
     "react-actioncable-provider": "^2.0.0",
     "react-dom": "^16.9.0",
