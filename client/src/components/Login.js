@@ -44,7 +44,7 @@ class Login extends React.Component {
 
   componentDidUpdate() {
     if (this.props.loginVerified && this.state.didSubmit && 
-        !this.props.passwordWrongError) {
+        !this.props.passwordWrongError && !this.state.shouldRender) {
       this.setState({shouldRender: true});
     }
   }

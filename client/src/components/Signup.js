@@ -16,6 +16,8 @@ class Signup extends React.Component {
       password_confirm: '',
       shouldRender: false, 
       didSubmit: false,
+      emailEmpty: false,
+      userEmpty: false,
     }
 
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -64,7 +66,10 @@ class Signup extends React.Component {
   }
 
   componentDidUpdate() {
-    if(this.props.actionFinished && this.state.didSubmit && !this.props.usernameTakenError && !this.props.emailTakenError) {
+    if(this.props.signupVerified && this.state.didSubmit &&
+        !this.props.usernameTakenError &&
+        !this.props.emailTakenError &&
+        !this.state.shouldRender) {
       this.setState({shouldRender: true});
     }
   }
@@ -78,6 +83,8 @@ class Signup extends React.Component {
     return (
       <div className="signup">
         {this.renderRedirect()}
+        {this.state.userEmpty ? <p>Username cannot be blank</p> : null }
+        {this.state.emailEmpty ? <p>Email cannot be blank</p> : null }
         {this.props.usernameTakenError ? <p>Username has been taken</p> : null }
         {this.props.emailTakenError ? <p>Email has been taken</p> : null}
         <h1>Sign up</h1>
@@ -132,7 +139,7 @@ const mapStateToProps = state => {
     loggedIn: state.session.loggedIn,
     emailTakenError: state.control.emailTakenError, 
     usernameTakenError: state.control.usernameTakenError,
-    actionFinished: state.control.actionFinished,
+    signupVerified: state.control.signupVerified,
   };
 };
 

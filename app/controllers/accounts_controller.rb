@@ -10,10 +10,6 @@ class AccountsController < ApplicationController
   def create
     account = Account.new(account_params)
     if account.save
-      puts "ID: "
-      puts account.id
-      puts "UUID: "
-      puts account.uuid
       ActivationMailer.activation_email(account).deliver
       render json: account
     else
