@@ -14,10 +14,9 @@ class Signup extends React.Component {
       email: '',
       password: '',
       password_confirm: '',
+      passwordsMatch: false,
       shouldRender: false, 
       didSubmit: false,
-      emailEmpty: false,
-      userEmpty: false,
     }
 
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -25,6 +24,7 @@ class Signup extends React.Component {
     this.handleChangeUsername = this.handleChangeUsername.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePasswordConfirm = this.handlePasswordConfirm.bind(this);
+    this.handleErrrors = this.handleErrors.bind(this);
     this.renderRedirect = this.renderRedirect.bind(this);
   }
 
@@ -41,16 +41,41 @@ class Signup extends React.Component {
     
     if(this.refs.password.value != this.refs.confirm_password.value) {
       this.refs.confirm_password.setCustomValidity("Passwords do not match");
+      this.setState({passwordsMatch: false});
     }
     else {
       this.refs.confirm_password.setCustomValidity('');
+      this.setState({passwordsMatch: true});
+    }
+  }
+
+  handleErrors() {
+
+    const {handle, email, password } = this.state;
+    var userBlank = handle.trim() === '';
+    var emailBlank = email.trim() === '';
+    var passBlank = password.trim() === '';
+    if (userBlank) {
+      return false;
+    }
+    else if (emailBlank) {
+      return false;
+    }
+    else if (passBlank) {
+      return false;
+    }
+    else {
+      return true; 
     }
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.signupAccount( this.state.handle, this.state.email,
+    var noErrors = this.handleErrors();
+    if (noErrors) {
+      this.props.signupAccount( this.state.handle, this.state.email,
                               this.state.password, this.state.password_confirmation);
+    }
     this.setState({didSubmit: true});
   }
 
@@ -75,7 +100,13 @@ class Signup extends React.Component {
   }
 
   render() {
-    
+    const {usernameTakenError, emailTakenError} = this.props;
+    const {handle, email, password, password_confirm, 
+           passwordsMatch, didSubmit } = this.state;
+    var userEmpty = handle.trim() === '';
+    var emailEmpty = email.trim() === '';
+    var passEmpty = password.trim() === '';
+    var passconfirmEmpty = password_confirm.trim() === '';
     console.log("REDIRECT SET");
     console.log(this.state.shouldRender);
     if (this.props.loggedIn) return null;
@@ -83,10 +114,12 @@ class Signup extends React.Component {
     return (
       <div className="signup">
         {this.renderRedirect()}
-        {this.state.userEmpty ? <p>Username cannot be blank</p> : null }
-        {this.state.emailEmpty ? <p>Email cannot be blank</p> : null }
-        {this.props.usernameTakenError ? <p>Username has been taken</p> : null }
-        {this.props.emailTakenError ? <p>Email has been taken</p> : null}
+        {(userEmpty && didSubmit) ? <p>Username cannot be blank</p> : null}
+        {(emailEmpty && didSubmit) ? <p>Email cannot be blank</p> : null}
+        {(passEmpty && didSubmit) ? <p>Password cannot be blank</p> : null}
+        {((passconfirmEmpty || !passwordsMatch) && didSubmit) ? <p>Passwords must match</p> : null}
+        {usernameTakenError ? <p>Username has been taken</p> : null }
+        {emailTakenError ? <p>Email has been taken</p> : null}
         <h1>Sign up</h1>
         <form onSubmit={this.handleSubmit}>
           <label>Username</label>
@@ -106,6 +139,7 @@ class Signup extends React.Component {
             value={this.state.email}
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
             maxLength="255"
+            title="Must provide a valid email"
             onChange={this.handleChangeEmail}/>
           <br />
           <label>Password</label>
