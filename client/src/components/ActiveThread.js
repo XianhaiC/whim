@@ -14,7 +14,7 @@ class ActiveThread extends React.Component {
     const { setFetchMessages, fetchMessages } = this.props;
     const scrollTop = refs.scrollbar.scrollTop;
     if ( scrollTop === 0 ) {
-      // Load next 30 messages 
+      // Load next 30 messages
       setFetchMessages(true);
     }
   }
@@ -58,7 +58,7 @@ class ActiveThread extends React.Component {
 
     return (
       <div className="active-thread">
-        <div className="active-thread-wrapper" ref='scrollbar' 
+        <div className="active-thread-wrapper" ref='scrollbar'
           onScroll={this.onScroll}>
           <ul>{messagesList}</ul>
         </div>

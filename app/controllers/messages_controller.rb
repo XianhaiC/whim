@@ -56,6 +56,23 @@ class MessagesController < ApplicationController
     end
   end
 
+  def destroy
+    message = Message.find(params[:id])
+
+    # delete its thread and thread messages first
+    if message.is_inspiration
+      thread = message.own_thread
+      thread.delete
+    end
+
+    message.delete
+
+    serialized_data = ActiveModelSerializers::Adapter::Json.new(
+      MessageSerializer.new(message)).serializable_hash.merge({ deleted: true })
+    MessageThreadsChannel.broadcast_to message.parent_thread, serialized_data
+    head :ok
+  end
+
   private
     def message_params
       params.require(:message).permit(:body, :spark_id,

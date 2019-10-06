@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import autosize from 'autosize';
 
 import { MAX_MSG_LENGTH } from '../constants';
-import { getTimeAMPM, clipMessage } from '../helpers';
-import { updateMessage } from '../actions/index';
+import { RightbarComponent, getTimeAMPM, clipMessage } from '../helpers';
+import { updateMessage, deleteMessage, setActiveThreadId, setRightbarComponent }
+  from '../actions/index';
 
 class InspirationDetails extends React.Component {
   constructor() {
@@ -18,6 +19,7 @@ class InspirationDetails extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.getMessage = this.getMessage.bind(this);
   }
@@ -48,6 +50,15 @@ class InspirationDetails extends React.Component {
     const message = this.getMessage();
 
     this.setState({ edit: true, body: message.body });
+  }
+
+  handleDelete() {
+    const { impulses, activeImpulseId } = this.props;
+    const message = this.getMessage();
+    const mainThreadId = impulses[activeImpulseId].message_thread.id;
+    this.props.setActiveThreadId(mainThreadId);
+    this.props.setRightbarComponent(RightbarComponent.LIST);
+    this.props.deleteMessage(message.id);
   }
 
   validate(body) {
@@ -125,7 +136,7 @@ class InspirationDetails extends React.Component {
             <div className="header-button" onClick={this.handleEdit}>
               <i className="fas fa-edit"></i>
             </div>
-            <div className="header-button">
+            <div className="header-button" onClick={this.handleDelete}>
               <i className="fas fa-trash"></i>
             </div>
           </div>
@@ -138,6 +149,7 @@ class InspirationDetails extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    activeImpulseId: state.control.activeImpulseId,
     activeThreadId: state.control.activeThreadId,
     threads: state.threads.threads,
     impulses: state.data.impulses,
@@ -146,6 +158,9 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  updateMessage
+  updateMessage,
+  deleteMessage,
+  setActiveThreadId,
+  setRightbarComponent
 })(InspirationDetails);
 

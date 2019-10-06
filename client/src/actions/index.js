@@ -22,17 +22,19 @@ import {
   SET_FETCH_MESSAGES
 } from '../actions/types';
 
-export const updateThreads = (threads) => {
+export const updateThreads = (threads,
+  remove = false, toRemoveIds = []) => {
   return {
     type: UPDATE_THREADS,
-    payload: { threads }
+    payload: { threads, remove, toRemoveIds }
   };
 }
 
-export const appendThreadMessages = (threadId, messages) => {
+export const appendThreadMessages = (threadId, messages,
+  remove = false, toRemoveIds = []) => {
   return {
     type: APPEND_THREAD_MESSAGES,
-    payload: { threadId, messages }
+    payload: { threadId, messages, remove, toRemoveIds }
   };
 }
 
@@ -449,6 +451,25 @@ export const updateMessage = (messageId, newBody) => {
   }
 }
 
+export const deleteMessage = (messageId) => {
+  return (dispatch, getState) => {
+    const accountToken = getState().session.accountToken;
+    const sessionToken = getState().session.sessionToken;
+
+    fetch(`${API_ROOT}/messages/${messageId}`, {
+      method: 'DELETE',
+      headers: {
+        ...HEADERS,
+        AuthorizationLogin: `Bearer ${accountToken}`,
+        AuthorizationSession: `Bearer ${sessionToken}`
+      }
+    })
+    .catch((e) => {
+      dispatch(errorOccured(true));
+    });
+  }
+}
+
 export const createImpulse = (name, description) => {
   return (dispatch, getState) => {
     fetch(`${API_ROOT}/impulses`, {
@@ -652,9 +673,25 @@ export const switchImpulse = (activeImpulse, activeSpark) => {
 
 export const receiveUpdate = (update) => {
   return (dispatch, getState) => {
-    const message = update.message;
-    const thread = update.message_thread;
+    const { message, message_thread: thread, deleted } = update;
     const thread_id = message.parent_thread_id;
+
+    // delete the message and it's thread (if it's an inspiration)
+    if (exists(deleted)) {
+      // find the thread
+      const deletedThread = Object.values(getState().threads.threads).find(thread =>
+        thread.parent_type === "Message" && thread.parent_id == message.id);
+
+      // delete it if it exists
+      if (exists(deletedThread))
+        dispatch(updateThreads(null, true, [deletedThread.id]));
+
+      // delete the message
+      // TODO refactor function name
+      dispatch(appendThreadMessages(message.parent_thread_id, null,
+        true, [message.id]));
+      return;
+    }
 
     // save the spark that posted the message
     dispatch(updateSparks([message.spark]));
