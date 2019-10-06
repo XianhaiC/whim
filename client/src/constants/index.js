@@ -21,3 +21,6 @@ export const PATH_SIGNUP = "/signup";
 // etc
 export const MAX_INSPO_CARD_LENGTH = 120;
 export const MAX_MSG_LENGTH = 2000;
+
+// gravatar
+export const PATH_GRAVATAR = "https://www.gravatar.com/avatar";

@@ -1,7 +1,10 @@
 import React from 'react';
+import md5 from 'md5';
 import { connect } from 'react-redux';
 
 import { setActiveThreadId } from '../actions/index';
+import { PATH_GRAVATAR } from '../constants';
+import { exists } from '../helpers';
 
 class Message extends React.Component {
   constructor() {
@@ -11,7 +14,7 @@ class Message extends React.Component {
 
   handleMoreClick() {
     const { message, threads } = this.props;
-    const messageThread = Object.values(threads).find(thread => 
+    const messageThread = Object.values(threads).find(thread =>
       thread.parent_type === "Message" && thread.parent_id == message.id
     );
 
@@ -34,11 +37,14 @@ class Message extends React.Component {
         <i className="fas fa-chevron-down"></i>  Expand thread
       </div>
       ) : null;
+    const hash = exists(spark.email) ? md5(spark.email) :
+      md5(spark.name + spark.id);
 
     return (
       <div className="message">
         <div className="message-container">
-          <div className="message-spark-pic"></div>
+          <img className="message-spark-pic"
+            src={`${PATH_GRAVATAR}/${hash}?s=40&d=retro&r=pg`} />
           <div className="message-body">
             <div className="message-header">
               <h4 className="message-spark-name">{spark.name}</h4>
