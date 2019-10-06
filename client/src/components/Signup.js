@@ -14,6 +14,10 @@ class Signup extends React.Component {
       email: '',
       password: '',
       password_confirm: '',
+      userBlank: false, 
+      emailBlank: false,
+      passBlank: false, 
+      passconfirmBlank: false,
       passwordsMatch: false,
       shouldRender: false, 
       didSubmit: false,
@@ -50,23 +54,31 @@ class Signup extends React.Component {
   }
 
   handleErrors() {
-
-    const {handle, email, password } = this.state;
-    var userBlank = handle.trim() === '';
-    var emailBlank = email.trim() === '';
-    var passBlank = password.trim() === '';
-    if (userBlank) {
-      return false;
+    this.setState({userBlank: false, emailBlank: false, 
+                  passBlank: false, passconfirmBlank: false});
+    const {handle, email, password, password_confirm } = this.state;
+    var noerr = true;
+    var userErr = handle.trim() === '';
+    var emailErr = email.trim() === '';
+    var passErr = password.trim() === '';
+    var passconfirmErr = password_confirm.trim() === '';
+    if (userErr) {
+      this.setState({userBlank: true});
+      noerr = false;
     }
-    else if (emailBlank) {
-      return false;
+    if (emailErr) {
+      this.setState({emailBlank: true});
+      noerr = false;
     }
-    else if (passBlank) {
-      return false;
+    if (passErr) {
+      this.setState({passBlank: true});
+      noerr = false;
     }
-    else {
-      return true; 
+    if (passconfirmErr) {
+      this.setState({passconfirmBlank: true});
+      noerr = false;
     }
+      return noerr; 
   }
 
   handleSubmit(e) {
@@ -101,23 +113,17 @@ class Signup extends React.Component {
 
   render() {
     const {usernameTakenError, emailTakenError} = this.props;
-    const {handle, email, password, password_confirm, 
+    const {userBlank, emailBlank, passBlank, passconfirmBlank, 
            passwordsMatch, didSubmit } = this.state;
-    var userEmpty = handle.trim() === '';
-    var emailEmpty = email.trim() === '';
-    var passEmpty = password.trim() === '';
-    var passconfirmEmpty = password_confirm.trim() === '';
-    console.log("REDIRECT SET");
-    console.log(this.state.shouldRender);
     if (this.props.loggedIn) return null;
 
     return (
       <div className="signup">
         {this.renderRedirect()}
-        {(userEmpty && didSubmit) ? <p>Username cannot be blank</p> : null}
-        {(emailEmpty && didSubmit) ? <p>Email cannot be blank</p> : null}
-        {(passEmpty && didSubmit) ? <p>Password cannot be blank</p> : null}
-        {((passconfirmEmpty || !passwordsMatch) && didSubmit) ? <p>Passwords must match</p> : null}
+        {(userBlank && didSubmit) ? <p>Username cannot be blank</p> : null}
+        {(emailBlank && didSubmit) ? <p>Email cannot be blank</p> : null}
+        {(passBlank && didSubmit) ? <p>Password cannot be blank</p> : null}
+        {((passconfirmBlank || !passwordsMatch) && didSubmit) ? <p>Passwords must match</p> : null}
         {usernameTakenError ? <p>Username has been taken</p> : null }
         {emailTakenError ? <p>Email has been taken</p> : null}
         <h1>Sign up</h1>
