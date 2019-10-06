@@ -7,7 +7,8 @@ import {
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
   SET_FETCH_MESSAGES,
-  FORM_ERRORS_OCCURED,
+  SIGNUP_ERRORS_OCCURED,
+  LOGIN_ERRORS_OCCURED,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -20,9 +21,11 @@ const INITIAL_STATE = {
   centerComponent: null,
   rightbarComponent: null,
   invitePopupOpen: false,
+  passwordWrongError: false,
   usernameTakenError: false, 
   emailTakenError: false,
-  actionFinished: false,
+  signupVerified: false,
+  loginVerified: false,
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -57,11 +60,14 @@ export default (state = INITIAL_STATE, action) => {
     case SET_FETCH_MESSAGES:
       return {...state, fetchMessages: action.payload.fetchMessages};
 
-    case FORM_ERRORS_OCCURED: 
+    case SIGNUP_ERRORS_OCCURED: 
       return {...state, usernameTakenError: action.payload.user, 
-        emailTakenError: action.payload.email,
-        actionFinished: action.payload.actiond};
-    
+        emailTakenError: action.payload.email, 
+        signupVerified: action.payload.verified};
+
+    case LOGIN_ERRORS_OCCURED: 
+      return {...state, passwordWrongError: action.payload.password, 
+        loginVerified: action.payload.verified};
 
     default:
       return state;

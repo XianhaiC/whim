@@ -12,7 +12,8 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      shouldRender: false
+      shouldRender: false,
+      didSubmit: false,
     }
 
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -32,7 +33,7 @@ class Login extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.loginAccount(this.state.email, this.state.password);
-    this.setState({shouldRender: true});
+    this.setState({didSubmit: true});
   }
 
   renderRedirect= () => {
@@ -41,14 +42,22 @@ class Login extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    if (this.props.loginVerified && this.state.didSubmit && 
+        !this.props.passwordWrongError) {
+      this.setState({shouldRender: true});
+    }
+  }
+
   render() {
-    console.log("LOGIN :)");
+    console.log("LOGIN ACCOUNT");
     console.log(this.props.loggedIn);
     if (this.props.loggedIn) return null;
 
     return (
       <div className="login">
         {this.renderRedirect()}
+        {this.props.passwordWrongError ? <p>Password for username is incorrect</p> : null}
         <h1>Login</h1>
         <form onSubmit={this.handleSubmit}>
           <label>Email</label>
@@ -57,7 +66,8 @@ class Login extends React.Component {
             type="text"
             value={this.state.email}
             onChange={this.handleChangeEmail}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            title="Valid email must be provided" />
           <br />
           <label>Password</label>
           <br />
@@ -76,7 +86,9 @@ class Login extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    loggedIn: state.session.loggedIn
+    loggedIn: state.session.loggedIn,
+    passwordWrongError: state.control.passwordWrongError,
+    loginVerified: state.control.loginVerified,
   };
 };
 

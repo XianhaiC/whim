@@ -9,6 +9,7 @@ class SessionsController < ApplicationController
     if !account.nil? && account.authenticate(params[:password])
       render json: { auth: auth_token(account), activated: account.activated }
     else
+      render json: { errors: "Password does not match" }, status: 400
     end
   end
 

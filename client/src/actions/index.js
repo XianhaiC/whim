@@ -19,7 +19,8 @@ import {
   SET_ACTIVE_ITEMS,
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
-  FORM_ERRORS_OCCURED,
+  SIGNUP_ERRORS_OCCURED,
+  LOGIN_ERRORS_OCCURED,
   SET_FETCH_MESSAGES
 } from '../actions/types';
 
@@ -156,10 +157,18 @@ export const setInvalidHashError = (occured) => {
   };
 }
 
-export const formErrorsOccured = (user, email, actiond) => {
+export const signupErrorsOccured = (user, email, verified) => {
   return {
-    type: FORM_ERRORS_OCCURED, 
-    payload: { user, email, actiond }
+    type: SIGNUP_ERRORS_OCCURED, 
+    payload: { user, email, verified }
+  };
+}
+
+export const loginErrorsOccured = (password, verified) =>
+{
+  return {
+    type: LOGIN_ERRORS_OCCURED,
+    payload: {password, verified }
   };
 }
 
@@ -632,14 +641,13 @@ export const signupAccount = (handle, email, password, password_confirmation) =>
           }
         })
       }
-      dispatch(formErrorsOccured(usernameError, emailError, true));
+      dispatch(signupErrorsOccured(usernameError, emailError, true));
     })
   }
 }
 
 export const loginAccount = (email, password) => {
   return (dispatch, getState) => {
-
     fetch(`${API_ROOT}/login`, {
       method: 'POST',
       headers: HEADERS,
@@ -649,24 +657,26 @@ export const loginAccount = (email, password) => {
       })
     })
     .then(res => {
-      if (!res.ok) throw Error(res.statusText);
       return res.json();
     })
     .then(authPayload => {
-      // persist the login for the session
-      const token = authPayload.auth.auth_token;
-      const accountId = authPayload.auth.account.id;
-      const activated = authPayload.activated;
+      if (authPayload.errors === undefined) {
+        // persist the login for the session
+        const token = authPayload.auth.auth_token;
+        const accountId = authPayload.auth.account.id;
+        const activated = authPayload.activated;
 
-      sessionStorage.setItem('accountId', accountId);
-      sessionStorage.setItem('accountToken', token);
+        sessionStorage.setItem('accountId', accountId);
+        sessionStorage.setItem('accountToken', token);
 
-      dispatch(login(accountId, activated, token));
-    })
-    .catch((e) => {
-      // set invalid hash error flag
-      console.log(e);
-      dispatch(errorOccured(true));
+        dispatch(login(accountId, activated, token));
+        dispatch(loginErrorsOccured(false, true));
+      }
+      // if errors occured set flag for wrong password on
+      else {
+        console.log(authPayload.errors);
+        dispatch(loginErrorsOccured(true, true));
+      }
     });
   }
 }

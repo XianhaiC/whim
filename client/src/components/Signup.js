@@ -16,7 +16,6 @@ class Signup extends React.Component {
       password_confirm: '',
       shouldRender: false, 
       didSubmit: false,
-      //actionFinished: false,
     }
 
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -25,7 +24,6 @@ class Signup extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePasswordConfirm = this.handlePasswordConfirm.bind(this);
     this.renderRedirect = this.renderRedirect.bind(this);
-   // this.checkValidation = this.checkValidation.bind(this);
   }
 
   handleChangePassword(e) {
@@ -47,21 +45,10 @@ class Signup extends React.Component {
     }
   }
 
- /* checkValidation = (error) => {
-    if (!error) {
-      this.setState({shouldRender: true});
-    }
-  }
-*/
-
   handleSubmit(e) {
     e.preventDefault();
-    //this.props.signupAccount(this.state.handle, this.state.email, this.state.password, this.state.password_confirm, this.checkValidation);
-   // var action = this.props.signupAccount(this.state.handle, this.state.email, this.state.password, this.state.password_confirm);
-    
-    this.props.signupAccount(this.state.handle, this.state.email, this.state.password, this.state.password_confirm);
-    //this.setState({actionFinished: action});
-    console.log("Signup Account Called");
+    this.props.signupAccount( this.state.handle, this.state.email,
+                              this.state.password, this.state.password_confirmation);
     this.setState({didSubmit: true});
   }
 
@@ -77,9 +64,7 @@ class Signup extends React.Component {
   }
 
   componentDidUpdate() {
-    //console.log("actionFinished");
-    //console.log(this.state.actionFinished);
-    if( this.props.actionFinished && this.state.didSubmit && !this.props.usernameTakenError && !this.props.emailTakenError) {
+    if(this.props.actionFinished && this.state.didSubmit && !this.props.usernameTakenError && !this.props.emailTakenError) {
       this.setState({shouldRender: true});
     }
   }
