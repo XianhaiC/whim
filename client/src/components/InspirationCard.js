@@ -18,9 +18,16 @@ class InspirationCard extends React.Component {
   }
 
   render() {
-    const { message, sparks } = this.props;
-    const updateDate = new Date(message.updated_at);
+    const { messageId, sparks, threads, parentThreadId } = this.props;
+    console.log("ID");
+    console.log(parentThreadId);
+    console.log(threads);
+
+    const message = threads[parentThreadId].messages.find(message =>
+      message.id == messageId
+    );
     const spark = sparks[message.spark_id];
+    const updateDate = new Date(message.updated_at);
 
     return (
       <div className="inspiration-card" onClick={this.handleClick}>
@@ -37,6 +44,7 @@ class InspirationCard extends React.Component {
 const mapStateToProps = state => {
   return {
     sparks: state.data.sparks,
+    threads: state.threads.threads
   };
 };
 

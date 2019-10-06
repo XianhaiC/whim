@@ -17,8 +17,7 @@ export default (state = INITIAL_STATE, action) => {
 
       if (action.payload.remove) {
         action.payload.toRemoveIds.forEach(impulseId =>
-          delete newState.impulses[impulseId]
-        );
+          delete newState.impulses[impulseId]);
       }
       else {
         action.payload.impulses.forEach(impulse =>
@@ -32,8 +31,7 @@ export default (state = INITIAL_STATE, action) => {
 
       if (action.payload.remove) {
         action.payload.toRemoveIds.forEach(sparkId =>
-          delete newState.sparks[sparkId]
-        );
+          delete newState.sparks[sparkId]);
       }
       else {
         action.payload.sparks.forEach(spark =>

@@ -36,6 +36,43 @@ class MessagesController < ApplicationController
     head :ok
   end
 
+  def update
+    message = Message.find(params[:id])
+
+    if message.nil?
+      return render json: {
+        errors:["Message does not exist"] }, status: 400
+    end
+
+    parent_thread = MessageThread.find(message.parent_thread_id)
+    message.body = params[:body]
+    if message.save
+      serialized_data = ActiveModelSerializers::Adapter::Json.new(
+        MessageSerializer.new(message)).serializable_hash
+      MessageThreadsChannel.broadcast_to parent_thread, serialized_data
+      head :ok
+    else
+      render json: { errors: message.errors }, status: 400
+    end
+  end
+
+  def destroy
+    message = Message.find(params[:id])
+
+    # delete its thread and thread messages first
+    if message.is_inspiration
+      thread = message.own_thread
+      thread.delete
+    end
+
+    message.delete
+
+    serialized_data = ActiveModelSerializers::Adapter::Json.new(
+      MessageSerializer.new(message)).serializable_hash.merge({ deleted: true })
+    MessageThreadsChannel.broadcast_to message.parent_thread, serialized_data
+    head :ok
+  end
+
   private
     def message_params
       params.require(:message).permit(:body, :spark_id,

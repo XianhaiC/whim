@@ -1,4 +1,5 @@
 export const UNDEFINED = "undefined";
+export const URL_ROOT = 'http://localhost:3006'
 export const API_ROOT = 'http://localhost:3000/api/v1';
 export const API_WS_ROOT = 'ws://localhost:3000/api/v1/cable';
 export const HEADERS = {
@@ -19,3 +20,4 @@ export const PATH_SIGNUP = "/signup";
 
 // etc
 export const MAX_INSPO_CARD_LENGTH = 120;
+export const MAX_MSG_LENGTH = 2000;

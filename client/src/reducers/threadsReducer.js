@@ -22,26 +22,40 @@ export default (state = INITIAL_STATE, action) => {
   switch(action.type) {
     case UPDATE_THREADS:
       newState = {...state, threads: {...state.threads}};
-      action.payload.threads.forEach(thread => {
-        newState.threads[thread.id] = thread
-      });
+
+      if (action.payload.remove) {
+        action.payload.toRemoveIds.forEach(threadId =>
+          delete newState.threads[threadId]);
+      }
+      else {
+        action.payload.threads.forEach(thread =>
+          newState.threads[thread.id] = thread);
+      }
       return newState;
 
     case APPEND_THREAD_MESSAGES:
-      // (the top of the thread is considered the "back" of the messages array,
-      // so we're "appending")
-      // used for appending loaded messages
       newState = {...state, threads: {...state.threads}};
       thread = newState.threads[action.payload.threadId];
 
+      // copy over the initial thread state
       if (!exists(thread.messages))
         thread.messages = action.payload.messages;
       else {
         thread.messages = [...thread.messages];
+      }
+
+      // update the thread state with new data
+      if (action.payload.remove) {
+        action.payload.toRemoveIds.forEach(messageId => {
+          const index = thread.messages.findIndex(x => x.id == messageId)
+          if (index !== -1) thread.messages.splice(index, 1);
+        });
+      }
+      else {
         action.payload.messages.forEach(message => {
-          if (thread.messages.findIndex(x => x.id == message.id) <= -1) {
-            thread.messages.push(message);
-          }
+          const index = thread.messages.findIndex(x => x.id == message.id)
+          if (index <= -1) thread.messages.push(message);
+          else thread.messages[index] = message;
         });
       }
 
@@ -58,9 +72,9 @@ export default (state = INITIAL_STATE, action) => {
       else {
         thread.messages = [...thread.messages];
         action.payload.messages.forEach(message => {
-          if (thread.messages.findIndex(x => x.id == message.id) <= -1) {
-            thread.messages.push(message);
-          }
+          const index = thread.messages.findIndex(x => x.id == message.id)
+          if (index <= -1) thread.messages.push(message);
+          else thread.messages[index] = message;
         });
       }
 

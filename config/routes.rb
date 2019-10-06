@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     resources :accounts, only: [:show, :create, :update]
     resources :sparks, only: [:show, :create, :update]
     resources :impulses, only: [:show, :create, :update]
-    resources :messages, only: [:show, :create, :update]
+    resources :messages, only: [:show, :create, :update, :destroy]
 
     # retrieving array information
     get '/accounts/:id/data', to: 'accounts#data'
