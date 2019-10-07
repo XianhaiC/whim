@@ -7,8 +7,8 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 Account.destroy_all
 
-jonathan = Account.create(handle: "Jonathan", email: "jonny@gmail.com", password: "helloworld", password_confirmation: "helloworld")
-andy = Account.create(handle: "Andy", email: "andy@gmail.com", password: "helloworld", password_confirmation: "helloworld")
+jonathan = Account.create(handle: "Jonathan", email: "jonny@gmail.com", password: "helloworld", password_confirmation: "helloworld", activated: true)
+andy = Account.create(handle: "Andy", email: "andy@gmail.com", password: "helloworld", password_confirmation: "helloworld", activated: true)
 nate = Account.create(handle: "Nate", email: "nate@gmail.com", password: "helloworld", password_confirmation: "helloworld")
 
 Impulse.destroy_all
