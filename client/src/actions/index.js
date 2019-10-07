@@ -247,7 +247,7 @@ export const getAccountData = accountId => {
           return filtered;
         }, []);
         dispatch(appendThreadMessages(impulse.message_thread.id, inspirations));
-
+        console.log("getAccount called");
         // we don't store thread data in the impulse list
         delete impulse.message_threads;
       });

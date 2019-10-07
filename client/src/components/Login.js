@@ -14,12 +14,15 @@ class Login extends React.Component {
       password: '',
       shouldRender: false,
       didSubmit: false,
+      emailBlank: false,
+      passwordBlank: false,
     }
 
     this.handleChangePassword = this.handleChangePassword.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.renderRedirect = this.renderRedirect.bind(this);
+    this.handleErrors = this.handleErrors.bind(this);
   }
 
   handleChangePassword(e) {
@@ -30,34 +33,57 @@ class Login extends React.Component {
     this.setState({email: e.target.value});
   }
 
+  handleErrors() {
+    this.setState({emailBlank: false, passwordBlank: false});
+    const { email, password } = this.state;
+    var noerr = true; 
+    var emailErr = email.trim() === '';
+    var passErr = password.trim() === '';
+    if (emailErr) {
+      this.setState({emailBlank: true});
+      noerr = false;
+    }
+    if (passErr) {
+      this.setState({passBlank: true});
+      noerr = false;
+    }
+    return noerr;
+  }
+
   handleSubmit(e) {
     e.preventDefault();
-    this.props.loginAccount(this.state.email, this.state.password);
+    var noErrors = this.handleErrors();
+    if (noErrors) { 
+      this.props.loginAccount(this.state.email, this.state.password); 
+    }
     this.setState({didSubmit: true});
   }
 
   renderRedirect= () => {
-    if (this.state.shouldRender) {
+    if (this.state.shouldRender && this.props.loginVerified &&
+        this.props.loggedIn) {
       return <Redirect to={PATH_BOARD}/>
     }
   }
 
   componentDidUpdate() {
     if (this.props.loginVerified && this.state.didSubmit && 
-        !this.props.passwordWrongError && !this.state.shouldRender) {
+        !this.props.passwordWrongError && !this.state.shouldRender
+        && this.props.loggedIn) {
       this.setState({shouldRender: true});
     }
   }
 
   render() {
-    console.log("LOGIN ACCOUNT");
-    console.log(this.props.loggedIn);
-    if (this.props.loggedIn) return null;
+    const { passwordWrongError } = this.props;
+    const { emailBlank, passBlank, didSubmit } = this.state;
 
     return (
       <div className="login">
         {this.renderRedirect()}
-        {this.props.passwordWrongError ? <p>Password for username is incorrect</p> : null}
+        {(emailBlank && didSubmit) ? <p>Username cannot be blank</p> : null}
+        {(passwordWrongError && didSubmit) ? <p>Username or password is incorrect</p> : null}
+        {(passBlank && didSubmit) ? <p>Password cannot be blank</p> : null}
         <h1>Login</h1>
         <form onSubmit={this.handleSubmit}>
           <label>Email</label>
