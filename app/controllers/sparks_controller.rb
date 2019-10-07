@@ -27,7 +27,9 @@ class SparksController < ApplicationController
     account = Account.find(params[:account_id])
     spark.session_token = nil
 
+    puts "CHECK"
     if account.nil? || !account.activated
+      puts "ERROR 1"
       return render json: {
         errors:["Account does not exist or has not been activated"] },
       status: 400
@@ -38,6 +40,7 @@ class SparksController < ApplicationController
     if spark.save
       render json: spark
     else
+      puts "ERROR 1"
       render json: { errors: spark.errors }, status: 400
     end
   end

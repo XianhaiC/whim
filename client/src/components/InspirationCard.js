@@ -19,10 +19,6 @@ class InspirationCard extends React.Component {
 
   render() {
     const { messageId, sparks, threads, parentThreadId } = this.props;
-    console.log("ID");
-    console.log(parentThreadId);
-    console.log(threads);
-
     const message = threads[parentThreadId].messages.find(message =>
       message.id == messageId
     );

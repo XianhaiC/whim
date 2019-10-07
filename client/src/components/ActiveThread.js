@@ -37,6 +37,8 @@ class ActiveThread extends React.Component {
     console.log("DATE");
     console.log(threadOffset);
 
+    console.log("CHECKING NEW MESSAGES");
+    console.log(activeThread.messages);
     let messagesList = null;
     if (exists(activeThread.messages)) {
       /*

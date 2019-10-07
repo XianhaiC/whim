@@ -66,9 +66,10 @@ const createImpulseCards = (impulses, handleClick) => {
     cards.push((
       <li className="impulse-card" key={impulse.id}
         onClick={() => handleClick (impulse)}>
-        <div className="impulse-card-pic"></div>
         <div className="impulse-card-info">
-          <p className="impulse-card-name">{impulse.name}</p>
+          <p className="impulse-card-name">
+            <i className="fas fa-hashtag impulse-card-pic"></i>  {impulse.name}
+          </p>
           <p className="impulse-card-sparks">{impulse.sparks_joined} Spark{impulse.sparks_joined != 1 ? "s" : ""} joined</p>
         </div>
       </li>

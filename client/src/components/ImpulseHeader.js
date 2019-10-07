@@ -20,7 +20,7 @@ class ImpulseHeader extends React.Component {
   }
 
   handleInvite() {
-    //this.props.createInvite(this.props.activeImpulseId);
+    this.props.createInvite(this.props.activeImpulseId);
     this.props.setInvitePopupOpen(true);
   }
 

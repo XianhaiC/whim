@@ -368,16 +368,13 @@ export const getThreadMessages = threadId => {
     const accountToken = getState().session.accountToken;
     const sessionToken = getState().session.sessionToken;
     let offset = getState().threads.threadOffsets[threadId];
-
-    console.log("GETTING");
+    let setOffset = false;
 
     // use current date to grab the most recent messages for the thread
     if (!exists(offset)) {
+      setOffset = true;
       let date = new Date();
       offset = dateToString(date);
-      console.log(date.getUTCHours());
-      console.log("OFFSET STRING");
-      console.log(offset);
     }
 
     fetch(`${API_ROOT}${PATH_THREADS}/${threadId}/messages?offset=${offset}`, {
@@ -393,9 +390,13 @@ export const getThreadMessages = threadId => {
       return res.json();
     })
     .then(messagesNew => {
-      console.log("NEW MESSAGES ARE BEING RETURNED");
-      console.log(messagesNew);
-      if (messagesNew.length <= 0) return;
+      if (messagesNew.length <= 0) {
+        if (setOffset) {
+          dispatch(updateThreadOffset(threadId, offset));
+        }
+        return;
+      }
+
       let sparksNew = [];
       messagesNew.forEach(message => {
         sparksNew.push(message.spark);
