@@ -24,6 +24,8 @@ class Sidebar extends React.Component {
     this.setRedirectSignup = this.setRedirectSignup.bind(this);
     this.renderRedirectLogin = this.renderRedirectLogin.bind(this);
     this.renderRedirectSignup = this.renderRedirectSignup.bind(this);
+
+    this.Header = this.Header.bind(this);
   }
 
   handleCreateImpulse() {
@@ -54,8 +56,29 @@ class Sidebar extends React.Component {
     }
   }
 
+  Header() {
+    const { loggedIn, accountHandle } = this.props;
+    if (loggedIn) {
+      return (
+        <div className="sidebar-header">
+          <div className="sidebar-header-active"></div>
+          <h4 className="sidebar-header-handle">@{accountHandle}</h4>
+        </div>
+      );
+
+    }
+    else {
+      return (
+        <div className="sidebar-buttons">
+          <button className="sidebar-button" onClick={this.setRedirectLogin}>Login</button>}
+          <button className="sidebar-button" onClick={this.setRedirectSignup}>Signup</button>}
+        </div>
+      );
+    }
+  }
+
   render() {
-    const { impulses, sparks, sessionImpulseIds, sessionSparkIds } = this.props;
+    const { impulses, sparks, sessionImpulseIds, sessionSparkIds, loggedIn } = this.props;
 
     let linkedImpulses = [];
     let sessionImpulses = [];
@@ -72,13 +95,10 @@ class Sidebar extends React.Component {
     return (
 
       <div className="sidebar">
+        {this.renderRedirectLogin()}
+        {this.renderRedirectSignup()}
         <div className="sidebar-lists">
-          <div className="login-button">
-            {this.renderRedirectLogin()}
-            {this.renderRedirectSignup()}
-            { this.props.loggedIn ? null : <button onClick={this.setRedirectLogin} type="button">Login</button>}
-            { this.props.loggedIn ? null : <button onClick={this.setRedirectSignup} type="button">Signup</button>}
-          </div>
+          <this.Header />
           <ImpulseList listName="Impulses"
             impulses={linkedImpulses} />
           <ImpulseList listName="Un-linked"
@@ -103,7 +123,8 @@ const mapStateToProps = state => {
     sparks: state.data.sparks,
     sessionImpulseIds: state.session.sessionImpulseIds,
     sessionSparkIds: state.session.sessionSparkIds,
-    loggedIn: state.session.loggedIn
+    loggedIn: state.session.loggedIn,
+    accountHandle: state.session.accountHandle
   };
 };
 

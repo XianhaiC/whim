@@ -115,10 +115,10 @@ export const setRightbarComponent = (rightbarComponent) => {
   }
 }
 
-export const login = (accountId, accountActivated, accountToken) => {
+export const login = (accountId, accountHandle, accountActivated, accountToken) => {
   return {
     type: LOGIN,
-    payload: { accountId, accountActivated, accountToken }
+    payload: { accountId, accountHandle, accountActivated, accountToken }
   };
 }
 
@@ -275,7 +275,7 @@ export const getAccount = (accountId, accountToken) => {
       return res.json();
     })
     .then(account => {
-      dispatch(login(account.id, account.activated, accountToken));
+      dispatch(login(account.id, account.handle, account.activated, accountToken));
     })
     .catch((e) => {
       console.log(e);
@@ -698,12 +698,13 @@ export const loginAccount = (email, password) => {
         // persist the login for the session
         const token = authPayload.auth.auth_token;
         const accountId = authPayload.auth.account.id;
+        const accountHandle = authPayload.auth.account.handle;
         const activated = authPayload.activated;
 
         sessionStorage.setItem('accountId', accountId);
         sessionStorage.setItem('accountToken', token);
 
-        dispatch(login(accountId, activated, token));
+        dispatch(login(accountId, accountHandle, activated, token));
         dispatch(loginErrorsOccured(false, true));
       }
       // if errors occured set flag for wrong password on
