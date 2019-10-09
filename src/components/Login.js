@@ -67,7 +67,7 @@ class Login extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.loggedIn) {
+    if (this.props.loggedIn && this.props.passwordWrongErr) {
       this.setState({shouldRender: true});
     }
   }
@@ -75,6 +75,9 @@ class Login extends React.Component {
   render() {
     console.log("LOGIN ACCOUNT");
     console.log(this.props.loggedIn);
+
+    const { emailBlank, passBlank, didSubmit } = this.state;
+    const { passwordWrongErr } = this.props;
 
     return (
       <div className="login">
