@@ -55,10 +55,10 @@ export const updateThreadOffset = (threadId, offset) => {
 }
 
 // TODO the recieved response has two keys, message and thread if messages is an inspo
-export const receiveMessage = (threadId, message) => {
+export const receiveMessage = (threadId, message, boolVal) => {
   return {
     type: PREPEND_THREAD_MESSAGES,
-    payload: { threadId, messages: [message] }
+    payload: { threadId, messages: [message], boolVal }
   };
 }
 
@@ -646,7 +646,7 @@ export const signupAccount = (handle, email, password, password_confirmation) =>
   }
 }
 
-export const loginAccount = (email, password) => {
+export const loginAccount = (email, password, loginVerified) => {
   return (dispatch, getState) => {
     fetch(`${API_ROOT}/login`, {
       method: 'POST',
@@ -670,12 +670,14 @@ export const loginAccount = (email, password) => {
         sessionStorage.setItem('accountToken', token);
 
         dispatch(login(accountId, activated, token));
-        dispatch(loginErrorsOccured(false, true));
+        loginVerified(false);
+        //dispatch(loginErrorsOccured(false, true));
       }
       // if errors occured set flag for wrong password on
       else {
         console.log(authPayload.errors);
-        dispatch(loginErrorsOccured(true, true));
+        loginVerified(true);
+        //dispatch(loginErrorsOccured(true, true));
       }
     });
   }
@@ -762,7 +764,7 @@ export const receiveUpdate = (update) => {
       dispatch(getThreadMessages(thread_id));
 
     // add the recieved message
-    dispatch(receiveMessage(thread_id, message));
+    dispatch(receiveMessage(thread_id, message, true));
 
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));

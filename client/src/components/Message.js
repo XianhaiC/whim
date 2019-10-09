@@ -24,9 +24,6 @@ class Message extends React.Component {
   render() {
     const { message, sparks } = this.props;
     let createDate = new Date(message.created_at);
-    console.log("ALL S");
-    console.log(sparks);
-    console.log(message);
     const spark = sparks[message.spark_id];
 
     const messageBody = message.is_inspiration ?
