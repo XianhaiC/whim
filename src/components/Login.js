@@ -19,7 +19,6 @@ class Login extends React.Component {
     this.handleChangePassword = this.handleChangePassword.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.renderRedirect = this.renderRedirect.bind(this);
   }
 
   handleChangePassword(e) {
@@ -36,23 +35,26 @@ class Login extends React.Component {
     this.setState({didSubmit: true});
   }
 
-  renderRedirect= () => {
+  renderRedirect() {
     if (this.state.shouldRender) {
       return <Redirect to={PATH_BOARD}/>
     }
   }
 
   componentDidUpdate() {
-    if (this.props.loginVerified && this.state.didSubmit && 
-        !this.props.passwordWrongError && !this.state.shouldRender) {
+    if (this.props.loggedIn) {
       this.setState({shouldRender: true});
     }
+      /*
+    if (this.props.loginVerified && this.state.didSubmit && 
+        !this.props.passwordWrongError && !this.state.shouldRender) {
+    }
+    */
   }
 
   render() {
     console.log("LOGIN ACCOUNT");
     console.log(this.props.loggedIn);
-    if (this.props.loggedIn) return null;
 
     return (
       <div className="login">

@@ -314,6 +314,10 @@ hr {
   flex-grow: 1;
 }
 
+.message-body > p {
+  white-space: pre-wrap;
+}
+
 .message-header {
   display: flex;
   flex-direction: row;
@@ -474,6 +478,7 @@ hr {
 
 .inspiration-card-text {
   padding: 20px 20px 10px 20px;
+  white-space: pre-wrap;
 }
 
 /* InspirationDetails */

@@ -18,6 +18,8 @@ class InspirationList extends React.Component {
     ));
     const activeImpulse = this.props.impulses[activeImpulseId];
 
+    console.log("IN LIST");
+    console.log(inspirationThreads);
     // map threads to card components
     const cardsList = inspirationThreads.map(thread => {
       return (

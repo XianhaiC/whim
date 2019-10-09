@@ -309,8 +309,27 @@ export const getSession = () => {
     })
     .then(data => {
       const { impulses, sparks } = data;
-      console.log("SESS");
-      console.log(data);
+
+      let inspirationThreads = [];
+      // note that threads will contain information about their parents
+      // this allows us to distinguish between impulse threads and
+      // inspiration threads later on
+      impulses.forEach(impulse => {
+        inspirationThreads.push(...impulse.message_threads);
+      });
+
+      dispatch(updateThreads(inspirationThreads));
+      impulses.forEach(impulse => {
+        const inspirations = impulse.message_threads.reduce((filtered, thread) => {
+          if (thread.parent_type === "Message") filtered.push(thread.parent);
+          return filtered;
+        }, []);
+        dispatch(appendThreadMessages(impulse.message_thread.id, inspirations));
+
+        // we don't store thread data in the impulse list
+        delete impulse.message_threads;
+      });
+
       dispatch(updateImpulses(impulses));
       dispatch(updateSparks(sparks));
       dispatch(updateSessionImpulseIds(
@@ -318,11 +337,13 @@ export const getSession = () => {
       dispatch(updateSessionSparkIds(data.session_spark_ids));
 
       // update with session threads as well
+      /*
       let inspirationThreads = [];
       impulses.forEach(impulse => {
         inspirationThreads.push(...impulse.message_threads);
       });
       dispatch(updateThreads(inspirationThreads));
+      */
     })
     .catch((e) => {
       console.log(e);
@@ -585,10 +606,22 @@ export const joinImpulse = (impulseHash) => {
 
       // add the new impulse to the list of session impulses
       if (!exists(existingImpulse)) {
+        // add the new inspiration threads
+        dispatch(updateThreads(impulse.message_threads));
+
+        // add the new inspiration messages
+        const inspirations = impulse.message_threads.reduce((filtered, thread) => {
+          if (thread.parent_type === "Message") filtered.push(thread.parent);
+          return filtered;
+        }, []);
+        dispatch(appendThreadMessages(impulse.message_thread.id, inspirations));
+
+        // we don't store thread data in the impulse list
+        delete impulse.message_threads;
+
         dispatch(updateImpulses([impulse]));
         dispatch(updateSparks(sparks));
         dispatch(updateSessionImpulseIds([impulse.id]));
-        dispatch(updateThreads([impulse.message_thread]));
         existingImpulse = impulse;
       }
       else {

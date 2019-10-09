@@ -11,6 +11,9 @@ class LoadAccount extends React.Component {
 
     if (exists(accountId) && exists(accountToken))
       this.props.getAccount(accountId, accountToken);
+
+    if (this.props.loggedIn)
+      this.loadAccount();
   }
 
   componentDidUpdate() {
