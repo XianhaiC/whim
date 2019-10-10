@@ -60,9 +60,16 @@ class Sidebar extends React.Component {
     const { loggedIn, accountHandle } = this.props;
     if (loggedIn) {
       return (
-        <div className="sidebar-header">
-          <div className="sidebar-header-active"></div>
-          <h4 className="sidebar-header-handle">@{accountHandle}</h4>
+        <div className="sidebar-header top-header">
+          <div className="sidebar-header-info top-info">
+            <div className="sidebar-header-handle">
+              <div className="sidebar-header-active"></div>
+              <h3>@{accountHandle}</h3>
+            </div>
+            <div className="sidebar-header-info top-info-sub">
+              <button className="logout">Logout</button>
+            </div>
+          </div>
         </div>
       );
 

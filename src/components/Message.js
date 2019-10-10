@@ -45,9 +45,9 @@ class Message extends React.Component {
           <div className="message-body">
             <div className="message-header">
               <h4 className="message-spark-name">{spark.name}</h4>
+              {exists(spark.handle) && <p>@{spark.handle}</p>}
               <p className="message-created-at">{getTimeAMPM(createDate)}</p>
             </div>
-            {exists(spark.handle) && <p>@{spark.handle}</p>}
             {messageBody}
           </div>
         </div>

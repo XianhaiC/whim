@@ -88,7 +88,41 @@ hr {
   justify-content: space-between;
   background-color: #3a3a3a;
   min-width: 300px;
-  padding-top: 20px;
+}
+
+.sidebar-header {
+  border-color: grey;
+}
+
+.sidebar-header-active {
+  width: 8px;
+  height: 8px;
+  background-color: green;
+  border-radius: 4px;
+  margin: 5px 4px 0px 0px;
+}
+
+.sidebar-header-handle h3 {
+  color: var(--main-dark-text);
+}
+
+.sidebar-header-handle {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.sidebar-header-info button {
+  color: var(--main-dark-text);
+}
+
+.logout {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  margin-left: 13px;
+  cursor: pointer;
 }
 
 .sidebar hr {
@@ -112,7 +146,7 @@ hr {
   flex: 1 1 0px;
   text-align: center;
   padding: 15px 20px 10px 20px;
-  color: #c6c5c5;
+  color: var(--main-dark-text);
   background-color: #303030;
 }
 
@@ -121,6 +155,10 @@ hr {
 }
 
 /* ImpulseList */
+
+.impulse-list {
+  margin-bottom: 15px;
+}
 
 .impulse-list-container {
   display: flex;
@@ -134,12 +172,12 @@ hr {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  padding: 20px 0px 0px 0px;
 }
 
 .impulse-list-header h3 {
-  color: #c6c5c5;
-  margin: 0px 10px 0px 10px;
+  color: var(--main-dark-text);
+  font-size: 12px;
+  margin: 10px 10px 0px 20px;
 }
 
 .impulse-list-header .hr-post {
@@ -167,6 +205,7 @@ hr {
 }
 
 .impulse-card-pic {
+  font-size: 14px;
   color: white;
 }
 
@@ -231,12 +270,7 @@ hr {
   flex-direction: row;
   border-width: 0px 0px 1px 0px;
   border-style: solid;
-  border-color: #d8c5c6;
   height: 50px;
-}
-
-.top-info h3 {
-  color: var(--main-text);
 }
 
 .top-info {
@@ -260,8 +294,16 @@ hr {
   margin-right: 10px;
 }
 
+.impulse-header {
+  border-color: var(--main-sep);
+}
+
 .impulse-header-buttons {
   color: var(--main-dim);
+}
+
+.impulse-header-info h3 {
+  color: var(--main-text);
 }
 
 /* ActiveThread */
@@ -326,7 +368,7 @@ hr {
 }
 
 .message-header > * {
-  margin: 0px 10px 0px 0px;
+  margin: 0px 6px 0px 0px;
   color: var(--main-text);
 }
 
