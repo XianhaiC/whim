@@ -14,6 +14,7 @@ import {
   SET_CENTER_COMPONENT,
   SET_RIGHTBAR_COMPONENT,
   SET_INVITE_POPUP_OPEN,
+  SET_LINK_POPUP_OPEN,
   LOGIN,
   SET_SESSION,
   SET_ACTIVE_ITEMS,
@@ -126,6 +127,13 @@ export const setInvitePopupOpen = (invitePopupOpen) => {
   return {
     type: SET_INVITE_POPUP_OPEN,
     payload: { invitePopupOpen }
+  };
+}
+
+export const setLinkPopupOpen = (linkPopupOpen) => {
+  return {
+    type: SET_LINK_POPUP_OPEN,
+    payload: { linkPopupOpen }
   };
 }
 

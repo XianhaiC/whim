@@ -61,24 +61,17 @@ class Sidebar extends React.Component {
     if (loggedIn) {
       return (
         <div className="sidebar-header top-header">
-          <div className="sidebar-header-info top-info">
-            <div className="sidebar-header-handle">
-              <div className="sidebar-header-active"></div>
-              <h3>@{accountHandle}</h3>
-            </div>
-            <div className="sidebar-header-info top-info-sub">
-              <button className="logout">Logout</button>
-            </div>
-          </div>
+          <h3>@{accountHandle}</h3>
+          <button className="logout">Logout</button>
         </div>
       );
 
     }
     else {
       return (
-        <div className="sidebar-buttons">
-          <button className="sidebar-button" onClick={this.setRedirectLogin}>Login</button>}
-          <button className="sidebar-button" onClick={this.setRedirectSignup}>Signup</button>}
+        <div className="top-buttons sidebar-buttons">
+          <button className="sidebar-button" onClick={this.setRedirectLogin}>Login</button>
+          <button className="sidebar-button" onClick={this.setRedirectSignup}>Signup</button>
         </div>
       );
     }
@@ -112,12 +105,12 @@ class Sidebar extends React.Component {
             impulses={sessionImpulses} />
         </div>
         <div className="sidebar-buttons">
-          <div className="sidebar-button" onClick={this.handleCreateImpulse}>
+          <button className="sidebar-button" onClick={this.handleCreateImpulse}>
             <i className="fas fa-plus"></i>  Create
-          </div>
-          <div className="sidebar-button" onClick={this.handleJoinImpulse}>
+          </button>
+          <button className="sidebar-button" onClick={this.handleJoinImpulse}>
             <i className="fas fa-users"></i>  Join
-          </div>
+          </button>
         </div>
       </div>
     );

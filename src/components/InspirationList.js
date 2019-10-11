@@ -30,7 +30,7 @@ class InspirationList extends React.Component {
 
     return (
       <div className="inspiration-list">
-        <div className="inspiration-list-header">
+        <div className="inspiration-list-header top-header">
           <div className="inspiration-list-info top-info">
             <h3 className="inspiration-list-title">Inspirations</h3>
             <div className="inspiration-list-sub top-info-sub">

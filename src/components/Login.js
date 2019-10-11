@@ -57,30 +57,38 @@ class Login extends React.Component {
     console.log(this.props.loggedIn);
 
     return (
-      <div className="login">
+      <div className="login center-form">
         {this.renderRedirect()}
-        {this.props.passwordWrongError ? <p>Password for username is incorrect</p> : null}
-        <h1>Login</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label>Email</label>
-          <br />
-          <input
-            type="text"
-            value={this.state.email}
-            onChange={this.handleChangeEmail}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            title="Valid email must be provided" />
-          <br />
-          <label>Password</label>
-          <br />
-          <input
-            type="password"
-            value={this.state.password}
-            onChange={this.handleChangePassword}
-            pattern=".{6,}"
-            title="Must contain at least 6 or more characters"/>
-          <input type="submit" />
-        </form>
+        <div className="center-form-wrapper">
+          <h1>Log In</h1>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              className="center-form-field"
+              type="text"
+              placeholder="Email"
+              value={this.state.email}
+              onChange={this.handleChangeEmail}
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              title="Valid email must be provided"
+              required />
+            <input
+              className="center-form-field"
+              type="password"
+              placeholder="Password"
+              value={this.state.password}
+              onChange={this.handleChangePassword}
+              pattern=".{6,}"
+              title="Must contain at least 6 or more characters"
+              required />
+              {
+                this.props.passwordWrongError && 
+                <p className="center-form-error">
+                  Password for username is incorrect
+                </p>
+              }
+            <input class="center-form-submit" type="submit" value="Submit"/>
+          </form>
+        </div>
       </div>
     );
   }

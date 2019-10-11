@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { RightbarComponent } from '../helpers';
-import { createInvite, linkAccount, setRightbarComponent,
-  setInvitePopupOpen } from '../actions/index';
+import { linkAccount, setRightbarComponent,
+  setInvitePopupOpen, setLinkPopupOpen } from '../actions/index';
 
 class ImpulseHeader extends React.Component {
   constructor() {
@@ -16,11 +16,12 @@ class ImpulseHeader extends React.Component {
   }
 
   handleLinkAccount() {
+    this.props.setLinkPopupOpen(true);
+    if (!this.props.accountActivated) return;
     this.props.linkAccount(this.props.activeSparkId, this.props.accountId);
   }
 
   handleInvite() {
-    this.props.createInvite(this.props.activeImpulseId);
     this.props.setInvitePopupOpen(true);
   }
 
@@ -73,13 +74,14 @@ const mapStateToProps = state => {
     accountId: state.session.accountId,
     activeImpulseId: state.control.activeImpulseId,
     activeSparkId: state.control.activeSparkId,
-    impulses: state.data.impulses
+    impulses: state.data.impulses,
+    accountActivated: state.session.accountActivated
   };
 };
 
 export default connect(mapStateToProps, {
-  createInvite,
   linkAccount,
   setRightbarComponent,
-  setInvitePopupOpen
+  setInvitePopupOpen,
+  setLinkPopupOpen
 })(ImpulseHeader);

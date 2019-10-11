@@ -118,57 +118,57 @@ class Signup extends React.Component {
     if (this.props.loggedIn) return null;
 
     return (
-      <div className="signup">
+      <div className="signup center-form">
         {this.renderRedirect()}
-        {(userBlank && didSubmit) ? <p>Username cannot be blank</p> : null}
-        {(emailBlank && didSubmit) ? <p>Email cannot be blank</p> : null}
-        {(passBlank && didSubmit) ? <p>Password cannot be blank</p> : null}
-        {((passconfirmBlank || !passwordsMatch) && didSubmit) ? <p>Passwords must match</p> : null}
-        {usernameTakenError ? <p>Username has been taken</p> : null }
-        {emailTakenError ? <p>Email has been taken</p> : null}
-        <h1>Sign up</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label>Username</label>
-          <br />
-          <input 
-            type="text"
-            value={this.state.handle}
-            pattern="^[-a-zA-Z0-9@\.+_]+$"
-            maxLength="50"
-            title="Must not contain white space and can only contains numbers and letters"
-            onChange={this.handleChangeUsername}/>
-          <br />
-          <label>Email</label>
-          <br />
-          <input
-            type="text"
-            value={this.state.email}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            maxLength="255"
-            title="Must provide a valid email"
-            onChange={this.handleChangeEmail}/>
-          <br />
-          <label>Password</label>
-          <br />
-          <input
-            ref="password"
-            type="password"
-            value={this.state.password}
-            onChange={this.handleChangePassword}
-            pattern=".{6,}"
-            title="Must contain at least 6 or more characters"/>
-          <br />
-          <label>Confirm Password</label>
-          <br />
-          <input
-            ref="confirm_password"
-            type="password"
-            value={this.state.password_confirm}
-            onChange={this.handlePasswordConfirm}
-            pattern=".{6,}" />
+        <div className="center-form-wrapper">
+          <h1>Sign up</h1>
+          <form onSubmit={this.handleSubmit}>
+            <input 
+              className="center-form-field"
+              type="text"
+              placeholder="Username"
+              value={this.state.handle}
+              pattern="^[-a-zA-Z0-9@\.+_]+$"
+              maxLength="50"
+              title="Must not contain white space and can only contains numbers and letters"
+              onChange={this.handleChangeUsername}
+              required />
+            <input
+              className="center-form-field"
+              type="text"
+              placeholder="Email"
+              value={this.state.email}
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              maxLength="255"
+              title="Must provide a valid email"
+              onChange={this.handleChangeEmail}
+              required />
+            <input
+              className="center-form-field"
+              ref="password"
+              type="password"
+              placeholder="Password"
+              value={this.state.password}
+              onChange={this.handleChangePassword}
+              pattern=".{6,}"
+              title="Must contain at least 6 or more characters"
+              required />
+            <input
+              className="center-form-field"
+              ref="confirm_password"
+              type="password"
+              placeholder="Confirm password"
+              value={this.state.password_confirm}
+              onChange={this.handlePasswordConfirm}
+              pattern=".{6,}"
+              required />
 
-          <input type="submit" />
-        </form>
+            {usernameTakenError ? <p>Username has been taken</p> : null }
+            {emailTakenError ? <p>Email has been taken</p> : null}
+
+            <input className="center-form-submit" type="submit" value="Submit"/>
+          </form>
+        </div>
       </div>
     );
   }
