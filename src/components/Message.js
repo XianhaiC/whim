@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { setActiveThreadId } from '../actions/index';
 import { PATH_GRAVATAR } from '../constants';
-import { exists } from '../helpers';
+import { exists, getTimeAMPM } from '../helpers';
 
 class Message extends React.Component {
   constructor() {
@@ -68,10 +68,3 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   setActiveThreadId
 })(Message);
-
-// helpers
-
-function getTimeAMPM(time) {
-  let isPM = time.getHours() / 12 === 1;
-  return `${time.getHours() % 12}:${time.getMinutes()} ${isPM ? "PM" : "AM"}`;
-}

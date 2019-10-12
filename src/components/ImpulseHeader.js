@@ -48,20 +48,25 @@ class ImpulseHeader extends React.Component {
           </div>
         </div>
         <div className="impulse-header-buttons header-buttons">
-          <div className="header-button" onClick={this.handleLinkAccount}>
+          <div className="header-button tooltip-south" onClick={this.handleLinkAccount}>
             <i className="fas fa-link"></i>  Link
+            <span className="tooltiptext-south">Link spark to account</span>
           </div>
-          <div className="header-button" onClick={this.handleInvite}>
+          <div className="header-button tooltip-south" onClick={this.handleInvite}>
             <i className="fas fa-share-alt"></i>  Invite
+            <span className="tooltiptext-south">Invite to this Impulse</span>
           </div>
-          <div className="header-button" onClick={this.handleInfo}>
+          <div className="header-button tooltip-south" onClick={this.handleInfo}>
             <i className="fas fa-info"></i>
+            <span className="tooltiptext-south">Impulse info</span>
           </div>
-          <div className="header-button" onClick={this.handleList}>
+          <div className="header-button tooltip-south" onClick={this.handleList}>
             <i className="fas fa-lightbulb"></i>
+            <span className="tooltiptext-south">Inspirations tab</span>
           </div>
-          <div className="header-button">
+          <div className="header-button tooltip-south">
             <i className="fas fa-cog"></i>
+            <span className="tooltiptext-south">Options</span>
           </div>
         </div>
       </div>

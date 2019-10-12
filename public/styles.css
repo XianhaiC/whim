@@ -450,7 +450,7 @@ hr {
 }
 
 .create-message-submit:hover {
-  background-color: #d2c4b6;
+  background-color: var(--main-sub-focus);
 }
 
 /* Rightbar */

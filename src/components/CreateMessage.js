@@ -82,16 +82,16 @@ class CreateMessage extends React.Component {
             placeholder="Enter a message..."
             onKeyDown={this.onEnterPress} 
             ref={el => this.textarea = el}/>
-          <button className="create-message-submit tooltip"
+          <button className="create-message-submit tooltip-north"
             onClick={this.handleMessageSubmit}>
             <i className="fas fa-paper-plane"></i>
-            <span className="tooltiptext">Send message</span>
+            <span className="tooltiptext-north">Send message</span>
           </button>
           {showInspirationSubmit &&
-            <button className="create-message-submit tooltip"
+            <button className="create-message-submit tooltip-north"
               onClick={this.handleInspirationSubmit}>
               <i className="fas fa-lightbulb"></i>
-              <span className="tooltiptext">Create inspiration</span>
+              <span className="tooltiptext-north">Create inspiration</span>
             </button>
           }
         </form>
