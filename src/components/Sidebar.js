@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect, withRouter } from 'react-router-dom';
 
-import { PATH_LOGIN, PATH_SIGNUP } from '../constants';
+import { PATH_BOARD, PATH_LOGIN, PATH_SIGNUP } from '../constants';
 import { CenterComponent } from '../helpers';
 import { setCenterComponent } from '../actions/index';
 
@@ -15,15 +15,16 @@ class Sidebar extends React.Component {
 
     this.state = {
       shouldRedirectLogin: false,
-      shouldRenderSignup: false
+      shouldRedirectSignup: false,
+      shouldRedirectLogout: false
     }
 
     this.handleCreateImpulse = this.handleCreateImpulse.bind(this);
     this.handleJoinImpulse = this.handleJoinImpulse.bind(this);
-    this.setRedirectLogin = this.setRedirectLogin.bind(this);
-    this.setRedirectSignup = this.setRedirectSignup.bind(this);
-    this.renderRedirectLogin = this.renderRedirectLogin.bind(this);
-    this.renderRedirectSignup = this.renderRedirectSignup.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    this.handleSignup = this.handleSignup.bind(this);
+    this.renderRedirect = this.renderRedirect.bind(this);
 
     this.Header = this.Header.bind(this);
   }
@@ -36,23 +37,29 @@ class Sidebar extends React.Component {
     this.props.setCenterComponent(CenterComponent.JOIN);
   }
 
-  setRedirectLogin = () => {
+  handleLogin = () => {
     this.setState( {shouldRedirectLogin: true });
   }
 
-  setRedirectSignup = () => {
+  handleLogout() {
+    localStorage.removeItem('accountId');
+    localStorage.removeItem('accountToken');
+    window.location.reload();
+  }
+
+  handleSignup = () => {
     this.setState( {shouldRedirectSignup: true });
   }
 
-  renderRedirectLogin = () => {
+  renderRedirect() {
     if (this.state.shouldRedirectLogin) {
       return <Redirect to={PATH_LOGIN} />
     }
-  }
-
-  renderRedirectSignup = () => {
-    if (this.state.shouldRedirectSignup) {
+    else if (this.state.shouldRedirectSignup) {
       return <Redirect to={PATH_SIGNUP} />
+    }
+    else if (this.state.shouldRedirectLogout) {
+      return <Redirect to={PATH_BOARD} />
     }
   }
 
@@ -62,7 +69,7 @@ class Sidebar extends React.Component {
       return (
         <div className="sidebar-header top-header">
           <h3>@{accountHandle}</h3>
-          <button className="logout">Logout</button>
+          <button className="logout" onClick={this.handleLogout}>Logout</button>
         </div>
       );
 
@@ -70,8 +77,8 @@ class Sidebar extends React.Component {
     else {
       return (
         <div className="top-buttons sidebar-buttons">
-          <button className="sidebar-button" onClick={this.setRedirectLogin}>Login</button>
-          <button className="sidebar-button" onClick={this.setRedirectSignup}>Signup</button>
+          <button className="sidebar-button" onClick={this.handleLogin}>Login</button>
+          <button className="sidebar-button" onClick={this.handleSignup}>Signup</button>
         </div>
       );
     }
@@ -95,8 +102,7 @@ class Sidebar extends React.Component {
     return (
 
       <div className="sidebar">
-        {this.renderRedirectLogin()}
-        {this.renderRedirectSignup()}
+        {this.renderRedirect()}
         <div className="sidebar-lists">
           <this.Header />
           <ImpulseList listName="Impulses"

@@ -709,8 +709,8 @@ export const loginAccount = (email, password) => {
         const accountHandle = authPayload.auth.account.handle;
         const activated = authPayload.activated;
 
-        sessionStorage.setItem('accountId', accountId);
-        sessionStorage.setItem('accountToken', token);
+        localStorage.setItem('accountId', accountId);
+        localStorage.setItem('accountToken', token);
 
         dispatch(login(accountId, accountHandle, activated, token));
         dispatch(loginErrorsOccured(false, true));
@@ -738,7 +738,7 @@ export const registerSession = () => {
     .then(authPayload => {
       const token = authPayload.auth_token;
 
-      sessionStorage.setItem('sessionToken', token);
+      localStorage.setItem('sessionToken', token);
 
       dispatch(setSession(token));
     })
