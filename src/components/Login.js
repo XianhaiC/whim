@@ -55,7 +55,7 @@ class Login extends React.Component {
     e.preventDefault();
     var noErrors = this.handleErrors();
     if (noErrors) { 
-      this.props.loginAccount(this.state.email, this.state.password); 
+      this.props.loginAccount(this.state.email, this.state.password, this.loginVerified); 
     }
     this.setState({didSubmit: true});
   }
