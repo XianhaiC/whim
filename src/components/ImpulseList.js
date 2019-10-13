@@ -31,9 +31,7 @@ class ImpulseList extends React.Component {
     return (
       <div className="impulse-list">
         <div className="impulse-list-header">
-          <hr className="hr-pre" />
           <h3>{this.props.listName}</h3>
-          <hr className="hr-post" />
         </div>
         <ul className="impulse-list-container">
           {

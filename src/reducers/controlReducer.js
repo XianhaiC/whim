@@ -4,6 +4,7 @@ import {
   SET_CENTER_COMPONENT,
   SET_RIGHTBAR_COMPONENT,
   SET_INVITE_POPUP_OPEN,
+  SET_LINK_POPUP_OPEN,
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
   SET_FETCH_MESSAGES,
@@ -21,6 +22,7 @@ const INITIAL_STATE = {
   centerComponent: null,
   rightbarComponent: null,
   invitePopupOpen: false,
+  linkPopupOpen: false,
   passwordWrongError: false,
   usernameTakenError: false, 
   emailTakenError: false,
@@ -48,6 +50,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case SET_INVITE_POPUP_OPEN:
       return {...state, invitePopupOpen: action.payload.invitePopupOpen};
+
+    case SET_LINK_POPUP_OPEN:
+      return {...state, linkPopupOpen: action.payload.linkPopupOpen};
 
     case ERROR_OCCURED:
       return {...state, errorOccured: action.payload.occured};

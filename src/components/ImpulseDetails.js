@@ -8,9 +8,9 @@ class ImpulseDetails extends React.Component {
 
     return (
       <div className="inspiration-details">
-        <div className="inspiration-list-header">
+        <div className="inspiration-list-header top-header">
           <div className="inspiration-list-info top-info">
-            <h3 className="inspiration-list-title">Impulse description</h3>
+            <h3 className="inspiration-list-title">Description</h3>
           </div>
         </div>
         <div className="inspiration-card inspiration-card-details">

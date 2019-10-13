@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect, withRouter } from 'react-router-dom';
 
-import { PATH_LOGIN, PATH_SIGNUP } from '../constants';
+import { PATH_BOARD, PATH_LOGIN, PATH_SIGNUP } from '../constants';
 import { CenterComponent } from '../helpers';
 import { setCenterComponent } from '../actions/index';
 
@@ -15,15 +15,18 @@ class Sidebar extends React.Component {
 
     this.state = {
       shouldRedirectLogin: false,
-      shouldRenderSignup: false
+      shouldRedirectSignup: false,
+      shouldRedirectLogout: false
     }
 
     this.handleCreateImpulse = this.handleCreateImpulse.bind(this);
     this.handleJoinImpulse = this.handleJoinImpulse.bind(this);
-    this.setRedirectLogin = this.setRedirectLogin.bind(this);
-    this.setRedirectSignup = this.setRedirectSignup.bind(this);
-    this.renderRedirectLogin = this.renderRedirectLogin.bind(this);
-    this.renderRedirectSignup = this.renderRedirectSignup.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    this.handleSignup = this.handleSignup.bind(this);
+    this.renderRedirect = this.renderRedirect.bind(this);
+
+    this.Header = this.Header.bind(this);
   }
 
   handleCreateImpulse() {
@@ -34,28 +37,55 @@ class Sidebar extends React.Component {
     this.props.setCenterComponent(CenterComponent.JOIN);
   }
 
-  setRedirectLogin = () => {
+  handleLogin = () => {
     this.setState( {shouldRedirectLogin: true });
   }
 
-  setRedirectSignup = () => {
+  handleLogout() {
+    localStorage.removeItem('accountId');
+    localStorage.removeItem('accountToken');
+    window.location.reload();
+  }
+
+  handleSignup = () => {
     this.setState( {shouldRedirectSignup: true });
   }
 
-  renderRedirectLogin = () => {
+  renderRedirect() {
     if (this.state.shouldRedirectLogin) {
       return <Redirect to={PATH_LOGIN} />
     }
+    else if (this.state.shouldRedirectSignup) {
+      return <Redirect to={PATH_SIGNUP} />
+    }
+    else if (this.state.shouldRedirectLogout) {
+      return <Redirect to={PATH_BOARD} />
+    }
   }
 
-  renderRedirectSignup = () => {
-    if (this.state.shouldRedirectSignup) {
-      return <Redirect to={PATH_SIGNUP} />
+  Header() {
+    const { loggedIn, accountHandle } = this.props;
+    if (loggedIn) {
+      return (
+        <div className="sidebar-header top-header">
+          <h3>@{accountHandle}</h3>
+          <button className="logout" onClick={this.handleLogout}>Logout</button>
+        </div>
+      );
+
+    }
+    else {
+      return (
+        <div className="top-buttons sidebar-buttons">
+          <button className="sidebar-button" onClick={this.handleLogin}>Login</button>
+          <button className="sidebar-button" onClick={this.handleSignup}>Signup</button>
+        </div>
+      );
     }
   }
 
   render() {
-    const { impulses, sparks, sessionImpulseIds, sessionSparkIds } = this.props;
+    const { impulses, sparks, sessionImpulseIds, sessionSparkIds, loggedIn } = this.props;
 
     let linkedImpulses = [];
     let sessionImpulses = [];
@@ -72,25 +102,21 @@ class Sidebar extends React.Component {
     return (
 
       <div className="sidebar">
+        {this.renderRedirect()}
         <div className="sidebar-lists">
-          <div className="login-button">
-            {this.renderRedirectLogin()}
-            {this.renderRedirectSignup()}
-            { this.props.loggedIn ? null : <button onClick={this.setRedirectLogin} type="button">Login</button>}
-            { this.props.loggedIn ? null : <button onClick={this.setRedirectSignup} type="button">Signup</button>}
-          </div>
+          <this.Header />
           <ImpulseList listName="Impulses"
             impulses={linkedImpulses} />
           <ImpulseList listName="Un-linked"
             impulses={sessionImpulses} />
         </div>
         <div className="sidebar-buttons">
-          <div className="sidebar-button" onClick={this.handleCreateImpulse}>
+          <button className="sidebar-button" onClick={this.handleCreateImpulse}>
             <i className="fas fa-plus"></i>  Create
-          </div>
-          <div className="sidebar-button" onClick={this.handleJoinImpulse}>
+          </button>
+          <button className="sidebar-button" onClick={this.handleJoinImpulse}>
             <i className="fas fa-users"></i>  Join
-          </div>
+          </button>
         </div>
       </div>
     );
@@ -103,7 +129,8 @@ const mapStateToProps = state => {
     sparks: state.data.sparks,
     sessionImpulseIds: state.session.sessionImpulseIds,
     sessionSparkIds: state.session.sessionSparkIds,
-    loggedIn: state.session.loggedIn
+    loggedIn: state.session.loggedIn,
+    accountHandle: state.session.accountHandle
   };
 };
 

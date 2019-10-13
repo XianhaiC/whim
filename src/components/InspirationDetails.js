@@ -125,7 +125,7 @@ class InspirationDetails extends React.Component {
 
     return (
       <div className="inspiration-details">
-        <div className="inspiration-list-header">
+        <div className="inspiration-list-header top-header">
           <div className="inspiration-list-info top-info">
             <h3 className="inspiration-list-title">{spark.name}'s inspiration</h3>
             <div className="inspiration-list-sub top-info-sub">

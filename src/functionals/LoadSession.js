@@ -14,7 +14,7 @@ class LoadSession extends React.Component {
   }
 
   loadSession() {
-    const sessionToken = sessionStorage.getItem('sessionToken');
+    const sessionToken = localStorage.getItem('sessionToken');
     if (!exists(sessionToken))
       this.props.registerSession();
     else {

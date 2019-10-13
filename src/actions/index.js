@@ -14,6 +14,7 @@ import {
   SET_CENTER_COMPONENT,
   SET_RIGHTBAR_COMPONENT,
   SET_INVITE_POPUP_OPEN,
+  SET_LINK_POPUP_OPEN,
   LOGIN,
   SET_SESSION,
   SET_ACTIVE_ITEMS,
@@ -115,10 +116,10 @@ export const setRightbarComponent = (rightbarComponent) => {
   }
 }
 
-export const login = (accountId, accountActivated, accountToken) => {
+export const login = (accountId, accountHandle, accountActivated, accountToken) => {
   return {
     type: LOGIN,
-    payload: { accountId, accountActivated, accountToken }
+    payload: { accountId, accountHandle, accountActivated, accountToken }
   };
 }
 
@@ -126,6 +127,13 @@ export const setInvitePopupOpen = (invitePopupOpen) => {
   return {
     type: SET_INVITE_POPUP_OPEN,
     payload: { invitePopupOpen }
+  };
+}
+
+export const setLinkPopupOpen = (linkPopupOpen) => {
+  return {
+    type: SET_LINK_POPUP_OPEN,
+    payload: { linkPopupOpen }
   };
 }
 
@@ -275,7 +283,7 @@ export const getAccount = (accountId, accountToken) => {
       return res.json();
     })
     .then(account => {
-      dispatch(login(account.id, account.activated, accountToken));
+      dispatch(login(account.id, account.handle, account.activated, accountToken));
     })
     .catch((e) => {
       console.log(e);
@@ -698,11 +706,11 @@ export const loginAccount = (email, password, loginVerified) => {
         // persist the login for the session
         const token = authPayload.auth.auth_token;
         const accountId = authPayload.auth.account.id;
+        const accountHandle = authPayload.auth.account.handle;
         const activated = authPayload.activated;
 
-        sessionStorage.setItem('accountId', accountId);
-        sessionStorage.setItem('accountToken', token);
-
+        localStorage.setItem('accountId', accountId);
+        localStorage.setItem('accountToken', token);
         dispatch(login(accountId, activated, token));
         loginVerified(false);
         //dispatch(loginErrorsOccured(false, true));
@@ -731,7 +739,7 @@ export const registerSession = () => {
     .then(authPayload => {
       const token = authPayload.auth_token;
 
-      sessionStorage.setItem('sessionToken', token);
+      localStorage.setItem('sessionToken', token);
 
       dispatch(setSession(token));
     })

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { setActiveThreadId } from '../actions/index';
 import { PATH_GRAVATAR } from '../constants';
-import { exists } from '../helpers';
+import { exists, getTimeAMPM } from '../helpers';
 
 class Message extends React.Component {
   constructor() {
@@ -45,6 +45,7 @@ class Message extends React.Component {
           <div className="message-body">
             <div className="message-header">
               <h4 className="message-spark-name">{spark.name}</h4>
+              {exists(spark.handle) && <p>@{spark.handle}</p>}
               <p className="message-created-at">{getTimeAMPM(createDate)}</p>
             </div>
             {messageBody}
@@ -67,10 +68,3 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   setActiveThreadId
 })(Message);
-
-// helpers
-
-function getTimeAMPM(time) {
-  let isPM = time.getHours() / 12 === 1;
-  return `${time.getHours() % 12}:${time.getMinutes()} ${isPM ? "PM" : "AM"}`;
-}

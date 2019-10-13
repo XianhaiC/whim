@@ -6,8 +6,8 @@ import { getAccount, getAccountData } from '../actions/index';
 
 class LoadAccount extends React.Component {
   componentDidMount() {
-    const accountToken = sessionStorage.getItem('accountToken');
-    const accountId = sessionStorage.getItem('accountId');
+    const accountToken = localStorage.getItem('accountToken');
+    const accountId = localStorage.getItem('accountId');
 
     if (exists(accountId) && exists(accountToken))
       this.props.getAccount(accountId, accountToken);
@@ -22,6 +22,7 @@ class LoadAccount extends React.Component {
   }
 
   loadAccount() {
+    console.log("LOAD ACCOUNR");
     this.props.getAccountData(this.props.accountId);
   }
 

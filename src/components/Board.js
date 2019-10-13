@@ -5,6 +5,7 @@ import Sidebar from './Sidebar';
 import Center from './Center';
 import Functionals from '../functionals/Functionals';
 import InvitePopup from './InvitePopup';
+import LinkPopup from './LinkPopup';
 
 // TODO move login to its own page
 const Board = () => {
@@ -16,6 +17,7 @@ const Board = () => {
       </div>
       <Functionals />
       <InvitePopup />
+      <LinkPopup />
     </div>
   );
 };

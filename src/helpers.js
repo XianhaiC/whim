@@ -23,10 +23,12 @@ export function exists(obj) {
 }
 
 export function getTimeAMPM(time) {
-  let isPM = time.getHours() / 12 === 1;
+  let isPM = Math.floor(time.getHours() / 12) === 1;
   let hours = time.getHours() % 12;
   if (hours === 0) hours = 12;
-  return `${hours}:${time.getMinutes()} ${isPM ? "PM" : "AM"}`;
+  let mins = time.getMinutes() + "";
+  while (mins.length < 2) mins = "0" + mins;
+  return `${hours}:${mins} ${isPM ? "PM" : "AM"}`;
 }
 
 export function clipMessage(message) {

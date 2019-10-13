@@ -80,7 +80,7 @@ class Login extends React.Component {
     const { passwordWrongErr } = this.props;
 
     return (
-      <div className="login">
+      <div className="login center-form">
         {this.renderRedirect()}
         {(emailBlank && didSubmit) ? <p>Username cannot be blank</p> : null}
         {(passwordWrongErr && didSubmit) ? <p>Username or password is incorrect</p> : null}
