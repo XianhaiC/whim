@@ -65,7 +65,7 @@ export default (state = INITIAL_STATE, action) => {
 
     case PREPEND_THREAD_MESSAGES:
       // used for prepending new messages received via sockets
-      newState = {...state, threads: {...state.threads}, messageReceived: action.payload.boolVal};
+      newState = {...state, threads: {...state.threads} };
       thread = newState.threads[action.payload.threadId];
 
       if (!exists(thread.messages))

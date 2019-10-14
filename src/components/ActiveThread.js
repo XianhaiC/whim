@@ -19,12 +19,13 @@ class ActiveThread extends React.Component {
     this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
-  getSnapshotBeforeUpdate(prevProps) {
-    console.log("copmonentWillUPdate");
-    console.log(this.props.messageReceived);
+  
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { scrollbar } = this.refs;
-
+     
     if (scrollbar != null) {
+
+      // Check whether scrollbar is at the bottom if we receive new messages
       if (this.props.messageReceived) {
       const scrollPos = scrollbar.scrollTop;
       const scrollBottom = (scrollbar.scrollHeight - scrollbar.clientHeight);
@@ -49,25 +50,34 @@ class ActiveThread extends React.Component {
     const { scrollbar } = this.refs;
     const { messageReceived, firstLoad, setMessageReceived, setFirstLoad } = this.props;
     console.log(snapshot);
+    
     // Check that scrollbar has rendered for inspirations and impulses
     if (scrollbar != null ) {
+      
       // Check that messages have been received by the back end and loaded first messages
       if (messageReceived && this.messagesList.length > 0) {
+        
+        // Scroll to bottom for every intial load
         if(this.firstLoad) {
           console.log("firstLoad is true block");
           this.scrollToBottom();
           setFirstLoad(false);
         }
+
         else {
-          if (snapshot) {
+
+          // Only scroll to the bottom if scrollbar is at the bottom of the screen
+          if (this.scrollAtBottom) {
             console.log("scroll is at the bottom");
             this.scrollToBottom();
           }
-          else if (!this.scrollAtBottom && this.topMessage) {
+
+          // If scrolbar is not at the bottom, scroll into view the position of the last message
+          else if (this.topMessage) {
             ReactDOM.findDOMNode(this.topMessage).scrollIntoView();
           }
         }
-        //setMessageReceived(false);
+        setMessageReceived(false);
       }
     }
   }

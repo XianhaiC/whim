@@ -817,8 +817,8 @@ export const receiveUpdate = (update) => {
       dispatch(getThreadMessages(thread_id));
 
     // add the recieved message
-    dispatch(setMessageReceived(true));
     dispatch(receiveMessage(thread_id, message));
+    dispatch(setMessageReceived(true));
 
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));
