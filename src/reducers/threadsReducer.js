@@ -36,6 +36,8 @@ export default (state = INITIAL_STATE, action) => {
     case APPEND_THREAD_MESSAGES:
       newState = {...state, threads: {...state.threads}};
       thread = newState.threads[action.payload.threadId];
+      thread = {...thread};
+      newState.threads[action.payload.threadId] = thread;
 
       // copy over the initial thread state
       if (!exists(thread.messages))
@@ -66,6 +68,8 @@ export default (state = INITIAL_STATE, action) => {
       // used for prepending new messages received via sockets
       newState = {...state, threads: {...state.threads}};
       thread = newState.threads[action.payload.threadId];
+      thread = {...thread};
+      newState.threads[action.payload.threadId] = thread;
 
       if (!exists(thread.messages))
         thread.messages = action.payload.messages;

@@ -19,6 +19,12 @@ class ActiveThread extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    console.log("CHECK PROPS");
+    console.log(prevProps.threads);
+    console.log(this.props.threads);
+  }
+
   scrollToBottom = () => {
     const { scrollbar } = this.refs;
     const scrollHeight = scrollbar.scrollHeight;
