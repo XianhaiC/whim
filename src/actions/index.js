@@ -4,6 +4,8 @@ import {
   UPDATE_THREADS,
   APPEND_THREAD_MESSAGES,
   PREPEND_THREAD_MESSAGES,
+  SET_SCROLL_DOWN,
+  SET_FIRST_LOAD,
   UPDATE_CACHED_THREAD_ID,
   UPDATE_THREAD_OFFSET,
   UPDATE_IMPULSES,
@@ -61,6 +63,20 @@ export const receiveMessage = (threadId, message) => {
     type: PREPEND_THREAD_MESSAGES,
     payload: { threadId, messages: [message] }
   };
+}
+
+export const setScrollDown = (flag) => {
+  return {
+    type: SET_SCROLL_DOWN, 
+    payload: { flag }
+  }
+}
+
+export const setFirstLoad = (flag) => {
+  return {
+    type: SET_FIRST_LOAD, 
+    payload: { flag }
+  }
 }
 
 export const updateImpulses = (impulses,
@@ -806,6 +822,7 @@ export const receiveUpdate = (update) => {
 
     // add the recieved message
     dispatch(receiveMessage(thread_id, message));
+    dispatch(setScrollDown(true));
 
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));
