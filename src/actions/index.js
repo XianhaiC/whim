@@ -4,6 +4,8 @@ import {
   UPDATE_THREADS,
   APPEND_THREAD_MESSAGES,
   PREPEND_THREAD_MESSAGES,
+  SET_MESSAGE_RECEIVED, 
+  SET_FIRST_LOAD,
   UPDATE_CACHED_THREAD_ID,
   UPDATE_THREAD_OFFSET,
   UPDATE_IMPULSES,
@@ -56,11 +58,25 @@ export const updateThreadOffset = (threadId, offset) => {
 }
 
 // TODO the recieved response has two keys, message and thread if messages is an inspo
-export const receiveMessage = (threadId, message, boolVal) => {
+export const receiveMessage = (threadId, message) => {
   return {
     type: PREPEND_THREAD_MESSAGES,
-    payload: { threadId, messages: [message], boolVal }
+    payload: { threadId, messages: [message] }
   };
+}
+
+export const setMessageReceived = (flag) => {
+  return {
+    type: SET_MESSAGE_RECEIVED,
+    payload: { flag }
+  }
+}
+
+export const setFirstLoad = (flag) => {
+  return {
+    type: SET_FIRST_LOAD, 
+    payload: { flag }
+  }
 }
 
 export const updateImpulses = (impulses,
@@ -791,22 +807,18 @@ export const receiveUpdate = (update) => {
         true, [message.id]));
       return;
     }
-
     // save the spark that posted the message
     dispatch(updateSparks([message.spark]));
     delete message.spark;
 
     // get the initial thread messages if they haven't been
     // loaded yet
-    console.log("TEVBING");
-    console.log(message);
-    console.log(!exists(getState().threads.threads[thread_id]));
-    console.log(getState().threads);
     if (!exists(getState().threads.threads[thread_id].messages))
       dispatch(getThreadMessages(thread_id));
 
     // add the recieved message
-    dispatch(receiveMessage(thread_id, message, true));
+    dispatch(setMessageReceived(true));
+    dispatch(receiveMessage(thread_id, message));
 
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));

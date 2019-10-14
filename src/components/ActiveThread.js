@@ -5,68 +5,86 @@ import { connect } from 'react-redux';
 import { exists } from '../helpers';
 import Message from './Message';
 import EmptyThread from './EmptyThread';
-import { setFetchMessages } from  '../actions/index';
+import { setFetchMessages, setMessageReceived, setFirstLoad } from  '../actions/index';
 
 // is in charge of loading messages given an impulse id
 class ActiveThread extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.scrollAtBottom = true;
+    this.messagesList = null;
     this.onScroll = this.onScroll.bind(this);
     this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  getSnapshotBeforeUpdate(prevProps) {
     console.log("copmonentWillUPdate");
+    console.log(this.props.messageReceived);
     const { scrollbar } = this.refs;
-    const { activeThreadId, threads } = this.props;
-    console.log(nextProps);
-    console.log(this.props);
-    if (nextProps.activeThreadId === activeThreadId) {
-      console.log(nextProps.threads[nextProps.activeThreadId].messages);
-      console.log(threads[activeThreadId].messages);
-      //this.messagesUpdated = nextProps.threads[nextProps.activeThreadId].messages.length !== 
-                           //threads[activeThreadId].messages.length;
 
+    if (scrollbar != null) {
       if (this.props.messageReceived) {
-        const scrollPos = scrollbar.scrollTop;
-        const scrollBottom = (scrollbar.scrollHeight - scrollbar.clientHeight);
-        console.log(scrollBottom);
-        this.scrollAtBottom = (scrollBottom <= 0) || (scrollPos === scrollBottom );
-      }
+      const scrollPos = scrollbar.scrollTop;
+      const scrollBottom = (scrollbar.scrollHeight - scrollbar.clientHeight);
+      this.scrollAtBottom = (scrollBottom <= 0) || (scrollPos === scrollBottom );
 
-      if (!this.scrollAtBottom) {
-        const numMessages = scrollbar.childNodes.length;
-        this.topMessage = numMessages === 0 ? null : scrollbar.childNodes[0];
-        this.scrollToBottom();
+        // if message is not at the bottom save the position of last message
+        if (!this.scrollAtBottom) {
+          const numMessages = scrollbar.childNodes.length;
+          this.topMessage = numMessages === 0 ? null : scrollbar.childNodes[0];
+          console.log(ReactDOM.findDOMNode(this.topMessage));
+        }
       }
-
+      
+      return this.scrollAtBottom;
     }
+    
+    return null;
   }
 
-  componentDidUpdate(prevProps) {
-    console.log("compondent Did update messagesUPdated: ");
-    console.log(prevProps.threads[prevProps.activeThreadId].messages);
-    console.log(this.props.threads[this.props.activeThreadId].messages);
-    console.log(this.messagesUpdated);
-    if (this.props.messageReceived) {
-      
-      if(this.scrollAtBottom) this.scrollToBottom();
-      if(this.topMessage) ReactDOM.findDOMNode(this.topMessage).scrollIntoView();
-      
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log('componentDidUpdate');
+    const { scrollbar } = this.refs;
+    const { messageReceived, firstLoad, setMessageReceived, setFirstLoad } = this.props;
+    console.log(snapshot);
+    // Check that scrollbar has rendered for inspirations and impulses
+    if (scrollbar != null ) {
+      // Check that messages have been received by the back end and loaded first messages
+      if (messageReceived && this.messagesList.length > 0) {
+        if(this.firstLoad) {
+          console.log("firstLoad is true block");
+          this.scrollToBottom();
+          setFirstLoad(false);
+        }
+        else {
+          if (snapshot) {
+            console.log("scroll is at the bottom");
+            this.scrollToBottom();
+          }
+          else if (!this.scrollAtBottom && this.topMessage) {
+            ReactDOM.findDOMNode(this.topMessage).scrollIntoView();
+          }
+        }
+        //setMessageReceived(false);
+      }
     }
   }
 
   onScroll = () => {
-    const { refs } = this;
+    const { scrollbar } = this.refs;
     const { setFetchMessages, fetchMessages } = this.props;
-    const scrollTop = refs.scrollbar.scrollTop;
+    const scrollTop = scrollbar.scrollTop;
+
+    // Load next 30 messages if scrollbar reaches the top
     if ( scrollTop === 0 ) {
-      // Load next 30 messages
       setFetchMessages(true);
     }
   }
 
+
+  // Method that scrolls to the bottom of the page
   scrollToBottom = () => {
     const { scrollbar } = this.refs;
     const scrollHeight = scrollbar.scrollHeight;
@@ -87,14 +105,13 @@ class ActiveThread extends React.Component {
 
     console.log("CHECKING NEW MESSAGES");
     console.log(activeThread.messages);
-    let messagesList = null;
     if (exists(activeThread.messages)) {
       /*
       messagesList = activeThread.messages.map(message =>
         <li key={message.id}><Message message={message} /></li>
       );
       */
-      messagesList = activeThread.messages.reduce((filtered, message) => {
+      this.messagesList = activeThread.messages.reduce((filtered, message) => {
         const ts = new Date(dateToString(new Date(message.created_at)));
         if (ts >= threadOffset) {
           filtered.push(
@@ -108,10 +125,9 @@ class ActiveThread extends React.Component {
 
     return (
       <div className="active-thread">
-        <div className="active-thread-wrapper" ref='scrollbar'
-          onScroll={this.onScroll}>
-          <ul>{messagesList}</ul>
-        </div>
+        <ul className="active-thread-wrapper" ref='scrollbar' 
+          onScroll={this.onScroll}>{this.messagesList}
+        </ul>
       </div>
     );
   }
@@ -120,14 +136,19 @@ class ActiveThread extends React.Component {
 const mapStateToProps = state => {
   return {
     activeThreadId: state.control.activeThreadId,
-    messageReceived: state.threads.messageReceived,
+    messageReceived: state.control.messageReceived,
+    firstLoad: state.control.firstLoad,
     threadOffsets: state.threads.threadOffsets,
     threads: state.threads.threads,
     fetchMessages: state.control.fetchMessages
   };
 };
 
-export default connect(mapStateToProps, {setFetchMessages})(ActiveThread);
+export default connect(mapStateToProps, {
+  setFetchMessages,
+  setMessageReceived,
+  setFirstLoad,
+})(ActiveThread);
 
 const dateToString = (date) => {
   return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()}.${date.getUTCMilliseconds()}`

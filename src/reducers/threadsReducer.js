@@ -12,7 +12,6 @@ const INITIAL_STATE = {
   threads: {},
   cachedThreadIds: {},
   threadOffsets: {},
-  messageReceived: false,
 }
 
 // TODO create one thread message update function since we're now sorting
