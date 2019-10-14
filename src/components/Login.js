@@ -14,9 +14,6 @@ class Login extends React.Component {
       password: '',
       shouldRender: false,
       didSubmit: false,
-      emailBlank: false,
-      passBlank: false,
-      passwordWrongErr: false,
     }
 
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -32,31 +29,9 @@ class Login extends React.Component {
     this.setState({email: e.target.value});
   }
 
-  handleErrors() {
-    this.setState({emailBlank: false, passBlank: false});
-    const { email, password } = this.state;
-    var noerr = true; 
-    var emailErr = email.trim() === '';
-    var passErr = password.trim() === '';
-    console.log("password blank flag expect false");
-    console.log(passErr);
-    if (emailErr) {
-      this.setState({emailBlank: true});
-      noerr = false;
-    }
-    if (passErr) {
-      this.setState({passBlank: true});
-      noerr = false;
-    }
-    return noerr;
-  }
-
   handleSubmit(e) {
     e.preventDefault();
-    var noErrors = this.handleErrors();
-    if (noErrors) { 
-      this.props.loginAccount(this.state.email, this.state.password, this.loginVerified); 
-    }
+    this.props.loginAccount(this.state.email, this.state.password);
     this.setState({didSubmit: true});
   }
 
@@ -67,45 +42,53 @@ class Login extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.loggedIn && this.props.passwordWrongErr) {
+    if (this.props.loggedIn) {
       this.setState({shouldRender: true});
     }
+      /*
+    if (this.props.loginVerified && this.state.didSubmit && 
+        !this.props.passwordWrongError && !this.state.shouldRender) {
+    }
+    */
   }
 
   render() {
     console.log("LOGIN ACCOUNT");
     console.log(this.props.loggedIn);
 
-    const { emailBlank, passBlank, didSubmit } = this.state;
-    const { passwordWrongErr } = this.props;
-
     return (
       <div className="login center-form">
         {this.renderRedirect()}
-        {(emailBlank && didSubmit) ? <p>Username cannot be blank</p> : null}
-        {(passwordWrongErr && didSubmit) ? <p>Username or password is incorrect</p> : null}
-        {(passBlank && didSubmit) ? <p>Password cannot be blank</p> : null}
-        <h1>Login</h1>
-        <form onSubmit={this.handleSubmit}>
-          <label>Email</label>
-          <br />
-          <input
-            type="text"
-            value={this.state.email}
-            onChange={this.handleChangeEmail}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            title="Valid email must be provided" />
-          <br />
-          <label>Password</label>
-          <br />
-          <input
-            type="password"
-            value={this.state.password}
-            onChange={this.handleChangePassword}
-            pattern=".{6,}"
-            title="Must contain at least 6 or more characters"/>
-          <input type="submit" />
-        </form>
+        <div className="center-form-wrapper">
+          <h1>Log In</h1>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              className="center-form-field"
+              type="text"
+              placeholder="Email"
+              value={this.state.email}
+              onChange={this.handleChangeEmail}
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              title="Valid email must be provided"
+              required />
+            <input
+              className="center-form-field"
+              type="password"
+              placeholder="Password"
+              value={this.state.password}
+              onChange={this.handleChangePassword}
+              pattern=".{6,}"
+              title="Must contain at least 6 or more characters"
+              required />
+              {
+                this.props.passwordWrongError && 
+                <p className="center-form-error">
+                  Password for username is incorrect
+                </p>
+              }
+            <input class="center-form-submit" type="submit" value="Submit"/>
+          </form>
+        </div>
       </div>
     );
   }
@@ -114,6 +97,8 @@ class Login extends React.Component {
 const mapStateToProps = state => {
   return {
     loggedIn: state.session.loggedIn,
+    passwordWrongError: state.control.passwordWrongError,
+    loginVerified: state.control.loginVerified,
   };
 };
 

@@ -4,8 +4,7 @@ import {
   APPEND_THREAD_MESSAGES,
   PREPEND_THREAD_MESSAGES,
   UPDATE_CACHED_THREAD_ID,
-  UPDATE_THREAD_OFFSET,
-  MESSAGE_COMPLETE,
+  UPDATE_THREAD_OFFSET
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -37,6 +36,8 @@ export default (state = INITIAL_STATE, action) => {
     case APPEND_THREAD_MESSAGES:
       newState = {...state, threads: {...state.threads}};
       thread = newState.threads[action.payload.threadId];
+      thread = {...thread};
+      newState.threads[action.payload.threadId] = thread;
 
       // copy over the initial thread state
       if (!exists(thread.messages))
@@ -65,8 +66,10 @@ export default (state = INITIAL_STATE, action) => {
 
     case PREPEND_THREAD_MESSAGES:
       // used for prepending new messages received via sockets
-      newState = {...state, threads: {...state.threads} };
+      newState = {...state, threads: {...state.threads}};
       thread = newState.threads[action.payload.threadId];
+      thread = {...thread};
+      newState.threads[action.payload.threadId] = thread;
 
       if (!exists(thread.messages))
         thread.messages = action.payload.messages;
@@ -77,7 +80,6 @@ export default (state = INITIAL_STATE, action) => {
           if (index <= -1) thread.messages.push(message);
           else thread.messages[index] = message;
         });
-
       }
 
       thread.messages = sortedMessages(thread.messages);

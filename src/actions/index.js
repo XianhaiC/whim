@@ -4,8 +4,6 @@ import {
   UPDATE_THREADS,
   APPEND_THREAD_MESSAGES,
   PREPEND_THREAD_MESSAGES,
-  SET_MESSAGE_RECEIVED, 
-  SET_FIRST_LOAD,
   UPDATE_CACHED_THREAD_ID,
   UPDATE_THREAD_OFFSET,
   UPDATE_IMPULSES,
@@ -63,20 +61,6 @@ export const receiveMessage = (threadId, message) => {
     type: PREPEND_THREAD_MESSAGES,
     payload: { threadId, messages: [message] }
   };
-}
-
-export const setMessageReceived = (flag) => {
-  return {
-    type: SET_MESSAGE_RECEIVED,
-    payload: { flag }
-  }
-}
-
-export const setFirstLoad = (flag) => {
-  return {
-    type: SET_FIRST_LOAD, 
-    payload: { flag }
-  }
 }
 
 export const updateImpulses = (impulses,
@@ -271,7 +255,7 @@ export const getAccountData = accountId => {
           return filtered;
         }, []);
         dispatch(appendThreadMessages(impulse.message_thread.id, inspirations));
-        console.log("getAccount called");
+
         // we don't store thread data in the impulse list
         delete impulse.message_threads;
       });
@@ -704,7 +688,7 @@ export const signupAccount = (handle, email, password, password_confirmation) =>
   }
 }
 
-export const loginAccount = (email, password, loginVerified) => {
+export const loginAccount = (email, password) => {
   return (dispatch, getState) => {
     fetch(`${API_ROOT}/login`, {
       method: 'POST',
@@ -727,15 +711,14 @@ export const loginAccount = (email, password, loginVerified) => {
 
         localStorage.setItem('accountId', accountId);
         localStorage.setItem('accountToken', token);
-        dispatch(login(accountId, activated, token));
-        loginVerified(false);
-        //dispatch(loginErrorsOccured(false, true));
+
+        dispatch(login(accountId, accountHandle, activated, token));
+        dispatch(loginErrorsOccured(false, true));
       }
       // if errors occured set flag for wrong password on
       else {
         console.log(authPayload.errors);
-        loginVerified(true);
-        //dispatch(loginErrorsOccured(true, true));
+        dispatch(loginErrorsOccured(true, true));
       }
     });
   }
@@ -807,18 +790,22 @@ export const receiveUpdate = (update) => {
         true, [message.id]));
       return;
     }
+
     // save the spark that posted the message
     dispatch(updateSparks([message.spark]));
     delete message.spark;
 
     // get the initial thread messages if they haven't been
     // loaded yet
+    console.log("TEVBING");
+    console.log(message);
+    console.log(!exists(getState().threads.threads[thread_id]));
+    console.log(getState().threads);
     if (!exists(getState().threads.threads[thread_id].messages))
       dispatch(getThreadMessages(thread_id));
 
     // add the recieved message
     dispatch(receiveMessage(thread_id, message));
-    dispatch(setMessageReceived(true));
 
     // thread exists if the message is an inspiration
     if (exists(thread)) dispatch(updateThreads([thread]));

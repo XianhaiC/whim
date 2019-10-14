@@ -10,8 +10,6 @@ import {
   SET_FETCH_MESSAGES,
   SIGNUP_ERRORS_OCCURED,
   LOGIN_ERRORS_OCCURED,
-  SET_MESSAGE_RECEIVED, 
-  SET_FIRST_LOAD, 
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -29,8 +27,7 @@ const INITIAL_STATE = {
   usernameTakenError: false, 
   emailTakenError: false,
   signupVerified: false,
-  messageReceived: false, 
-  firstLoad: false,
+  loginVerified: false,
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -74,13 +71,8 @@ export default (state = INITIAL_STATE, action) => {
         signupVerified: action.payload.verified};
 
     case LOGIN_ERRORS_OCCURED: 
-      return {...state, passwordWrongError: action.payload.password };
-
-    case SET_MESSAGE_RECEIVED: 
-      return {...state, messageReceived: action.payload.flag };
-
-    case SET_FIRST_LOAD:
-      return {...state, firstLoad: action.payload.flag };
+      return {...state, passwordWrongError: action.payload.password, 
+        loginVerified: action.payload.verified};
 
     default:
       return state;
