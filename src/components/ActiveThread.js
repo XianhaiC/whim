@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { exists } from '../helpers';
 import Message from './Message';
 import EmptyThread from './EmptyThread';
-import { setFetchMessages, setFirstLoad, setScrollDown } from  '../actions/index';
+import { setFetchMessages, setFirstLoad, setScrollUp } from  '../actions/index';
 
 // is in charge of loading messages given an impulse id
 class ActiveThread extends React.Component {
@@ -14,20 +14,25 @@ class ActiveThread extends React.Component {
   constructor(props) {
     super(props);
     this.messagesList = null;
-    this.scrollAtBottom = false;
+    this.historyChanged = false;
+    this.scrollAtBottom = true;
+    this.scrollAtTop = false; 
     this.onScroll = this.onScroll.bind(this);
     this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
 
   UNSAFE_componentWillUpdate (nextProps) {
-    this.historyChanged = nextProps.threads[nextProps.activeThreadId].messages.length
-      !== this.props.threads[this.props.activeThreadId].messages.length;
+    const { threads, activeThreadId } = this.props; 
+    const nextActiveThread = nextProps.threads[nextProps.activeThreadId];
+    const activeThread = threads[activeThreadId];
+    if (nextActiveThread.messages !== undefined && activeThread.messages !== undefined) {
+      this.historyChanged = nextActiveThread.messages.length !== activeThread.messages.length; 
+    }
     const { scrollbar } = this.refs;
     if (scrollbar !== null) {
 
-      console.log(this.historyChanged);
-      if (this.props.scrollDown && this.historyChanged) {
+      if (this.historyChanged) {
 
         const scrollPos = scrollbar.scrollTop;
         const scrollBottom = (scrollbar.scrollHeight - scrollbar.clientHeight);
@@ -36,54 +41,44 @@ class ActiveThread extends React.Component {
       if (!this.scrollAtBottom) {
         const numMessages = scrollbar.childNodes.length;
         this.topMessage = numMessages === 0 ? null : scrollbar.childNodes[0];
-        console.log(this.topMessage);
         console.log(ReactDOM.findDOMNode(this.topMessage));
       }
     }
   }
   
   componentDidUpdate(prevProps) {
+    const {threads, activeThreadId} = this.props;
+    const activeThread = threads[activeThreadId];
     const {scrollbar} = this.refs;
+    
     if (scrollbar !== null) {
-      console.log("scroll down");
-      console.log(this.props.scrollDown);
-      console.log('messages list');
-      console.log(this.messagesList);
-      if(this.props.scrollDown && this.messagesList.length > 0) {
-        console.log('first Load');
-        console.log(this.props.firstLoad);
+      if(this.messagesList.length > 0) {
         if (this.props.firstLoad) {
           this.scrollToBottom();
           this.props.setFirstLoad(false);
         }
         else {
           if(this.historyChanged) {
-            if(this.scrollAtBottom) this.scrollToBottom();
-            if(this.topMessage) ReactDOM.findDOMNode(this.topMessage).scrollIntoView();
-          }
-          else {
-            if(this.topMessage) ReactDOM.findDOMNode(this.topMessage).scrollIntoView();
+            if(this.scrollAtBottom && !this.props.fetchMessages) this.scrollToBottom();
+	    
+	  }
+          if (this.topMessage && this.messagesList.length === activeThread.messages.length && 
+	      activeThread.messages.length === prevProps.threads[prevProps.activeThreadId].messages.length) {
+            ReactDOM.findDOMNode(this.topMessage).scrollIntoView();
           }
         }
-        this.props.setScrollDown(false);
       }
     }
   }
 
   onScroll = () => {
-    const { refs } = this;
+    const { scrollbar } = this.refs;
     const { setFetchMessages, fetchMessages } = this.props;
-    const scrollTop = refs.scrollbar.scrollTop;
+    const scrollTop = scrollbar.scrollTop;
     if ( scrollTop === 0 ) {
       // Load next 30 messages
-      setFetchMessages(true);
+      setFetchMessages(true); 
     }
-  }
-
-  componentDidUpdate(prevProps) {
-    console.log("CHECK PROPS");
-    console.log(prevProps.threads);
-    console.log(this.props.threads);
   }
 
   scrollToBottom = () => {
@@ -91,9 +86,6 @@ class ActiveThread extends React.Component {
     const scrollHeight = scrollbar.scrollHeight;
     const height = scrollbar.clientHeight;
     const maxScrollTop = scrollHeight - height;
-    console.log('scrollHeight: ' + scrollHeight);
-    console.log('clientHeight: ' + height);
-    console.log('maxScrollTop: ' + maxScrollTop);
     ReactDOM.findDOMNode(scrollbar).scrollTop = maxScrollTop > 0 ? maxScrollTop: 0;
   }
 
@@ -101,17 +93,8 @@ class ActiveThread extends React.Component {
     const { threads, activeThreadId, threadOffsets } = this.props;
     const activeThread = threads[activeThreadId];
     const threadOffset = new Date(threadOffsets[activeThreadId]);
-    console.log("DATE");
-    console.log(threadOffset);
-
-    console.log("CHECKING NEW MESSAGES");
-    console.log(activeThread.messages);
+    
     if (exists(activeThread.messages)) {
-      /*
-      messagesList = activeThread.messages.map(message =>
-        <li key={message.id}><Message message={message} /></li>
-      );
-      */
       this.messagesList = activeThread.messages.reduce((filtered, message) => {
         const ts = new Date(dateToString(new Date(message.created_at)));
         if (ts >= threadOffset) {
@@ -140,14 +123,14 @@ const mapStateToProps = state => {
     threads: state.threads.threads,
     fetchMessages: state.control.fetchMessages,
     firstLoad: state.control.firstLoad,
-    scrollDown: state.control.scrollDown,
+    scrollUp: state.control.scrollUp,
   };
 };
 
 export default connect(mapStateToProps, {
   setFetchMessages,
   setFirstLoad,
-  setScrollDown,
+  setScrollUp,
 })(ActiveThread);
 
 const dateToString = (date) => {

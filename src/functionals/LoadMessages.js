@@ -3,14 +3,12 @@ import { connect } from 'react-redux';
 
 import { exists } from '../helpers';
 import { getThreadMessages, setFetchMessages,
-         setFirstLoad, setScrollDown } from '../actions/index';
+         setFirstLoad, setScrollUp } from '../actions/index';
 
 class LoadMessages extends React.Component {
   componentDidUpdate() {
-    console.log('LoadMessages component rendering');
     const { activeThreadId, fetchMessages, threads, threadOffsets } = this.props;
     const { setFetchMessages } = this.props;
-    console.log(fetchMessages);
     if (fetchMessages && exists(activeThreadId)) {
       this.loadThreadMessages();
       setFetchMessages(false);
@@ -24,8 +22,6 @@ class LoadMessages extends React.Component {
   }
 
   loadThreadMessages() {
-    console.log('LoadThreadMessages is being called');
-    this.props.setScrollDown(true);
     this.props.getThreadMessages(this.props.activeThreadId);
   }
 
@@ -46,6 +42,6 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   getThreadMessages,
   setFetchMessages,
-  setScrollDown,
+  setScrollUp,
   setFirstLoad
 })(LoadMessages);
