@@ -1,68 +1,100 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# whim
 
-## Available Scripts
+A text channel based chat application for collaboration and brainstorming.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+* Create impulses -- these are text channels that anyone can create. Share the link to let others join!
+* Skip creating an account -- No signup required. Simply create or join an impulse to start chatting.
+* Anonymous sparks -- these are anonymous identities that represent you in each impulse. If you wish to
+persist an impulse beyond the current browser session, create an account and link the spark to it.
+* Post inspirations -- create a note that encapsulates an idea, problem, task, or anything really. Each one spawns
+a thread of it's own and can be revised, so everyone in the impulse can contribute to the idea.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Inspiration/Goals
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+I began work on this project to practice creating a webapp from scratch -- taking
+an idea from conception to reality. For the last few months, I've been learning Rails
+as a backend framework and wanted to dabble in frontend development as well. And so I
+chose to pick up react and learn how to make the two click.
 
-### `npm test`
+As for what to make, I thought it'd be cool to recreate an instant messaging app, much like
+Slack, Discord, or Messenger, since these are tools I commonly use to organize groups
+for projects, etc. However, it's a hassle when not everyone uses the same platform -- some
+people have accounts while others do not. And so I wanted to make something that didn't
+require signup, so everyone can join instantly. Following the collaborative theme, I decided to add
+inspirations. I often find myself scribbling out a slew of sticky notes, usually various
+things for myself, but sometimes for others as well. And so I thought it'd be neat to
+incorporate the idea of a "shared" post-it note into the app: something that everyone could
+see and contribute to.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## How to use
 
-### `npm run build`
+Start by creating an impulse.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Then, create a spark. Give yourself a unique name that others see you as.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Start chatting!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Create inspirations by clicking the inspiration button when submitting a message.
 
-### `npm run eject`
+New inspirations show up here
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Click on one to enlarge it
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Notice that the thread changed. Messages sent now are under this inspiration's thread.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Built With
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+* React/Redux - frontend framework
+* Rails - backend framework
+* Heroku - hosting
+* Vanilla CSS
 
-## Learn More
+## Running locally
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Setting up frontend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+0. Install nodejs/npm
+1. Clone this repo
+2. Run npm i inside the repo to install module dependancies
+3. Modify package.json to run the server on the desired port
+4. Update API_ROOT and API_WS_ROOT in src/constants/index.js to match the backend enpoint
 
-### Code Splitting
+### Setting up backend
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+0. Install ruby, Rails, and postgreSQL
+1. Clone the backend API repo [here]()
+2. Fill out config/application.yml with details for postgreSQL and ActionMailer
+3. Inside the repo, run bundle install
 
-### Analyzing the Bundle Size
+What things you need to install the software and how to install them
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+## TODO list
 
-### Making a Progressive Web App
+* Switch to using cookies for authentication. JWT tokens are currently being store in localStorage
+* Message deletion
+* Impulse deletion
+* Mobile support (responsive CSS)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+## Contributing
 
-### Advanced Configuration
+If you there's any bugs, security flaws, or suggestions, let me know! Submit a PR
+request if you wish as well. I'm always looking to improve this project.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+## Authors
 
-### Deployment
+* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
-### `npm run build` fails to minify
+## License
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* Hat tip to anyone whose code was used
+* Inspiration
+* etc
+
