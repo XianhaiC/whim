@@ -699,6 +699,8 @@ export const loginAccount = (email, password) => {
       })
     })
     .then(res => {
+      console.log("ACCOUNT COOKIE");
+      console.log(res);
       return res.json();
     })
     .then(authPayload => {

@@ -7,6 +7,7 @@
     "md5": "^2.2.1",
     "react": "^16.9.0",
     "react-actioncable-provider": "^2.0.0",
+    "react-cookie": "^4.0.1",
     "react-dom": "^16.9.0",
     "react-fontawesome": "^1.6.1",
     "react-onclickoutside": "^6.9.0",
@@ -17,7 +18,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "PORT=3006 react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
