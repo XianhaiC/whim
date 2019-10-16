@@ -343,15 +343,6 @@ export const getSession = () => {
       dispatch(updateSessionImpulseIds(
         impulses.map(impulse => impulse.id)));
       dispatch(updateSessionSparkIds(data.session_spark_ids));
-
-      // update with session threads as well
-      /*
-      let inspirationThreads = [];
-      impulses.forEach(impulse => {
-        inspirationThreads.push(...impulse.message_threads);
-      });
-      dispatch(updateThreads(inspirationThreads));
-      */
     })
     .catch((e) => {
       console.log(e);
@@ -651,7 +642,7 @@ export const joinImpulse = (impulseHash) => {
   }
 }
 
-export const signupAccount = (handle, email, password, password_confirmation) => {
+export const signupAccount = (handle, email, password, passwordConfirmation) => {
   return (dispatch, getState) => {
     var emailError = false;
     var usernameError = false;
@@ -664,7 +655,7 @@ export const signupAccount = (handle, email, password, password_confirmation) =>
           { handle: handle, 
             email: email,
             password: password,
-            password_confirmation: password_confirmation
+            password_confirmation: passwordConfirmation
           }
       })
     })
