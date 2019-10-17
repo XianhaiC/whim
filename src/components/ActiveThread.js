@@ -30,7 +30,7 @@ class ActiveThread extends React.Component {
       this.historyChanged = nextActiveThread.messages.length !== activeThread.messages.length; 
     }
     const { scrollbar } = this.refs;
-    if (!exists(scrollbar)) {
+    if (exists(scrollbar)) {
 
       if (this.historyChanged) {
 
