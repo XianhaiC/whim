@@ -2,6 +2,8 @@
 
 A text channel based chat application for collaboration and brainstorming.
 
+![app img](public/app.png)
+
 ## Features
 
 * Create impulses -- these are text channels that anyone can create. Share the link to let others join!
@@ -21,12 +23,12 @@ chose to pick up react and learn how to make the two click.
 As for what to make, I thought it'd be cool to recreate an instant messaging app, much like
 Slack, Discord, or Messenger, since these are tools I commonly use to organize groups
 for projects, etc. However, it's a hassle when not everyone uses the same platform -- some
-people have accounts while others do not. And so I wanted to make something that didn't
-require signup, so everyone can join instantly. Following the collaborative theme, I decided to add
-inspirations. I often find myself scribbling out a slew of sticky notes, usually various
-things for myself, but sometimes for others as well. And so I thought it'd be neat to
-incorporate the idea of a "shared" post-it note into the app: something that everyone could
-see and contribute to.
+people have accounts for one while others don't. And so I wanted to make something that didn't
+require signup, letting everyone join instantly. Following the collaborative theme, I added the ability to create
+"inspirations". I often scribble down my thoughts on sticky, usually for ideas, tasks, or reminders.
+And so I thought it'd be useful to have a disposable, virtual note that everyone can see.
+Inspirations thus serve as a "shared" post-it note: something that anyone can share their ideas through, no matter how 
+simple or complex.
 
 ## How to use
 
@@ -59,16 +61,14 @@ Notice that the thread changed. Messages sent now are under this inspiration's t
 1. Clone this repo
 2. Run npm i inside the repo to install module dependancies
 3. Modify package.json to run the server on the desired port
-4. Update API_ROOT and API_WS_ROOT in src/constants/index.js to match the backend enpoint
+4. Update API_ROOT and API_WS_ROOT in src/constants/index.js to match your backend server enpoint
 
 ### Setting up backend
 
 0. Install ruby, Rails, and postgreSQL
-1. Clone the backend API repo [here]()
+1. Clone the backend API repo [here](https://github.com/XianhaiC/whim-backend)
 2. Fill out config/application.yml with details for postgreSQL and ActionMailer
 3. Inside the repo, run bundle install
-
-What things you need to install the software and how to install them
 
 ## TODO list
 
@@ -84,17 +84,5 @@ request if you wish as well. I'm always looking to improve this project.
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
+* [Xianhai Cao](https://github.com/XianhaiC)
+* [Justin Sung](https://github.com/jsungg)

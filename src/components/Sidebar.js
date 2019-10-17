@@ -86,10 +86,12 @@ class Sidebar extends React.Component {
       <div className="sidebar">
         <div className="sidebar-lists">
           <this.Header />
-          <ImpulseList listName="Impulses"
-            impulses={linkedImpulses} />
-          <ImpulseList listName="Un-linked"
-            impulses={sessionImpulses} />
+          <div className="sidebar-lists-wrapper">
+            <ImpulseList listName="Impulses"
+              impulses={linkedImpulses} />
+            <ImpulseList listName="Un-linked"
+              impulses={sessionImpulses} />
+          </div>
         </div>
         <div className="sidebar-buttons">
           <button className="sidebar-button" onClick={this.handleCreateImpulse}>

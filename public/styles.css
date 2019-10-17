@@ -23,6 +23,19 @@
   --error-text: #d54747;
 }
 
+::-webkit-scrollbar {
+  background: transparent;
+  width: 8px;
+  margin-right: 1px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--main-sub-focus);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+}
+
 * {
   padding: 0px;
   margin: 0px;
@@ -162,6 +175,16 @@ hr {
 }
 
 .sidebar-lists {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.sidebar-lists-wrapper {
+  overflow-y: scroll;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
