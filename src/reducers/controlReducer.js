@@ -5,6 +5,8 @@ import {
   SET_RIGHTBAR_COMPONENT,
   SET_INVITE_POPUP_OPEN,
   SET_LINK_POPUP_OPEN,
+  SET_FIRST_LOAD,
+  SET_SCROLL_UP,
   ERROR_OCCURED,
   SET_INVALID_HASH_ERROR,
   SET_FETCH_MESSAGES,
@@ -18,6 +20,8 @@ const INITIAL_STATE = {
   activeThreadId: null,
   errorOccured: false,
   invalidHashError: false,
+  firstLoad: false,
+  scrollUp: false,
   fetchMessages: false,
   centerComponent: null,
   rightbarComponent: null,
@@ -73,6 +77,12 @@ export default (state = INITIAL_STATE, action) => {
     case LOGIN_ERRORS_OCCURED: 
       return {...state, passwordWrongError: action.payload.password, 
         loginVerified: action.payload.verified};
+
+    case SET_SCROLL_UP:
+      return {...state, scrollDown: action.payload.flag };
+
+    case SET_FIRST_LOAD:
+      return {...state, firstLoad: action.payload.flag };
 
     default:
       return state;

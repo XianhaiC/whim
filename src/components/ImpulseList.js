@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { switchImpulse } from '../actions/index';
+import { switchImpulse, setScrollUp, setFirstLoad } from '../actions/index';
 
 class ImpulseList extends React.Component {
   constructor(props) {
@@ -24,6 +24,7 @@ class ImpulseList extends React.Component {
     // update the state with the new impulse
     // this sets the active spark and thread as well
     this.props.switchImpulse(impulse, found);
+    this.props.setFirstLoad(true);
   }
 
   render() {
@@ -54,7 +55,9 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  switchImpulse
+  switchImpulse,
+  setScrollUp,
+  setFirstLoad,
 })(ImpulseList);
 
 // helpers
