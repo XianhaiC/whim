@@ -3,17 +3,21 @@
   --inspo-darker: #624c47;
   --inspo-darker-focus: #55413d;
   --inspo-dim: #d5d5d5;
+  --inspo-sep: #8c687b;
+  --inspo-text: #f5efe9;
   --accent-main: #71445b;
   --main-light: white;
   --main-dim: #654d4f;
   --main-text: #2f0508;
   --main-sep: #e6e6e6;
   --main-sub: #eeeeee;
-  --main-sub-focus: #d5d5d5;
-  --main-dark: #262626;
+  --main-sub-focus: #e1d3d4;
+  --main-dark: #22191f;
+  --main-dark-light: #31242d;
+  --main-dark-light-hover: #2d1f28;
   --main-dark-sub: #303030;
   --main-dark-sub-hover: #1d1d1d;
-  --main-dark-sep: #393939;
+  --main-dark-sep: #4a3a44;
   --main-dark-text: #c6c5c5;
   --error-text: #d54747;
 }
@@ -134,7 +138,7 @@ hr {
 }
 
 .sidebar-header h3 {
-  color: var(--main-dark-text);
+  color: white;
   padding: 0px 0px 10px 20px;
 }
 
@@ -185,11 +189,11 @@ hr {
   text-align: center;
   padding: 10px 20px 10px 20px;
   color: var(--main-dark-text);
-  background-color: #303030;
+  background-color: var(--main-dark-light);
 }
 
 .sidebar-button:hover {
-  background-color: #1d1d1d;
+  background-color: var(--main-dark-light-hover);
 }
 
 /* ImpulseList */
@@ -239,7 +243,7 @@ hr {
 }
 
 .impulse-card:hover {
-  background-color: #303030;
+  background-color: var(--main-dark-light-hover);
 }
 
 .impulse-card-pic {
@@ -298,7 +302,7 @@ hr {
   border-width: 0px 0px 0px 1px;
   border-style: solid;
   border-color: #d8c5c6;
-  background-color: var(--inspo-dark);
+  background-color: var(--main-sub);
 }
 
 /* ImpulseHeader */
@@ -393,7 +397,7 @@ hr {
 }
 
 .message-inspiration {
-  color: #f5efe9;
+  color: var(--inspo-text);;
   background-color: var(--inspo-dark);
   border-radius: 5px;
   padding: 20px 10px 10px 20px;
@@ -464,7 +468,7 @@ hr {
 .active-impulse-right h4,
 .active-impulse-right h3,
 .active-impulse-right p {
-  color: var(--main-text);
+  color: var(--inspo-text);
 }
 
 .inspiration-list {
@@ -476,7 +480,7 @@ hr {
 }
 
 .inspiration-list-header {
-  border-color: #aa978c;
+  border-color: #d2d2d1;
 }
 
 .inspiration-list-info {
@@ -484,11 +488,11 @@ hr {
 }
 
 .inspiration-list-info > h3 {
-  color: var(--main-light);
+  color: var(--main-text);
 }
 
 .inspiration-list-info p {
-  color: var(--inspo-dim);
+  color: var(--main-dim);
 }
 
 .inspiration-list-wrapper {
@@ -504,7 +508,7 @@ hr {
 }
 
 .inspiration-card {
-  background-color: var(--main-light);
+  background-color: var(--inspo-dark);
   border-radius: 5px;
   margin: 10px 20px 0px 20px;
 }
@@ -517,7 +521,7 @@ hr {
   padding: 10px 20px 10px 20px;
   border-width: 1px 0px 0px 0px;
   border-style: solid;
-  border-color: var(--main-sep);
+  border-color: var(--inspo-sep);
 }
 
 .inspiration-card-footer > p {
