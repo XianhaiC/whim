@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect, withRouter } from 'react-router-dom';
 
+import history from '../history';
 import { API_ROOT, HEADERS } from '../constants';
 import { signupAccount } from '../actions/index';
 import { PATH_LOGIN } from '../constants';
@@ -10,16 +11,11 @@ class Signup extends React.Component {
   constructor() {
     super();
     this.state = {
-      handle: '', 
+      handle: '',
       email: '',
       password: '',
-      password_confirm: '',
-      userBlank: false, 
-      emailBlank: false,
-      passBlank: false, 
-      passconfirmBlank: false,
-      passwordsMatch: false,
-      shouldRender: false, 
+      confirmPassword: '',
+      renderCreated: false,
       didSubmit: false,
     }
 
@@ -28,8 +24,7 @@ class Signup extends React.Component {
     this.handleChangeUsername = this.handleChangeUsername.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePasswordConfirm = this.handlePasswordConfirm.bind(this);
-    this.handleErrrors = this.handleErrors.bind(this);
-    this.renderRedirect = this.renderRedirect.bind(this);
+    this.Created = this.Created.bind(this);
   }
 
   handleChangePassword(e) {
@@ -41,53 +36,20 @@ class Signup extends React.Component {
   }
 
   handlePasswordConfirm(e) {
-    this.setState({password_confirm: e.target.value});
-    
-    if(this.refs.password.value != this.refs.confirm_password.value) {
-      this.refs.confirm_password.setCustomValidity("Passwords do not match");
-      this.setState({passwordsMatch: false});
+    this.setState({confirmPassword: e.target.value});
+
+    if(this.refs.password.value != this.refs.confirmPassword.value) {
+      this.refs.confirmPassword.setCustomValidity("Passwords do not match");
     }
     else {
-      this.refs.confirm_password.setCustomValidity('');
-      this.setState({passwordsMatch: true});
+      this.refs.confirmPassword.setCustomValidity('');
     }
-  }
-
-  handleErrors() {
-    this.setState({userBlank: false, emailBlank: false, 
-                  passBlank: false, passconfirmBlank: false});
-    const {handle, email, password, password_confirm } = this.state;
-    var noerr = true;
-    var userErr = handle.trim() === '';
-    var emailErr = email.trim() === '';
-    var passErr = password.trim() === '';
-    var passconfirmErr = password_confirm.trim() === '';
-    if (userErr) {
-      this.setState({userBlank: true});
-      noerr = false;
-    }
-    if (emailErr) {
-      this.setState({emailBlank: true});
-      noerr = false;
-    }
-    if (passErr) {
-      this.setState({passBlank: true});
-      noerr = false;
-    }
-    if (passconfirmErr) {
-      this.setState({passconfirmBlank: true});
-      noerr = false;
-    }
-      return noerr; 
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    var noErrors = this.handleErrors();
-    if (noErrors) {
-      this.props.signupAccount( this.state.handle, this.state.email,
-                              this.state.password, this.state.password_confirmation);
-    }
+    this.props.signupAccount( this.state.handle, this.state.email,
+                            this.state.password, this.state.passwordConfirm);
     this.setState({didSubmit: true});
   }
 
@@ -95,31 +57,35 @@ class Signup extends React.Component {
     this.setState({handle: e.target.value});
   }
 
-  
-  renderRedirect= () => {
-    if (this.state.shouldRender) {
-      return <Redirect to={PATH_LOGIN}/>
-    }
-  }
-
   componentDidUpdate() {
     if(this.props.signupVerified && this.state.didSubmit &&
         !this.props.usernameTakenError &&
         !this.props.emailTakenError &&
-        !this.state.shouldRender) {
-      this.setState({shouldRender: true});
+        !this.state.renderCreated) {
+      this.setState({ renderCreated: true });
     }
+  }
+
+  Created() {
+    return (
+      <div className="signup-created">
+        <h1>Your account has been created!</h1>
+        <h2>Check your email for the activation link.</h2>
+        <button onClick={() => history.push(PATH_LOGIN)}>Back to login</button>
+      </div>
+    );
   }
 
   render() {
     const {usernameTakenError, emailTakenError} = this.props;
-    const {userBlank, emailBlank, passBlank, passconfirmBlank, 
-           passwordsMatch, didSubmit } = this.state;
+    const { didSubmit } = this.state;
     if (this.props.loggedIn) return null;
+
+    // if the user has created their account
+    if (this.state.renderCreated) return <this.Created />;
 
     return (
       <div className="signup center-form">
-        {this.renderRedirect()}
         <div className="center-form-wrapper">
           <h1>Sign up</h1>
           <form onSubmit={this.handleSubmit}>
@@ -155,10 +121,10 @@ class Signup extends React.Component {
               required />
             <input
               className="center-form-field"
-              ref="confirm_password"
+              ref="confirmPassword"
               type="password"
               placeholder="Confirm password"
-              value={this.state.password_confirm}
+              value={this.state.confirmPassword}
               onChange={this.handlePasswordConfirm}
               pattern=".{6,}"
               required />
