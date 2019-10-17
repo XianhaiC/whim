@@ -2,6 +2,8 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import history from '../history';
+import { PATH_LOGIN } from '../constants';
 import { API_ROOT, HEADERS, PATH_BOARD, PATH_ROOT } from '../constants';
 
 class Confirmation extends React.Component {
@@ -12,10 +14,6 @@ class Confirmation extends React.Component {
       confirmed: false,
       invalid: false
     }
-  }
-
-  renderRedirect() {
-    if (this.state.confirmed) return <Redirect to={PATH_ROOT} />;
   }
 
   componentDidMount() {
@@ -38,15 +36,26 @@ class Confirmation extends React.Component {
 
   render() {
     let text = this.state.invalid ?
-      <h1>Invalid confirmation link.</h1> :
+      <h1>Invalid confirmation link. :(</h1> :
       <h1>Awaiting confirmation...</h1>;
 
-    return (
-      <div className="confirmation">
-        {this.renderRedirect()}
-        {text}
-      </div>
-    );
+    if (this.state.confirmed) {
+      return (
+        <div className="center-form">
+          <div className="center-form-wrapper">
+            <h2>Account successfully activated!</h2>
+            <button onClick={() => history.push(PATH_LOGIN)}>Login</button>
+          </div>
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className="response">
+          {text}
+        </div>
+      );
+    }
   }
 }
 

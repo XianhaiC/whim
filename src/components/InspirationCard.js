@@ -26,7 +26,7 @@ class InspirationCard extends React.Component {
     const updateDate = new Date(message.updated_at);
 
     return (
-      <div className="inspiration-card" onClick={this.handleClick}>
+      <div className="inspiration-card inspiration-card-highlight" onClick={this.handleClick}>
         <p className="inspiration-card-text">{clipMessage(message.body)}</p>
         <div className="inspiration-card-footer">
           <p className="inspiration-card-spark-name">{spark.name}</p>

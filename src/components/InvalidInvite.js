@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
 
-class InvalidInvite extends Component { 
+class InvalidInvite extends Component {
   render() {
-    return <h3>Invalid invite.</h3>
+    return (
+      <div className="response">
+        <h1>Invalid invite.</h1>
+      </div>
+    );
   }
 }
 

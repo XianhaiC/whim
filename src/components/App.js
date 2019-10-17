@@ -1,18 +1,24 @@
-import React, {Component} from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { API_ROOT, HEADERS, PATH_ROOT, PATH_INVITE,
          PATH_INVALID_INVITE, PATH_BOARD, PATH_LOGIN, PATH_SIGNUP, PATH_CONFIRMATION } from '../constants';
 import { exists } from '../helpers';
+import history from '../history';
 import Board from './Board';
 import Login from './Login';
 import Signup from './Signup';
 import Confirmation from './Confirmation';
-
-//import Landing from './Landing'
 import InvalidInvite from './InvalidInvite';
+import {
+  updateThreads,
+  appendThreadMessages,
+  updateImpulses,
+  updateSparks
+} from '../actions/index';
 
-class App extends Component {
+class App extends React.Component {
   constructor() {
     super();
     /*
@@ -34,26 +40,36 @@ class App extends Component {
   }
 
   parseInvite(props) {
-    /*
     fetch(`${API_ROOT}/impulses/invite/${props.match.params.hash}`, {
       method: 'GET',
       headers: HEADERS
     })
     .then(res => res.json())
-    .then(impulse => {
-      console.log(impulse);
-      if (!exists(impulse.id)) {
+    .then(data => {
+      console.log("INVITE");
+      console.log(data);
+      if (!exists(data.impulse)) {
         // redirect to error page
-        this.setState({ invalid_hash: true });
+        history.push(PATH_INVALID_INVITE);
       }
       else {
-        this.setState({
-          invite_hash: props.match.params.hash,
-          invited_impulse: impulse
-        });
+        const { impulse, sparks } = data;
+
+        this.props.updateThreads(impulse.message_threads);
+        const inspirations = impulse.message_threads.reduce((filtered, thread) => {
+          if (thread.parent_type === "Message") filtered.push(thread.parent);
+          return filtered;
+        }, []);
+        this.props.appendThreadMessages(impulse.message_thread.id, inspirations);
+
+        // we don't store thread data in the impulse list
+        delete impulse.message_threads;
+        this.props.updateImpulses([impulse]);
+        this.props.updateSparks(sparks);
+
+        history.push(PATH_BOARD);
       }
     });
-    */
   }
 
   handleImpulseJoined(impulse) {
@@ -118,4 +134,9 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(null, {
+  updateThreads,
+  appendThreadMessages,
+  updateImpulses,
+  updateSparks,
+})(App);

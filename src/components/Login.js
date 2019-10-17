@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect, withRouter } from 'react-router-dom';
 
+import history from '../history';
 import { API_ROOT, HEADERS } from '../constants';
 import { loginAccount } from '../actions/index';
 import { PATH_BOARD } from '../constants';
@@ -12,8 +13,6 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      shouldRender: false,
-      didSubmit: false,
     }
 
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -32,33 +31,17 @@ class Login extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     this.props.loginAccount(this.state.email, this.state.password);
-    this.setState({didSubmit: true});
-  }
-
-  renderRedirect() {
-    if (this.state.shouldRender) {
-      return <Redirect to={PATH_BOARD}/>
-    }
   }
 
   componentDidUpdate() {
     if (this.props.loggedIn) {
-      this.setState({shouldRender: true});
+      history.push(PATH_BOARD);
     }
-      /*
-    if (this.props.loginVerified && this.state.didSubmit && 
-        !this.props.passwordWrongError && !this.state.shouldRender) {
-    }
-    */
   }
 
   render() {
-    console.log("LOGIN ACCOUNT");
-    console.log(this.props.loggedIn);
-
     return (
       <div className="login center-form">
-        {this.renderRedirect()}
         <div className="center-form-wrapper">
           <h1>Log In</h1>
           <form onSubmit={this.handleSubmit}>

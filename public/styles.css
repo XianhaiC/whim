@@ -1,19 +1,24 @@
 :root {
   --inspo-dark: #71445b;
-  --inspo-darker: #624c47;
+  --inspo-dark-hover: #513141;
+  --inspo-darker: #886e7c;
   --inspo-darker-focus: #55413d;
   --inspo-dim: #d5d5d5;
+  --inspo-sep: #8c687b;
+  --inspo-text: #f5efe9;
   --accent-main: #71445b;
   --main-light: white;
   --main-dim: #654d4f;
   --main-text: #2f0508;
   --main-sep: #e6e6e6;
   --main-sub: #eeeeee;
-  --main-sub-focus: #d5d5d5;
-  --main-dark: #262626;
+  --main-sub-focus: #e1d3d4;
+  --main-dark: #22191f;
+  --main-dark-light: #31242d;
+  --main-dark-light-hover: #2d1f28;
   --main-dark-sub: #303030;
   --main-dark-sub-hover: #1d1d1d;
-  --main-dark-sep: #393939;
+  --main-dark-sep: #4a3a44;
   --main-dark-text: #c6c5c5;
   --error-text: #d54747;
 }
@@ -134,7 +139,7 @@ hr {
 }
 
 .sidebar-header h3 {
-  color: var(--main-dark-text);
+  color: white;
   padding: 0px 0px 10px 20px;
 }
 
@@ -185,11 +190,11 @@ hr {
   text-align: center;
   padding: 10px 20px 10px 20px;
   color: var(--main-dark-text);
-  background-color: #303030;
+  background-color: var(--main-dark-light);
 }
 
 .sidebar-button:hover {
-  background-color: #1d1d1d;
+  background-color: var(--main-dark-light-hover);
 }
 
 /* ImpulseList */
@@ -239,7 +244,7 @@ hr {
 }
 
 .impulse-card:hover {
-  background-color: #303030;
+  background-color: var(--main-dark-light-hover);
 }
 
 .impulse-card-pic {
@@ -265,6 +270,7 @@ hr {
 .center {
   height: 100%;
   flex-grow: 1;
+  display: flex;
   background-color: var(--main-light);
 }
 
@@ -272,6 +278,7 @@ hr {
 
 .active-impulse {
   height: 100%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -298,7 +305,7 @@ hr {
   border-width: 0px 0px 0px 1px;
   border-style: solid;
   border-color: #d8c5c6;
-  background-color: var(--inspo-dark);
+  background-color: var(--main-sub);
 }
 
 /* ImpulseHeader */
@@ -393,9 +400,9 @@ hr {
 }
 
 .message-inspiration {
-  color: #f5efe9;
+  color: var(--inspo-text);;
   background-color: var(--inspo-dark);
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 20px 10px 10px 20px;
   margin-top: 5px;
 }
@@ -464,7 +471,7 @@ hr {
 .active-impulse-right h4,
 .active-impulse-right h3,
 .active-impulse-right p {
-  color: var(--main-text);
+  color: var(--inspo-text);
 }
 
 .inspiration-list {
@@ -476,7 +483,7 @@ hr {
 }
 
 .inspiration-list-header {
-  border-color: #aa978c;
+  border-color: #d2d2d1;
 }
 
 .inspiration-list-info {
@@ -484,11 +491,11 @@ hr {
 }
 
 .inspiration-list-info > h3 {
-  color: var(--main-light);
+  color: var(--main-text);
 }
 
 .inspiration-list-info p {
-  color: var(--inspo-dim);
+  color: var(--main-dim);
 }
 
 .inspiration-list-wrapper {
@@ -504,9 +511,13 @@ hr {
 }
 
 .inspiration-card {
-  background-color: var(--main-light);
-  border-radius: 5px;
+  background-color: var(--inspo-dark);
+  border-radius: 3px;
   margin: 10px 20px 0px 20px;
+}
+
+.inspiration-card-highlight:hover {
+  background-color: var(--inspo-dark-hover);
 }
 
 .inspiration-card-footer {
@@ -517,7 +528,7 @@ hr {
   padding: 10px 20px 10px 20px;
   border-width: 1px 0px 0px 0px;
   border-style: solid;
-  border-color: var(--main-sep);
+  border-color: var(--inspo-sep);
 }
 
 .inspiration-card-footer > p {
@@ -539,7 +550,7 @@ hr {
 }
 
 .inspiration-details-buttons {
-  color: var(--main-light);
+  color: var(--main-dim);
 }
 
 .inspiration-details > form {
@@ -560,8 +571,9 @@ hr {
 
 .edit-text {
   flex: 1 1 0;
-  background-color: var(--main-light);
-  border-radius: 5px;
+  background-color: var(--inspo-dark);
+  color: var(--inspo-text);
+  border-radius: 3px;
   border: 0;
   outline: none;
   resize: none;
@@ -572,17 +584,17 @@ hr {
 
 .edit-button {
   background: var(--inspo-darker);
-  color: var(--main-light);
+  color: var(--inspo-text);
 }
 
 .edit-button:hover {
-  background: var(--inspo-darker-focus);
+  background: var(--inspo-dark);
 }
 
 /* CreateImpulse, JoinImpulse, and CreateSpark */
 
 .new-impulse {
-  height: 100%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -605,10 +617,10 @@ hr {
 }
 
 .new-impulse form {
-  height: 100%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .new-impulse-fill {
@@ -663,6 +675,10 @@ hr {
   font-size: 14px;
 }
 
+.new-impulse-extra {
+  flex: 1 1 0;
+}
+
 /* EmptyThread */
 
 .empty {
@@ -700,7 +716,7 @@ hr {
   align-items: center;
   background: var(--main-dark);
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .popup > h2 {
@@ -713,15 +729,15 @@ hr {
 
 .popup > button {
   border: 0;
-  border-radius: 5px;
-  background-color: var(--main-dark-sub);
+  border-radius: 3px;
+  background-color: var(--main-dark-light);
   color: var(--main-dark-text);
-  margin-top: 20px;
+  margin-top: 50px;
   padding: 10px;
 }
 
 .popup > button:hover {
-  background-color: var(--main-dark-sub-hover);
+  background-color: var(--main-dark-light-hover);
 }
 
 .popup-wrapper {
@@ -749,8 +765,8 @@ hr {
 .popup-link,
 .popup-code {
   padding: 15px 10px 10px 10px;
-  background-color: var(--main-dark-sub);
-  border-radius: 5px;
+  background-color: var(--main-dark-light);
+  border-radius: 3px;
 }
 
 /* Login */
@@ -768,7 +784,7 @@ hr {
   flex-direction: column;
   background-color: var(--main-dark);
   padding: 60px 50px 60px 50px;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .center-form form {
@@ -782,18 +798,18 @@ hr {
   border: 0;
   padding: 10px;
   width: 300px;
-  background-color: var(--main-dark-sub);
+  background-color: var(--main-dark-light);
   color: var(--main-dark-text);
   box-sizing: border-box;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .center-form input:invalid {
   border-color: blue;
 }
 
-.center-form h1 {
-  color: var(--main-dark-text);
+.center-form h1, .center-form h2 {
+  color: white;
 }
 
 .center-form-field {
@@ -805,10 +821,36 @@ hr {
 }
 
 .center-form-submit:hover {
-  background-color: var(--main-dark-sub-hover);
+  background-color: var(--main-dark-light-hover);
 }
 
 .center-form form > p {
   margin-top: 10px;
   color: var(--error-text);
+}
+
+.center-form button {
+  align-self: center;
+  border: 0;
+  padding: 10px;
+  margin-top: 50px;
+  width: 300px;
+  background-color: var(--main-dark-light);
+  color: var(--main-dark-text);
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+.center-form button:hover {
+  background-color: var(--main-dark-light-hover);
+}
+
+/* InvalidInvite */
+
+.response {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 40%;
 }

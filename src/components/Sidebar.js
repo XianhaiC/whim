@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Route, Redirect, withRouter } from 'react-router-dom';
 
 import { PATH_BOARD, PATH_LOGIN, PATH_SIGNUP } from '../constants';
+import history from '../history';
 import { CenterComponent } from '../helpers';
 import { setCenterComponent } from '../actions/index';
 
@@ -13,18 +14,11 @@ class Sidebar extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      shouldRedirectLogin: false,
-      shouldRedirectSignup: false,
-      shouldRedirectLogout: false
-    }
-
     this.handleCreateImpulse = this.handleCreateImpulse.bind(this);
     this.handleJoinImpulse = this.handleJoinImpulse.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleSignup = this.handleSignup.bind(this);
-    this.renderRedirect = this.renderRedirect.bind(this);
 
     this.Header = this.Header.bind(this);
   }
@@ -38,7 +32,7 @@ class Sidebar extends React.Component {
   }
 
   handleLogin = () => {
-    this.setState( {shouldRedirectLogin: true });
+    history.push(PATH_LOGIN);
   }
 
   handleLogout() {
@@ -48,19 +42,7 @@ class Sidebar extends React.Component {
   }
 
   handleSignup = () => {
-    this.setState( {shouldRedirectSignup: true });
-  }
-
-  renderRedirect() {
-    if (this.state.shouldRedirectLogin) {
-      return <Redirect to={PATH_LOGIN} />
-    }
-    else if (this.state.shouldRedirectSignup) {
-      return <Redirect to={PATH_SIGNUP} />
-    }
-    else if (this.state.shouldRedirectLogout) {
-      return <Redirect to={PATH_BOARD} />
-    }
+    history.push(PATH_SIGNUP);
   }
 
   Header() {
@@ -102,7 +84,6 @@ class Sidebar extends React.Component {
     return (
 
       <div className="sidebar">
-        {this.renderRedirect()}
         <div className="sidebar-lists">
           <this.Header />
           <ImpulseList listName="Impulses"

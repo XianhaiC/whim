@@ -4,6 +4,8 @@ import {
   UPDATE_THREADS,
   APPEND_THREAD_MESSAGES,
   PREPEND_THREAD_MESSAGES,
+  SET_SCROLL_UP,
+  SET_FIRST_LOAD,
   UPDATE_CACHED_THREAD_ID,
   UPDATE_THREAD_OFFSET,
   UPDATE_IMPULSES,
@@ -61,6 +63,20 @@ export const receiveMessage = (threadId, message) => {
     type: PREPEND_THREAD_MESSAGES,
     payload: { threadId, messages: [message] }
   };
+}
+
+export const setScrollUp = (flag) => {
+  return {
+    type: SET_SCROLL_UP, 
+    payload: { flag }
+  }
+}
+
+export const setFirstLoad = (flag) => {
+  return {
+    type: SET_FIRST_LOAD, 
+    payload: { flag }
+  }
 }
 
 export const updateImpulses = (impulses,
@@ -343,15 +359,6 @@ export const getSession = () => {
       dispatch(updateSessionImpulseIds(
         impulses.map(impulse => impulse.id)));
       dispatch(updateSessionSparkIds(data.session_spark_ids));
-
-      // update with session threads as well
-      /*
-      let inspirationThreads = [];
-      impulses.forEach(impulse => {
-        inspirationThreads.push(...impulse.message_threads);
-      });
-      dispatch(updateThreads(inspirationThreads));
-      */
     })
     .catch((e) => {
       console.log(e);
@@ -651,7 +658,7 @@ export const joinImpulse = (impulseHash) => {
   }
 }
 
-export const signupAccount = (handle, email, password, password_confirmation) => {
+export const signupAccount = (handle, email, password, passwordConfirmation) => {
   return (dispatch, getState) => {
     var emailError = false;
     var usernameError = false;
@@ -664,7 +671,7 @@ export const signupAccount = (handle, email, password, password_confirmation) =>
           { handle: handle, 
             email: email,
             password: password,
-            password_confirmation: password_confirmation
+            password_confirmation: passwordConfirmation
           }
       })
     })
