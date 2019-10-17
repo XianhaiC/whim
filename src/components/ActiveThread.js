@@ -97,7 +97,7 @@ class ActiveThread extends React.Component {
     const activeThread = threads[activeThreadId];
     const threadOffset = new Date(threadOffsets[activeThreadId]);
     
-    if (exists(activeThread.messages)) {
+    if (exists(activeThread.messages) && activeThread.messages.length > 0) {
       this.messagesList = activeThread.messages.reduce((filtered, message) => {
         const ts = new Date(dateToString(new Date(message.created_at)));
         if (ts >= threadOffset) {

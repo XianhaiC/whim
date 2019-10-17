@@ -1,6 +1,7 @@
 :root {
   --inspo-dark: #71445b;
-  --inspo-darker: #624c47;
+  --inspo-dark-hover: #513141;
+  --inspo-darker: #886e7c;
   --inspo-darker-focus: #55413d;
   --inspo-dim: #d5d5d5;
   --inspo-sep: #8c687b;
@@ -269,6 +270,7 @@ hr {
 .center {
   height: 100%;
   flex-grow: 1;
+  display: flex;
   background-color: var(--main-light);
 }
 
@@ -276,6 +278,7 @@ hr {
 
 .active-impulse {
   height: 100%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -399,7 +402,7 @@ hr {
 .message-inspiration {
   color: var(--inspo-text);;
   background-color: var(--inspo-dark);
-  border-radius: 5px;
+  border-radius: 3px;
   padding: 20px 10px 10px 20px;
   margin-top: 5px;
 }
@@ -509,8 +512,12 @@ hr {
 
 .inspiration-card {
   background-color: var(--inspo-dark);
-  border-radius: 5px;
+  border-radius: 3px;
   margin: 10px 20px 0px 20px;
+}
+
+.inspiration-card-highlight:hover {
+  background-color: var(--inspo-dark-hover);
 }
 
 .inspiration-card-footer {
@@ -543,7 +550,7 @@ hr {
 }
 
 .inspiration-details-buttons {
-  color: var(--main-light);
+  color: var(--main-dim);
 }
 
 .inspiration-details > form {
@@ -564,8 +571,9 @@ hr {
 
 .edit-text {
   flex: 1 1 0;
-  background-color: var(--main-light);
-  border-radius: 5px;
+  background-color: var(--inspo-dark);
+  color: var(--inspo-text);
+  border-radius: 3px;
   border: 0;
   outline: none;
   resize: none;
@@ -576,17 +584,17 @@ hr {
 
 .edit-button {
   background: var(--inspo-darker);
-  color: var(--main-light);
+  color: var(--inspo-text);
 }
 
 .edit-button:hover {
-  background: var(--inspo-darker-focus);
+  background: var(--inspo-dark);
 }
 
 /* CreateImpulse, JoinImpulse, and CreateSpark */
 
 .new-impulse {
-  height: 100%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -609,10 +617,10 @@ hr {
 }
 
 .new-impulse form {
-  height: 100%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .new-impulse-fill {
@@ -667,6 +675,10 @@ hr {
   font-size: 14px;
 }
 
+.new-impulse-extra {
+  flex: 1 1 0;
+}
+
 /* EmptyThread */
 
 .empty {
@@ -704,7 +716,7 @@ hr {
   align-items: center;
   background: var(--main-dark);
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .popup > h2 {
@@ -717,15 +729,15 @@ hr {
 
 .popup > button {
   border: 0;
-  border-radius: 5px;
-  background-color: var(--main-dark-sub);
+  border-radius: 3px;
+  background-color: var(--main-dark-light);
   color: var(--main-dark-text);
-  margin-top: 20px;
+  margin-top: 50px;
   padding: 10px;
 }
 
 .popup > button:hover {
-  background-color: var(--main-dark-sub-hover);
+  background-color: var(--main-dark-light-hover);
 }
 
 .popup-wrapper {
@@ -753,8 +765,8 @@ hr {
 .popup-link,
 .popup-code {
   padding: 15px 10px 10px 10px;
-  background-color: var(--main-dark-sub);
-  border-radius: 5px;
+  background-color: var(--main-dark-light);
+  border-radius: 3px;
 }
 
 /* Login */
@@ -772,7 +784,7 @@ hr {
   flex-direction: column;
   background-color: var(--main-dark);
   padding: 60px 50px 60px 50px;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .center-form form {
@@ -786,18 +798,18 @@ hr {
   border: 0;
   padding: 10px;
   width: 300px;
-  background-color: var(--main-dark-sub);
+  background-color: var(--main-dark-light);
   color: var(--main-dark-text);
   box-sizing: border-box;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .center-form input:invalid {
   border-color: blue;
 }
 
-.center-form h1 {
-  color: var(--main-dark-text);
+.center-form h1, .center-form h2 {
+  color: white;
 }
 
 .center-form-field {
@@ -809,10 +821,36 @@ hr {
 }
 
 .center-form-submit:hover {
-  background-color: var(--main-dark-sub-hover);
+  background-color: var(--main-dark-light-hover);
 }
 
 .center-form form > p {
   margin-top: 10px;
   color: var(--error-text);
+}
+
+.center-form button {
+  align-self: center;
+  border: 0;
+  padding: 10px;
+  margin-top: 50px;
+  width: 300px;
+  background-color: var(--main-dark-light);
+  color: var(--main-dark-text);
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+.center-form button:hover {
+  background-color: var(--main-dark-light-hover);
+}
+
+/* InvalidInvite */
+
+.response {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 40%;
 }

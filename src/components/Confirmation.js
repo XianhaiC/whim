@@ -41,15 +41,17 @@ class Confirmation extends React.Component {
 
     if (this.state.confirmed) {
       return (
-        <div className="confirmation-ok">
-          <h1>Account successfully activated!</h1>
-          <button onClick={() => history.push(PATH_LOGIN)}>Login</button>
+        <div className="center-form">
+          <div className="center-form-wrapper">
+            <h2>Account successfully activated!</h2>
+            <button onClick={() => history.push(PATH_LOGIN)}>Login</button>
+          </div>
         </div>
       );
     }
     else {
       return (
-        <div className="confirmation-progress">
+        <div className="response">
           {text}
         </div>
       );

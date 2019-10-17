@@ -9,8 +9,7 @@ import { PATH_LOGIN } from '../constants';
 
 class Signup extends React.Component {
   constructor() {
-    super();
-    this.state = {
+    super(); this.state = {
       handle: '',
       email: '',
       password: '',
@@ -68,10 +67,12 @@ class Signup extends React.Component {
 
   Created() {
     return (
-      <div className="signup-created">
-        <h1>Your account has been created!</h1>
-        <h2>Check your email for the activation link.</h2>
-        <button onClick={() => history.push(PATH_LOGIN)}>Back to login</button>
+      <div className="center-form">
+        <div className="center-form-wrapper">
+          <h2>Your account has been created!</h2>
+          <h2>Check your email for the activation link.</h2>
+          <button onClick={() => history.push(PATH_LOGIN)}>Back to login</button>
+        </div>
       </div>
     );
   }
