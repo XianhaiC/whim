@@ -25,32 +25,39 @@ Slack, Discord, or Messenger, since these are tools I commonly use to organize g
 for projects, etc. However, it's a hassle when not everyone uses the same platform -- some
 people have accounts for one while others don't. And so I wanted to make something that didn't
 require signup, letting everyone join instantly. Following the collaborative theme, I added the ability to create
-"inspirations". I often scribble down my thoughts on sticky, usually for ideas, tasks, or reminders.
+"inspirations". I often scribble down my thoughts on sticky notes, usually for ideas, tasks, or reminders.
 And so I thought it'd be useful to have a disposable, virtual note that everyone can see.
-Inspirations thus serve as a "shared" post-it note: something that anyone can share their ideas through, no matter how 
+Inspirations thus serve as a "shared" sticky note: something to communicate ideas with, no matter how 
 simple or complex.
 
 ## How to use
 
 Start by creating an impulse.
 
+![how to create impulse](public/t_create.png)
+
 Then, create a spark. Give yourself a unique name that others see you as.
+
+![how to create spark](public/t_spark.png)
 
 Start chatting!
 
 Create inspirations by clicking the inspiration button when submitting a message.
 
+![create inspiration](public/t_inspo.png)
+
 New inspirations show up here
 
-Click on one to enlarge it
+![inspiration list](public/t_list.png)
 
-Notice that the thread changed. Messages sent now are under this inspiration's thread.
+Click on one to enlarge it. Notice that the thread changed. Messages sent now are under this inspiration's thread.
+Click the impulse on the left sidebar to re-open the impulse thread.
 
 ## Built With
 
-* React/Redux - frontend framework
-* Rails - backend framework
-* Heroku - hosting
+* **Front-end:** React/Redux
+* **Back-end:** Rails API
+* **Hosting:** Heroku
 * Vanilla CSS
 
 ## Running locally
@@ -79,7 +86,7 @@ Notice that the thread changed. Messages sent now are under this inspiration's t
 
 ## Contributing
 
-If you there's any bugs, security flaws, or suggestions, let me know! Submit a PR
+If you there's any bugs, questions, or suggestions, let me know! Submit a pull
 request if you wish as well. I'm always looking to improve this project.
 
 ## Authors
