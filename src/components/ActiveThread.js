@@ -30,7 +30,7 @@ class ActiveThread extends React.Component {
       this.historyChanged = nextActiveThread.messages.length !== activeThread.messages.length; 
     }
     const { scrollbar } = this.refs;
-    if (scrollbar !== null) {
+    if (!exists(scrollbar)) {
 
       if (this.historyChanged) {
 
@@ -51,7 +51,7 @@ class ActiveThread extends React.Component {
     const activeThread = threads[activeThreadId];
     const {scrollbar} = this.refs;
     
-    if (scrollbar !== null) {
+    if (exists(scrollbar)) {
       if(this.messagesList.length > 0) {
         if (this.props.firstLoad) {
           this.scrollToBottom();
@@ -83,10 +83,13 @@ class ActiveThread extends React.Component {
 
   scrollToBottom = () => {
     const { scrollbar } = this.refs;
-    const scrollHeight = scrollbar.scrollHeight;
-    const height = scrollbar.clientHeight;
-    const maxScrollTop = scrollHeight - height;
-    ReactDOM.findDOMNode(scrollbar).scrollTop = maxScrollTop > 0 ? maxScrollTop: 0;
+    
+    if (exists(scrollbar)) {
+      const scrollHeight = scrollbar.scrollHeight;
+      const height = scrollbar.clientHeight;
+      const maxScrollTop = scrollHeight - height;
+      ReactDOM.findDOMNode(scrollbar).scrollTop = maxScrollTop > 0 ? maxScrollTop: 0;
+    }
   }
 
   render() {
