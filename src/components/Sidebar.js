@@ -4,7 +4,7 @@ import { Route, Redirect, withRouter } from 'react-router-dom';
 
 import { PATH_BOARD, PATH_LOGIN, PATH_SIGNUP } from '../constants';
 import history from '../history';
-import { CenterComponent } from '../helpers';
+import { exists, CenterComponent } from '../helpers';
 import { setCenterComponent } from '../actions/index';
 
 import ImpulseList from './ImpulseList';
@@ -67,16 +67,27 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    const { impulses, sparks, sessionImpulseIds, sessionSparkIds, loggedIn } = this.props;
+    const { impulses, sparks, loggedIn, accountId } = this.props;
 
     let linkedImpulses = [];
     let sessionImpulses = [];
 
+    let linkedImpulseIds = [];
+    if (loggedIn && exists(accountId)) {
+      console.log("ACC file");
+      console.log(sparks);
+      console.log(accountId);
+      linkedImpulseIds = Object.values(sparks).reduce((filtered, spark) => {
+        if (spark.account_id == accountId) filtered.push(spark.impulse_id);
+        return filtered;
+      }, []);
+    }
+
     Object.values(impulses).forEach(impulse => {
-      if (sessionImpulseIds[impulse.id] === true)
-        sessionImpulses.push(impulse);
-      else
+      if (linkedImpulseIds.includes(impulse.id))
         linkedImpulses.push(impulse);
+      else
+        sessionImpulses.push(impulse);
     });
 
     // call .values() on each dict so we retrieve a list of their values
@@ -108,9 +119,8 @@ const mapStateToProps = state => {
   return {
     impulses: state.data.impulses,
     sparks: state.data.sparks,
-    sessionImpulseIds: state.session.sessionImpulseIds,
-    sessionSparkIds: state.session.sessionSparkIds,
     loggedIn: state.session.loggedIn,
+    accountId: state.session.accountId,
     accountHandle: state.session.accountHandle
   };
 };

@@ -5,7 +5,6 @@ import LoadSession from './LoadSession';
 import LoadMessages from './LoadMessages';
 import MessageThreadsChannel from './MessageThreadsChannel';
 import ImpulsesChannel from './ImpulsesChannel';
-import Reload from './Reload';
 
 const Functionals = () => {
   return (
@@ -15,7 +14,6 @@ const Functionals = () => {
       <LoadMessages />
       <MessageThreadsChannel />
       <ImpulsesChannel />
-      <Reload />
     </div>
   );
 };
