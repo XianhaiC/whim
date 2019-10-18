@@ -14,9 +14,9 @@ class Message extends React.Component {
 
   handleMoreClick() {
     const { message, threads } = this.props;
-    const messageThread = Object.values(threads).find(thread =>
-      thread.parent_type === "Message" && thread.parent_id == message.id
-    );
+    const messageThread = Object.values(threads).find(thread =>{
+      return thread.parent_type === "Message" && thread.parent_id === message.id;
+    });
 
     this.props.setActiveThreadId(messageThread.id);
   }
@@ -40,7 +40,7 @@ class Message extends React.Component {
     return (
       <div className="message">
         <div className="message-container">
-          <img className="message-spark-pic"
+          <img className="message-spark-pic" alt=""
             src={`${PATH_GRAVATAR}/${hash}?s=40&d=retro&r=pg`} />
           <div className="message-body">
             <div className="message-header">
@@ -51,7 +51,7 @@ class Message extends React.Component {
             {messageBody}
           </div>
         </div>
-        {messageMore} 
+        {messageMore}
         <hr/>
       </div>
     );

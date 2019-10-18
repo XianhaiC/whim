@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { MAX_INSPO_CARD_LENGTH } from '../constants';
 import { setActiveThreadId, setRightbarComponent } from '../actions/index';
-import { RightbarComponent, getTimeAMPM, clipMessage } from '../helpers';
+import { exists, RightbarComponent, getTimeAMPM, clipMessage } from '../helpers';
 
 class InspirationCard extends React.Component {
   constructor(props) {
@@ -19,8 +18,9 @@ class InspirationCard extends React.Component {
 
   render() {
     const { messageId, sparks, threads, parentThreadId } = this.props;
+    if (!exists(threads[parentThreadId].messages)) return null;
     const message = threads[parentThreadId].messages.find(message =>
-      message.id == messageId
+      message.id === messageId
     );
     const spark = sparks[message.spark_id];
     const updateDate = new Date(message.updated_at);

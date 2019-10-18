@@ -42,7 +42,7 @@ class ImpulseHeader extends React.Component {
         <div className="impulse-header-info top-info">
           <h3>{activeImpulse.name}</h3>
           <div className="impulse-header-sub top-info-sub">
-            <p>{activeImpulse.sparks_joined} Spark{activeImpulse.sparks_joined != 1 ? "s" : ""} joined</p>
+            <p>{activeImpulse.sparks_joined} Spark{activeImpulse.sparks_joined !== 1 ? "s" : ""} joined</p>
             {activeImpulse.invite_hash
                 && <p>Invite hash: {activeImpulse.invite_hash}</p>}
           </div>
@@ -66,7 +66,7 @@ class ImpulseHeader extends React.Component {
           </div>
           <div className="header-button tooltip-south">
             <i className="fas fa-cog"></i>
-            <span className="tooltiptext-south">Options</span>
+            <span className="tooltiptext-south">Options (not implemented)</span>
           </div>
         </div>
       </div>

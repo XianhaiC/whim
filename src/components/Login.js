@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect, withRouter } from 'react-router-dom';
 
 import history from '../history';
-import { API_ROOT, HEADERS } from '../constants';
 import { loginAccount } from '../actions/index';
 import { PATH_BOARD } from '../constants';
 
@@ -35,6 +33,7 @@ class Login extends React.Component {
 
   componentDidUpdate() {
     if (this.props.loggedIn) {
+      window.location.reload();
       history.push(PATH_BOARD);
     }
   }
@@ -69,7 +68,7 @@ class Login extends React.Component {
                   Password for username is incorrect
                 </p>
               }
-            <input class="center-form-submit" type="submit" value="Submit"/>
+            <input className="center-form-submit" type="submit" value="Submit"/>
           </form>
         </div>
       </div>
@@ -85,6 +84,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   loginAccount
-})(Login));
+})(Login);

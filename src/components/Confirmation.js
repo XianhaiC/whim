@@ -1,10 +1,7 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 import history from '../history';
-import { PATH_LOGIN } from '../constants';
-import { API_ROOT, HEADERS, PATH_BOARD, PATH_ROOT } from '../constants';
+import { API_ROOT, HEADERS, PATH_LOGIN } from '../constants';
 
 class Confirmation extends React.Component {
   constructor(props) {

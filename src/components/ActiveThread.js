@@ -36,21 +36,21 @@ class ActiveThread extends React.Component {
 
         const scrollPos = scrollbar.scrollTop;
         const scrollBottom = (scrollbar.scrollHeight - scrollbar.clientHeight);
-        this.scrollAtBottom = (scrollBottom <= 0) || (scrollPos === scrollBottom);
+        this.scrollAtBottom = (scrollBottom <= 0) ||
+          (scrollPos === scrollBottom);
       }
       if (!this.scrollAtBottom) {
         const numMessages = scrollbar.childNodes.length;
         this.topMessage = numMessages === 0 ? null : scrollbar.childNodes[0];
-        console.log(ReactDOM.findDOMNode(this.topMessage));
       }
     }
   }
-  
+
   componentDidUpdate(prevProps) {
     const {threads, activeThreadId} = this.props;
     const activeThread = threads[activeThreadId];
     const {scrollbar} = this.refs;
-    
+
     if (exists(scrollbar)) {
       if(this.messagesList.length > 0) {
         if (this.props.firstLoad) {
@@ -60,7 +60,6 @@ class ActiveThread extends React.Component {
         else {
           if(this.historyChanged) {
             if(this.scrollAtBottom && !this.props.fetchMessages) this.scrollToBottom();
-	    
 	  }
           if (this.topMessage && this.messagesList.length === activeThread.messages.length && 
 	      activeThread.messages.length === prevProps.threads[prevProps.activeThreadId].messages.length) {
@@ -73,30 +72,35 @@ class ActiveThread extends React.Component {
 
   onScroll = () => {
     const { scrollbar } = this.refs;
-    const { setFetchMessages, fetchMessages } = this.props;
+    const { setFetchMessages } = this.props;
     const scrollTop = scrollbar.scrollTop;
     if ( scrollTop === 0 ) {
       // Load next 30 messages
-      setFetchMessages(true); 
+      setFetchMessages(true);
     }
   }
 
   scrollToBottom = () => {
     const { scrollbar } = this.refs;
-    
+
     if (exists(scrollbar)) {
       const scrollHeight = scrollbar.scrollHeight;
       const height = scrollbar.clientHeight;
       const maxScrollTop = scrollHeight - height;
-      ReactDOM.findDOMNode(scrollbar).scrollTop = maxScrollTop > 0 ? maxScrollTop: 0;
+      ReactDOM.findDOMNode(scrollbar).scrollTop = maxScrollTop > 0 ?
+        maxScrollTop: 0;
     }
   }
 
   render() {
-    const { threads, activeThreadId, threadOffsets } = this.props;
+    const { threads, activeThreadId, threadOffsets,
+      fetchMessages } = this.props;
     const activeThread = threads[activeThreadId];
     const threadOffset = new Date(threadOffsets[activeThreadId]);
-    
+
+    // loading messages ...
+    if (fetchMessages) return null;
+
     if (exists(activeThread.messages) && activeThread.messages.length > 0) {
       this.messagesList = activeThread.messages.reduce((filtered, message) => {
         const ts = new Date(dateToString(new Date(message.created_at)));
@@ -112,7 +116,7 @@ class ActiveThread extends React.Component {
 
     return (
       <div className="active-thread">
-        <ul className="active-thread-wrapper" ref='scrollbar' 
+        <ul className="active-thread-wrapper" ref='scrollbar'
           onScroll={this.onScroll}>{this.messagesList}</ul>
       </div>
     );

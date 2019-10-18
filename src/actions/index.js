@@ -10,8 +10,6 @@ import {
   UPDATE_THREAD_OFFSET,
   UPDATE_IMPULSES,
   UPDATE_SPARKS,
-  UPDATE_SESSION_IMPULSE_IDS,
-  UPDATE_SESSION_SPARK_IDS,
   SET_ACTIVE_THREAD_ID,
   SET_CENTER_COMPONENT,
   SET_RIGHTBAR_COMPONENT,
@@ -92,22 +90,6 @@ export const updateSparks = (sparks,
   return {
     type: UPDATE_SPARKS,
     payload: { sparks, remove, toRemoveIds }
-  };
-}
-
-export const updateSessionImpulseIds = (impulseIds,
-  remove = false, toRemoveIds = []) => {
-  return {
-    type: UPDATE_SESSION_IMPULSE_IDS,
-    payload: { impulseIds, remove, toRemoveIds }
-  };
-}
-
-export const updateSessionSparkIds = (sparkIds,
-  remove = false, toRemoveIds = []) => {
-  return {
-    type: UPDATE_SESSION_SPARK_IDS,
-    payload: { sparkIds, remove, toRemoveIds }
   };
 }
 
@@ -275,6 +257,8 @@ export const getAccountData = accountId => {
         // we don't store thread data in the impulse list
         delete impulse.message_threads;
       });
+
+      // remove the linked spark and its impulse from the session lists
       dispatch(updateImpulses(impulses));
       dispatch(updateSparks(sparks));
     })
@@ -356,9 +340,6 @@ export const getSession = () => {
 
       dispatch(updateImpulses(impulses));
       dispatch(updateSparks(sparks));
-      dispatch(updateSessionImpulseIds(
-        impulses.map(impulse => impulse.id)));
-      dispatch(updateSessionSparkIds(data.session_spark_ids));
     })
     .catch((e) => {
       console.log(e);
@@ -539,7 +520,6 @@ export const createImpulse = (name, description) => {
       // add the new impulse and set the active impulse to allow the user
       // to create a new spark
       dispatch(updateImpulses([newImpulse]));
-      dispatch(updateSessionImpulseIds([newImpulse.id]));
       dispatch(updateThreads([newImpulse.message_thread]));
       dispatch(switchImpulse(newImpulse, null));
     })
@@ -590,7 +570,6 @@ export const createSpark = (name, impulseId, accountId) => {
       // add the new spark to the list of session sparks
       // update the active impulse information to include this new spark
       dispatch(updateSparks([newSpark]));
-      dispatch(updateSessionSparkIds([newSpark.id]));
       dispatch(switchImpulse(activeImpulse, newSpark));
     })
     .catch((e) => {
@@ -613,8 +592,6 @@ export const joinImpulse = (impulseHash) => {
     })
     .then(data => {
       const { impulse, sparks } = data;
-      console.log("JOINING");
-      console.log(data);
 
       let existingImpulse = getState().data.impulses[impulse.id];
       let existingSpark = null;
@@ -636,7 +613,6 @@ export const joinImpulse = (impulseHash) => {
 
         dispatch(updateImpulses([impulse]));
         dispatch(updateSparks(sparks));
-        dispatch(updateSessionImpulseIds([impulse.id]));
         existingImpulse = impulse;
       }
       else {
@@ -662,7 +638,6 @@ export const signupAccount = (handle, email, password, passwordConfirmation) => 
   return (dispatch, getState) => {
     var emailError = false;
     var usernameError = false;
-    console.log("ACTION BEING CALLED");
     fetch(`${API_ROOT}/accounts`, {
       method: 'POST', 
       headers: HEADERS, 
@@ -679,7 +654,6 @@ export const signupAccount = (handle, email, password, passwordConfirmation) => 
       return res.json();
     })
     .then(result => {
-      console.log(result.errors);
       if (result.errors != null ) {
         result.errors.forEach( error => {
           if (error === "Handle has already been taken") {
@@ -706,8 +680,6 @@ export const loginAccount = (email, password) => {
       })
     })
     .then(res => {
-      console.log("ACCOUNT COOKIE");
-      console.log(res);
       return res.json();
     })
     .then(authPayload => {
@@ -787,11 +759,18 @@ export const receiveUpdate = (update) => {
     if (exists(deleted)) {
       // find the thread
       const deletedThread = Object.values(getState().threads.threads).find(thread =>
-        thread.parent_type === "Message" && thread.parent_id == message.id);
+        thread.parent_type === "Message" && thread.parent_id === message.id);
 
       // delete it if it exists
-      if (exists(deletedThread))
+      if (exists(deletedThread)) {
+        // switch to impulse thread if we're on the deleted thread
+        const activeImpulseId = getState().control.activeImpulseId;
+        const mainThreadId = getState().data.impulses[activeImpulseId].message_thread.id;
+        dispatch(setRightbarComponent(RightbarComponent.LIST));
+        dispatch(setActiveThreadId(mainThreadId));
+
         dispatch(updateThreads(null, true, [deletedThread.id]));
+      }
 
       // delete the message
       // TODO refactor function name
@@ -806,10 +785,6 @@ export const receiveUpdate = (update) => {
 
     // get the initial thread messages if they haven't been
     // loaded yet
-    console.log("TEVBING");
-    console.log(message);
-    console.log(!exists(getState().threads.threads[thread_id]));
-    console.log(getState().threads);
     if (!exists(getState().threads.threads[thread_id].messages))
       dispatch(getThreadMessages(thread_id));
 
@@ -871,11 +846,7 @@ export const linkAccount = (sparkId, accountId) => {
       return res.json();
     })
     .then(spark => {
-      const linkedImpulse = getState().data.impulses[spark.impulse_id];
-
-      // remove the linked spark and its impulse from the session lists
-      dispatch(updateSessionSparkIds([], true, [spark.id]));
-      dispatch(updateSessionImpulseIds([], true, [spark.impulse_id]));
+      dispatch(updateSparks([spark]));
     })
     .catch((e) => {
       console.log(e);

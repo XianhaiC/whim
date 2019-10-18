@@ -2,9 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import onClickOutside from "react-onclickoutside";
 
-import { exists } from '../helpers';
 import { setLinkPopupOpen } from '../actions/index';
-import { URL_ROOT } from '../constants';
 
 class LinkPopup extends React.Component {
   constructor() {
@@ -21,7 +19,6 @@ class LinkPopup extends React.Component {
     const { accountActivated, accountHandle } = this.props;
 
     if (!this.props.linkPopupOpen) return null;
-    console.log("RENDER LINK");
 
     const content = accountActivated ? (
       <div className="popup" ref={el => this.popup = el}>

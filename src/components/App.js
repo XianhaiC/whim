@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import { API_ROOT, HEADERS, PATH_ROOT, PATH_INVITE,
          PATH_INVALID_INVITE, PATH_BOARD, PATH_LOGIN, PATH_SIGNUP, PATH_CONFIRMATION } from '../constants';
@@ -11,6 +11,7 @@ import Login from './Login';
 import Signup from './Signup';
 import Confirmation from './Confirmation';
 import InvalidInvite from './InvalidInvite';
+import Functionals from '../functionals/Functionals';
 import {
   updateThreads,
   appendThreadMessages,
@@ -21,22 +22,12 @@ import {
 class App extends React.Component {
   constructor() {
     super();
-    /*
-    this.state = {
-      account_id: null,
-      active_impulse: null,
-      invite_hash: null,
-      invited_impulse: null,
-      invalid_hash: false
-    }
-    */
 
     this.parseInvite = this.parseInvite.bind(this);
     this.handleImpulseJoined = this.handleImpulseJoined.bind(this);
     this.renderBoard = this.renderBoard.bind(this);
     this.renderLogin = this.renderLogin.bind(this);
     this.renderSignup = this.renderSignup.bind(this);
-    this.renderLanding = this.renderLanding.bind(this);
   }
 
   parseInvite(props) {
@@ -46,8 +37,6 @@ class App extends React.Component {
     })
     .then(res => res.json())
     .then(data => {
-      console.log("INVITE");
-      console.log(data);
       if (!exists(data.impulse)) {
         // redirect to error page
         history.push(PATH_INVALID_INVITE);
@@ -73,53 +62,30 @@ class App extends React.Component {
   }
 
   handleImpulseJoined(impulse) {
-    console.log(impulse);
     this.setState({ invited_impulse: impulse });
   }
 
   renderLogin() {
-    console.log("LOGIN RENDERING");
     return (
       <Login />
     );
   }
 
   renderSignup() {
-    return ( <Signup /> );
+    return <Signup />
   }
 
-  // TODO: figure out what to do with these passed in props
   renderBoard(props) {
     return <Board />
-    /*return (<Board
-      invite_hash={this.state.invite_hash}
-      invited_impulse={this.state.invited_impulse} />
-    )
-    */
-  }
-
-  renderLanding(props) {
-    //return <Landing onImpulseJoined={this.handleImpulseJoined} />
-    return null;
   }
 
   renderConfirmation(props) {
     return <Confirmation uuid={props.match.params.uuid} />;
   }
 
-  renderRedirect() {
-    /*
-    if (this.state.invalid_hash) return <Redirect to={PATH_INVALID_INVITE} />
-    if (this.state.invite_hash
-      || this.state.invited_impulse) return <Redirect to={PATH_BOARD} />
-      */
-  }
-
-  //TODO change back root to landing later
   render() {
     return (
       <div className="app">
-        {this.renderRedirect()}
         <Switch>
           <Route exact path={PATH_ROOT} render={this.renderBoard} />
           <Route exact path={PATH_BOARD} render={this.renderBoard} />
@@ -129,6 +95,7 @@ class App extends React.Component {
           <Route path={PATH_CONFIRMATION} render={this.renderConfirmation} />
           <Route exact path={PATH_SIGNUP} render={this.renderSignup} />
         </Switch>
+        <Functionals />
       </div>
     );
   }
