@@ -15,7 +15,6 @@ class InvitePopup extends React.Component {
   }
 
   handleClickOutside(e) {
-    console.log("CLICKED");
     this.props.setInvitePopupOpen(false);
   }
 

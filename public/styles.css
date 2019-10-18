@@ -24,16 +24,13 @@
 }
 
 ::-webkit-scrollbar {
-  background: transparent;
-  width: 8px;
-  margin-right: 1px;
+  width: 6px;
 }
 
+/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--main-sub-focus);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-track {
+  background: var(--inspo-dark);
+>>>>>>> dev
 }
 
 * {
@@ -175,7 +172,7 @@ hr {
 }
 
 .sidebar-lists {
-  flex: 1 1 0;
+  flex : 1 1 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -183,12 +180,14 @@ hr {
 }
 
 .sidebar-lists-wrapper {
-  overflow-y: scroll;
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  overflow-y: scroll;
+  scrollbar-color: var(--main-dark-light-hover) transparent;
+  scrollbar-width: thin;
 }
 
 .sidebar-buttons {
@@ -358,6 +357,8 @@ hr {
 .active-thread-wrapper {
   overflow-y: scroll;
   flex: 1 1 0;
+  scrollbar-color: var(--main-sub) transparent;
+  scrollbar-width: thin;
 }
 
 /* Message */
@@ -524,6 +525,8 @@ hr {
 .inspiration-list-wrapper {
   flex: 1 1 0;
   overflow-y: scroll;
+  scrollbar-color: var(--inspo-dark) transparent;
+  scrollbar-width: thin;
 }
 
 .inspiration-list-container {
@@ -574,6 +577,10 @@ hr {
 
 .inspiration-details-buttons {
   color: var(--main-dim);
+}
+
+.inspiration-details-buttons div:hover {
+  background-color: var(--main-sub-focus);
 }
 
 .inspiration-details > form {

@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect, withRouter } from 'react-router-dom';
 
 import history from '../history';
-import { API_ROOT, HEADERS } from '../constants';
 import { signupAccount } from '../actions/index';
 import { PATH_LOGIN } from '../constants';
 
@@ -37,7 +35,7 @@ class Signup extends React.Component {
   handlePasswordConfirm(e) {
     this.setState({confirmPassword: e.target.value});
 
-    if(this.refs.password.value != this.refs.confirmPassword.value) {
+    if(this.refs.password.value !== this.refs.confirmPassword.value) {
       this.refs.confirmPassword.setCustomValidity("Passwords do not match");
     }
     else {
@@ -79,7 +77,6 @@ class Signup extends React.Component {
 
   render() {
     const {usernameTakenError, emailTakenError} = this.props;
-    const { didSubmit } = this.state;
     if (this.props.loggedIn) return null;
 
     // if the user has created their account
@@ -150,6 +147,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   signupAccount
-})(Signup));
+})(Signup);

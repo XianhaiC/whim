@@ -1,5 +1,5 @@
 export const UNDEFINED = "undefined";
-export const URL_ROOT = 'http://localhost:3006'
+export const URL_ROOT = 'https://intense-coast-16296.herokuapp.com'
 export const API_ROOT = 'https://intense-coast-16296.herokuapp.com/api/v1';
 export const API_WS_ROOT = 'wss://intense-coast-16296.herokuapp.com/api/v1/cable';
 //export const API_ROOT = 'http://localhost:3000/api/v1';

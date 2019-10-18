@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { switchThread } from '../actions/index';
 import InspirationCard from './InspirationCard';
 
 class InspirationList extends React.Component {
   render() {
-    const { activeImpulseId, activeThreadId, threads } = this.props;
-    const activeThread = threads[activeThreadId];
+    const { activeImpulseId, threads } = this.props;
 
     // find the impulses' inspiration threads and sort them by most recently
     // updated
@@ -18,8 +16,6 @@ class InspirationList extends React.Component {
     ));
     const activeImpulse = this.props.impulses[activeImpulseId];
 
-    console.log("IN LIST");
-    console.log(inspirationThreads);
     // map threads to card components
     const cardsList = inspirationThreads.map(thread => {
       return (
@@ -34,7 +30,7 @@ class InspirationList extends React.Component {
           <div className="inspiration-list-info top-info">
             <h3 className="inspiration-list-title">Inspirations</h3>
             <div className="inspiration-list-sub top-info-sub">
-              <p>{activeImpulse.inspirations_created} Idea{activeImpulse.inspirations_created != 1 ? "s" : ""} brewing...</p>
+              <p>{activeImpulse.inspirations_created} Idea{activeImpulse.inspirations_created !== 1 ? "s" : ""} brewing...</p>
             </div>
           </div>
         </div>
@@ -51,7 +47,6 @@ class InspirationList extends React.Component {
 const mapStateToProps = state => {
   return {
     activeImpulseId: state.control.activeImpulseId,
-    activeThreadId: state.control.activeThreadId,
     impulses: state.data.impulses,
     threads: state.threads.threads
   };
