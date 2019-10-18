@@ -74,7 +74,7 @@ class InspirationDetails extends React.Component {
     const impulseThread =
       threads[impulses[activeThread.impulse_id].message_thread.id];;
     const message = impulseThread.messages.find(message =>
-      message.id === activeThread.parent_id);
+      message.id == activeThread.parent_id);
     return message;
   }
 
