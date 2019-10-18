@@ -4,6 +4,8 @@ A text channel based chat application for collaboration and brainstorming.
 
 ![app img](public/app.png)
 
+Try the demo [here](https://whim-chat.herokuapp.com/)
+
 ## Features
 
 * Create impulses -- these are text channels that anyone can create. Share the link to let others join!
