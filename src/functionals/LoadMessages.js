@@ -7,7 +7,7 @@ import { getThreadMessages, setFetchMessages,
 
 class LoadMessages extends React.Component {
   componentDidUpdate() {
-    const { activeThreadId, fetchMessages, threads, threadOffsets } = this.props;
+    const { activeThreadId, fetchMessages, threadOffsets } = this.props;
     const { setFetchMessages } = this.props;
     if (fetchMessages && exists(activeThreadId)) {
       this.loadThreadMessages();
@@ -34,7 +34,6 @@ const mapStateToProps = state => {
   return {
     activeThreadId: state.control.activeThreadId,
     fetchMessages: state.control.fetchMessages,
-    threads: state.threads.threads,
     threadOffsets: state.threads.threadOffsets
   }
 };

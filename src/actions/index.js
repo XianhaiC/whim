@@ -790,8 +790,15 @@ export const receiveUpdate = (update) => {
         thread.parent_type === "Message" && thread.parent_id == message.id);
 
       // delete it if it exists
-      if (exists(deletedThread))
+      if (exists(deletedThread)) {
+        // switch to impulse thread if we're on the deleted thread
+        const activeImpulseId = getState().control.activeImpulseId;
+        const mainThreadId = getState().data.impulses[activeImpulseId].message_thread.id;
+        dispatch(setActiveThreadId(mainThreadId));
+        dispatch(setRightbarComponent(RightbarComponent.LIST));
+
         dispatch(updateThreads(null, true, [deletedThread.id]));
+      }
 
       // delete the message
       // TODO refactor function name

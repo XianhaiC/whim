@@ -14,8 +14,12 @@ class Message extends React.Component {
 
   handleMoreClick() {
     const { message, threads } = this.props;
-    const messageThread = Object.values(threads).find(thread =>
-      thread.parent_type === "Message" && thread.parent_id == message.id
+    const messageThread = Object.values(threads).find(thread =>{
+      console.log("EUQE");
+      console.log(thread);
+      console.log(message);
+      return thread.parent_type === "Message" && thread.parent_id === message.id;
+    }
     );
 
     this.props.setActiveThreadId(messageThread.id);
