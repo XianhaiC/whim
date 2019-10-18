@@ -578,6 +578,10 @@ hr {
   color: var(--main-dim);
 }
 
+.inspiration-details-buttons div:hover {
+  background-color: var(--main-sub-focus);
+}
+
 .inspiration-details > form {
   flex: 1 1 0;
   display: flex;

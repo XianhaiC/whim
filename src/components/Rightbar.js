@@ -11,6 +11,9 @@ class Rightbar extends React.Component {
   render() {
     let rightbarComponent = null;
 
+    console.log("RIGHT");
+    console.log(this.props.rightbarComponent);
+
     switch (this.props.rightbarComponent) {
       case RightbarComponent.LIST:
         rightbarComponent = <InspirationList />

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { switchImpulse, setScrollUp, setFirstLoad } from '../actions/index';
+import { exists } from '../helpers';
 
 class ImpulseList extends React.Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class ImpulseList extends React.Component {
     let found = null;
     found = Object.values(this.props.sparks).find(spark =>
       spark.impulse_id === impulse.id
-      && (spark.account_id === accountId
+      && ((exists(accountId) && spark.account_id === accountId)
         || spark.session_token === sessionToken)
     );
 

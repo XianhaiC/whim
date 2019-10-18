@@ -74,13 +74,14 @@ class InspirationDetails extends React.Component {
     const impulseThread =
       threads[impulses[activeThread.impulse_id].message_thread.id];;
     const message = impulseThread.messages.find(message =>
-      message.id == activeThread.parent_id);
+      message.id === activeThread.parent_id);
     return message;
   }
 
   render() {
     const message = this.getMessage();
 
+    console.log(this.props)
     const updateDate = new Date(message.updated_at);
     const spark = this.props.sparks[message.spark_id];
 
@@ -129,11 +130,13 @@ class InspirationDetails extends React.Component {
             </div>
           </div>
           <div className="inspiration-details-buttons header-buttons">
-            <div className="header-button" onClick={this.handleEdit}>
+            <div className="header-button tooltip-south" onClick={this.handleEdit}>
               <i className="fas fa-edit"></i>
+              <span className="tooltiptext-south">Edit</span>
             </div>
-            <div className="header-button" onClick={this.handleDelete}>
+            <div className="header-button tooltip-south" onClick={this.handleDelete}>
               <i className="fas fa-trash"></i>
+              <span className="tooltiptext-south">Delete</span>
             </div>
           </div>
         </div>

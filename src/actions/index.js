@@ -766,8 +766,8 @@ export const receiveUpdate = (update) => {
         // switch to impulse thread if we're on the deleted thread
         const activeImpulseId = getState().control.activeImpulseId;
         const mainThreadId = getState().data.impulses[activeImpulseId].message_thread.id;
-        dispatch(setActiveThreadId(mainThreadId));
         dispatch(setRightbarComponent(RightbarComponent.LIST));
+        dispatch(setActiveThreadId(mainThreadId));
 
         dispatch(updateThreads(null, true, [deletedThread.id]));
       }

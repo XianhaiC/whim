@@ -66,7 +66,7 @@ class ImpulseHeader extends React.Component {
           </div>
           <div className="header-button tooltip-south">
             <i className="fas fa-cog"></i>
-            <span className="tooltiptext-south">Options</span>
+            <span className="tooltiptext-south">Options (not implemented)</span>
           </div>
         </div>
       </div>
