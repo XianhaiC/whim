@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Login from './Login';
 import Sidebar from './Sidebar';
 import Center from './Center';
 import InvitePopup from './InvitePopup';

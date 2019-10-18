@@ -1,14 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, Redirect, withRouter } from 'react-router-dom';
 
-import { PATH_BOARD, PATH_LOGIN, PATH_SIGNUP } from '../constants';
+import { PATH_LOGIN, PATH_SIGNUP } from '../constants';
 import history from '../history';
 import { exists, CenterComponent } from '../helpers';
 import { setCenterComponent } from '../actions/index';
 
 import ImpulseList from './ImpulseList';
-import Login from './Login';
 
 class Sidebar extends React.Component {
   constructor() {
@@ -74,11 +72,8 @@ class Sidebar extends React.Component {
 
     let linkedImpulseIds = [];
     if (loggedIn && exists(accountId)) {
-      console.log("ACC file");
-      console.log(sparks);
-      console.log(accountId);
       linkedImpulseIds = Object.values(sparks).reduce((filtered, spark) => {
-        if (spark.account_id == accountId) filtered.push(spark.impulse_id);
+        if (spark.account_id === accountId) filtered.push(spark.impulse_id);
         return filtered;
       }, []);
     }
@@ -125,6 +120,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, {
+export default connect(mapStateToProps, {
   setCenterComponent
-})(Sidebar));
+})(Sidebar);

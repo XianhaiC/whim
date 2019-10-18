@@ -592,8 +592,6 @@ export const joinImpulse = (impulseHash) => {
     })
     .then(data => {
       const { impulse, sparks } = data;
-      console.log("JOINING");
-      console.log(data);
 
       let existingImpulse = getState().data.impulses[impulse.id];
       let existingSpark = null;
@@ -640,7 +638,6 @@ export const signupAccount = (handle, email, password, passwordConfirmation) => 
   return (dispatch, getState) => {
     var emailError = false;
     var usernameError = false;
-    console.log("ACTION BEING CALLED");
     fetch(`${API_ROOT}/accounts`, {
       method: 'POST', 
       headers: HEADERS, 
@@ -657,7 +654,6 @@ export const signupAccount = (handle, email, password, passwordConfirmation) => 
       return res.json();
     })
     .then(result => {
-      console.log(result.errors);
       if (result.errors != null ) {
         result.errors.forEach( error => {
           if (error === "Handle has already been taken") {
@@ -684,8 +680,6 @@ export const loginAccount = (email, password) => {
       })
     })
     .then(res => {
-      console.log("ACCOUNT COOKIE");
-      console.log(res);
       return res.json();
     })
     .then(authPayload => {
@@ -765,7 +759,7 @@ export const receiveUpdate = (update) => {
     if (exists(deleted)) {
       // find the thread
       const deletedThread = Object.values(getState().threads.threads).find(thread =>
-        thread.parent_type === "Message" && thread.parent_id == message.id);
+        thread.parent_type === "Message" && thread.parent_id === message.id);
 
       // delete it if it exists
       if (exists(deletedThread)) {
@@ -791,10 +785,6 @@ export const receiveUpdate = (update) => {
 
     // get the initial thread messages if they haven't been
     // loaded yet
-    console.log("TEVBING");
-    console.log(message);
-    console.log(!exists(getState().threads.threads[thread_id]));
-    console.log(getState().threads);
     if (!exists(getState().threads.threads[thread_id].messages))
       dispatch(getThreadMessages(thread_id));
 

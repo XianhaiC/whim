@@ -42,7 +42,6 @@ class ActiveThread extends React.Component {
       if (!this.scrollAtBottom) {
         const numMessages = scrollbar.childNodes.length;
         this.topMessage = numMessages === 0 ? null : scrollbar.childNodes[0];
-        console.log(ReactDOM.findDOMNode(this.topMessage));
       }
     }
   }
@@ -73,7 +72,7 @@ class ActiveThread extends React.Component {
 
   onScroll = () => {
     const { scrollbar } = this.refs;
-    const { setFetchMessages, fetchMessages } = this.props;
+    const { setFetchMessages } = this.props;
     const scrollTop = scrollbar.scrollTop;
     if ( scrollTop === 0 ) {
       // Load next 30 messages

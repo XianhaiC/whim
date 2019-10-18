@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import { API_ROOT, HEADERS, PATH_ROOT, PATH_INVITE,
          PATH_INVALID_INVITE, PATH_BOARD, PATH_LOGIN, PATH_SIGNUP, PATH_CONFIRMATION } from '../constants';
@@ -37,8 +37,6 @@ class App extends React.Component {
     })
     .then(res => res.json())
     .then(data => {
-      console.log("INVITE");
-      console.log(data);
       if (!exists(data.impulse)) {
         // redirect to error page
         history.push(PATH_INVALID_INVITE);
@@ -64,12 +62,10 @@ class App extends React.Component {
   }
 
   handleImpulseJoined(impulse) {
-    console.log(impulse);
     this.setState({ invited_impulse: impulse });
   }
 
   renderLogin() {
-    console.log("LOGIN RENDERING");
     return (
       <Login />
     );

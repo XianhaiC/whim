@@ -49,13 +49,13 @@ export default (state = INITIAL_STATE, action) => {
       // update the thread state with new data
       if (action.payload.remove) {
         action.payload.toRemoveIds.forEach(messageId => {
-          const index = thread.messages.findIndex(x => x.id == messageId)
+          const index = thread.messages.findIndex(x => x.id === messageId)
           if (index !== -1) thread.messages.splice(index, 1);
         });
       }
       else {
         action.payload.messages.forEach(message => {
-          const index = thread.messages.findIndex(x => x.id == message.id)
+          const index = thread.messages.findIndex(x => x.id === message.id)
           if (index <= -1) thread.messages.push(message);
           else thread.messages[index] = message;
         });
@@ -76,7 +76,7 @@ export default (state = INITIAL_STATE, action) => {
       else {
         thread.messages = [...thread.messages];
         action.payload.messages.forEach(message => {
-          const index = thread.messages.findIndex(x => x.id == message.id)
+          const index = thread.messages.findIndex(x => x.id === message.id)
           if (index <= -1) thread.messages.push(message);
           else thread.messages[index] = message;
         });

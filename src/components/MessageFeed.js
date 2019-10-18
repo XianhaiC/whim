@@ -26,7 +26,6 @@ class MessageFeed extends React.Component {
     if (this.messagesUpdated) {
       const scrollPos = scrollbar.scrollTop;
       const scrollBottom = ( scrollbar.scrollHeight - scrollbar.clientHeight);
-      console.log(scrollBottom);
       this.scrollAtBottom = (scrollBottom <= 0) || (scrollPos === scrollBottom ); 
     }
     if (!this.scrollAtBottom) {
@@ -51,7 +50,6 @@ class MessageFeed extends React.Component {
   }
   
   onScroll = () => {
-    //console.log(this.refs.scrollbar.scrollTop);
     const { refs, props } = this; 
     const scrollTop = refs.scrollbar.scrollTop;
     if ( scrollTop === 0) {
@@ -69,8 +67,6 @@ class MessageFeed extends React.Component {
   getQuery() {
     this.state.messages_query = this.props.messages.slice(this.props.messages.length - this.state.message_subset, 
                                                   this.props.messages.length);
-    console.log(this.state.messages_query);
-    console.log(this.props.messages);
   }
   
   scrollToBottom = () => {
@@ -78,9 +74,6 @@ class MessageFeed extends React.Component {
     const scrollHeight = scrollbar.scrollHeight;
     const height = scrollbar.clientHeight;
     const maxScrollTop = scrollHeight - height;
-    console.log('scrollHeight: ' + scrollHeight);
-    console.log('clientHeight: ' + height);
-    console.log('maxScrollTop: ' + maxScrollTop);
     ReactDOM.findDOMNode(scrollbar).scrollTop = maxScrollTop > 0 ? maxScrollTop: 0; 
   }
 

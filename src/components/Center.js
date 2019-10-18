@@ -31,9 +31,6 @@ class Center extends React.Component {
         centerComponent = <Empty />
         break;
     }
-    console.log("CENTER");
-    console.log(centerComponent);
-    console.log(this.props);
 
     return (
       <div className="center">

@@ -16,8 +16,8 @@ class ImpulseList extends React.Component {
 
     let found = null;
     found = Object.values(this.props.sparks).find(spark =>
-      spark.impulse_id == impulse.id
-      && (spark.account_id == accountId
+      spark.impulse_id === impulse.id
+      && (spark.account_id === accountId
         || spark.session_token === sessionToken)
     );
 
@@ -71,7 +71,7 @@ const createImpulseCards = (impulses, handleClick) => {
           <p className="impulse-card-name">
             <i className="fas fa-hashtag impulse-card-pic"></i>  {impulse.name}
           </p>
-          <p className="impulse-card-sparks">{impulse.sparks_joined} Spark{impulse.sparks_joined != 1 ? "s" : ""} joined</p>
+          <p className="impulse-card-sparks">{impulse.sparks_joined} Spark{impulse.sparks_joined !== 1 ? "s" : ""} joined</p>
         </div>
       </li>
     ));

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import autosize from 'autosize';
 
 import { MAX_MSG_LENGTH } from '../constants';
-import { RightbarComponent, getTimeAMPM, clipMessage } from '../helpers';
+import { RightbarComponent, getTimeAMPM } from '../helpers';
 import { updateMessage, deleteMessage, setActiveThreadId, setRightbarComponent }
   from '../actions/index';
 
@@ -67,10 +67,6 @@ class InspirationDetails extends React.Component {
     return true;
   }
 
-  Body(props) {
-    const message = this.getMessage();
-  }
-
   getMessage() {
     const {activeThreadId,
       impulses, threads } = this.props;
@@ -78,7 +74,7 @@ class InspirationDetails extends React.Component {
     const impulseThread =
       threads[impulses[activeThread.impulse_id].message_thread.id];;
     const message = impulseThread.messages.find(message =>
-      message.id == activeThread.parent_id);
+      message.id === activeThread.parent_id);
     return message;
   }
 

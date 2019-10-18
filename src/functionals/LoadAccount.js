@@ -22,7 +22,6 @@ class LoadAccount extends React.Component {
   }
 
   loadAccount() {
-    console.log("LOAD ACCOUNR");
     this.props.getAccountData(this.props.accountId);
   }
 

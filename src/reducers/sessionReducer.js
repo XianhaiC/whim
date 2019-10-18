@@ -13,7 +13,6 @@ const INITIAL_STATE = {
 }
 
 export default (state = INITIAL_STATE, action) => {
-  let newState = null;
 
   switch(action.type) {
     case LOGIN:
@@ -24,7 +23,7 @@ export default (state = INITIAL_STATE, action) => {
         accountActivated: action.payload.accountActivated,
         accountToken: action.payload.accountToken
       };
-    
+
     case SET_SESSION:
       return {...state, sessionToken: action.payload.sessionToken};
 
