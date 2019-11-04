@@ -30,7 +30,6 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: var(--inspo-dark);
->>>>>>> dev
 }
 
 * {
